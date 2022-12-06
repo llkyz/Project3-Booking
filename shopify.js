@@ -1,9 +1,10 @@
 const Shopify = require('shopify-api-node');
+require('dotenv').config()
 
 const shopify = new Shopify({
     shopName: 'sppfys.myshopify.com',
-    apiKey: '998c46fcba522bb88280a6ff8caadca3',
-    password: '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',
+    apiKey: process.env.SHOPIFY_KEY,
+    password: process.env.SHOPIFY_PASSWORD,
     autoLimit: true
 });
 
