@@ -1,0 +1,10 @@
+/*
+workshop date
+workshop time
+booking ID
+origin
+workshop type
+customer name
+customer pax
+customer contact number
+*/
