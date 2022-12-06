@@ -1,7 +1,7 @@
 /*
 workshop date
 workshop time
-booking ID
+ID from origin
 origin
 workshop type
 customer name
