@@ -11,7 +11,15 @@ const shopify = new Shopify({
 function getData() {
   shopify.order
     .list({ limit: 5 })
-    .then((orders) => console.log(orders))
+    .then((orders) => orders.forEach((orders)=>{
+      console.log("====================================")
+      console.log("ID:", orders.id)
+        console.log("Price:", orders.current_total_price)
+          console.log("Participants: ", orders.line_items[0].properties[3].value)
+            console.log("Date: ", orders.line_items[0].properties[1].value)
+              console.log("Customer Name: ", orders.customer.first_name + orders.customer.last_name)
+                console.log("Phone Number: ", orders.customer.phone ? orders.customer.phone: "N/A")
+    }))
     .catch((err) => console.error(err))
 }
 
