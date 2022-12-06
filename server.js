@@ -13,8 +13,8 @@ db.on("open", ()=>console.log("MongoDB connection established"))
 
 app.listen(3000, console.log("Listening to port 3000..."))
 
-// sophieData()
-shopifyData()
+sophieData()
+// shopifyData()
 
 const testData = [{title: "Title1", entry: "Some data here"}, {title: "Title222222", entry: "More data"}]
 
@@ -35,24 +35,3 @@ async function findData() {
 app.get("/", (req, res) => {
     res.render("index.ejs")
 })
-
-/*
-sophieData.id
-sophieData.total_payout_amount
-sophieData.total_quantity
-sophieData.start_date
-sophieData.start_time
-sophieData.end_time
-sophieData.order.customer_name
-sophieData.order.contact_num
-*/
-
-
-/*
-shopifyData.id
-shopifyData.current_total_price
-shopifyData.customer.orders_count
-shopifyData.line_items[0].properties[1].value
-shopifyData.customer.first_name + shopifyData.customer.last_name
-shopifyData.customer.phone
-*/

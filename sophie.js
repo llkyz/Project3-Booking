@@ -13,7 +13,22 @@ async function getData() {
       let data = await response.json();
       // console.log(data)
       // console.log(Object.keys(data))
-      console.log(data.order_items[0])
+      data.order_items.forEach((data) => {
+        let time = Date.parse(data.start_time.slice(0, -1));
+        console.log(
+          time.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
+        );
+        console.log("====================================")
+        console.log("Origin: Sophie")
+        console.log("ID: ", data.id)
+        console.log("Price: ", data.total_payout_amount.amount)
+        console.log("Participants: ", data.quantity)
+        console.log("Date: ", data.start_date)
+        console.log("Time: ", data.start_time)
+        console.log("Customer Name: ", data.order.customer_name)
+        console.log("Contact Number: ", data.order.contact_num)
+      })
+      // console.log(data.order_items[0])
       //order_items
       //pagination_info
 }
