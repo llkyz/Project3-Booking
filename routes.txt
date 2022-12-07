@@ -1,0 +1,16 @@
+Routes
+------
+GET /fetch/sophie (Get array of open orders from sophie)
+GET /fetch/shopify (Get array of open orders from shopify)
+
+GET /calendar (Get all calendar entries)
+POST /calendar/ (Create new calendar entry)
+GET /calendar/:id (Get specific calendar entry)
+PUT /calendar/:id (Update specific calendar entry)
+DELETE /calendar/:id (Delete specific calendar entry)
+
+GET /user (Get all calendar entries)
+POST /user/ (Create new calendar entry)
+GET /user/:id (Get specific calendar entry)
+PUT /user/:id (Update specific calendar entry)
+DELETE /user/:id (Delete specific calendar entry)
