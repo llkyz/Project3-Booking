@@ -9,7 +9,7 @@ export default function CheckAuth({ ProtectedComponent }) {
 
   useEffect(() => {
     async function checkToken() {
-      const response = await fetch("http://127.0.0.1:5000/checktoken", {
+      const response = await fetch(process.env.BACKEND_URL + "checktoken", {
         credentials: "include",
       });
       if (response.status == 200) {
