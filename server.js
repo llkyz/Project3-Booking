@@ -5,26 +5,28 @@ const app = express();
 const mongoose = require("mongoose");
 const db = mongoose.connection;
 const Test = require("./models/test");
+const cors = require("cors");
 
 mongoURI = "mongodb+srv://JaxToh:jaxatlas@cluster0.mqjwngr.mongodb.net/test";
 
 mongoose.connect(mongoURI);
 db.on("open", () => console.log("MongoDB connection established"));
 
-app.listen(3000, console.log("Listening to port 3000..."));
+app.use(cors());
+app.listen(5000, console.log("Listening to port 5000..."));
 
 async function getSophieData() {
   let result = await sophieData();
   console.log(result);
 }
-getSophieData();
+// getSophieData();
 
 async function getShopifyData() {
   let result = await shopifyData();
   console.log(result);
 }
 
-getShopifyData();
+// getShopifyData();
 
 const testData = [
   { title: "Title1", entry: "Some data here" },
@@ -45,6 +47,7 @@ async function findData() {
 
 // findData()
 
-app.get("/", (req, res) => {
-  res.render("index.ejs");
+app.get("/fetch", async (req, res) => {
+  const result = await Test.find();
+  res.json(result);
 });
