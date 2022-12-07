@@ -7,7 +7,7 @@ function App() {
 
   useEffect(() => {
     async function callBackendAPI() {
-      const response = await fetch("http://127.0.0.1:5000/fetch");
+      const response = await fetch("http://127.0.0.1:5000/fetch/sophie");
       let data = await response.json();
       if (response.status !== 200) {
         throw Error(data.message);
@@ -32,7 +32,7 @@ function App() {
         >
           Learn React
         </a>
-        {expressData ? <h1>{JSON.stringify(expressData)}</h1> : ""}
+        {expressData ? <p>{JSON.stringify(expressData)}</p> : ""}
       </header>
     </div>
   );
