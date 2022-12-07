@@ -1,14 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Booking = require("../models/booking");
-
-const isAuthenticated = (req, res, next) => {
-  if (req.session.currentUser) {
-    return next();
-  } else {
-    res.redirect("/sessions/unauthenticated");
-  }
-};
+const isAuthenticated = require("../middleware/isAuthenticated");
 
 router.get("/", isAuthenticated, async (req, res) => {
   let result = await Booking.find();

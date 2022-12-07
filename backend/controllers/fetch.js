@@ -1,16 +1,9 @@
 const express = require("express");
-const sophieData = require("../sophie");
-const shopifyData = require("../shopify");
+const sophieData = require("./fetch/sophie");
+const shopifyData = require("./fetch/shopify");
 const router = express.Router();
 const Booking = require("../models/booking");
-
-const isAuthenticated = (req, res, next) => {
-  if (req.session.currentUser) {
-    return next();
-  } else {
-    res.redirect("/sessions/unauthenticated");
-  }
-};
+const isAuthenticated = require("../middleware/isAuthenticated");
 
 router.get("/sophie", isAuthenticated, async (req, res) => {
   let result = await sophieData();
