@@ -8,6 +8,7 @@ const authController = require("./controllers/authentication");
 const userController = require("./controllers/user");
 const fetchController = require("./controllers/fetch");
 const calendarController = require("./controllers/calendar");
+require("dotenv").config();
 
 let mongoURI = process.env.DATABASE;
 
@@ -19,16 +20,27 @@ app.use(cookieParser());
 app.use(
   cors({
     credentials: true,
-    origin: ["http://127.0.0.1:3000", "http://localhost:3000"],
+    origin: [process.env.FRONTEND_URL, "http://localhost:3000"],
   })
 );
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "http://127.0.0.1:3000");
+  res.setHeader("Access-Control-Allow-Credentials", true);
+  res.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,PATCH,DELETE");
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "Content-Type",
+    "Authorization"
+  );
+  next();
+});
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use("/checktoken", authController);
 app.use("/user", userController);
 app.use("/fetch", fetchController);
 app.use("/calendar", calendarController);
-app.listen(5000, console.log("Listening to port 5000..."));
+app.listen(process.env.PORT, console.log("Listening to port 5000..."));
 
 app.get("/", (req, res) => {
   res.redirect("/calendar");
