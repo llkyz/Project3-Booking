@@ -19,7 +19,7 @@ router.get("/sophie", isAuthenticated, async (req, res) => {
     }
   }
 
-  res.json(result);
+  res.status(200).json(result);
 });
 
 router.get("/shopify", isAuthenticated, async (req, res) => {
@@ -36,7 +36,7 @@ router.get("/shopify", isAuthenticated, async (req, res) => {
     }
   }
 
-  res.json(result);
+  res.status(200).json(result);
 });
 
 module.exports = router;

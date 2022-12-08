@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Navigate } from "react-router-dom";
 import config from "../config";
 
-export default function CheckAuth({ ProtectedComponent }) {
+export default function CheckAuth({ Primary, Alternative, action }) {
   const [authentication, setAuthentication] = useState({
     loading: true,
     redirect: false,
@@ -26,10 +26,12 @@ export default function CheckAuth({ ProtectedComponent }) {
     <>
       {authentication.loading ? (
         ""
+      ) : authentication.redirect && action === "redirect" ? (
+        <Navigate to={Alternative} replace={true} />
       ) : authentication.redirect ? (
-        <Navigate to="/login" replace={true} />
+        <Alternative />
       ) : (
-        <ProtectedComponent />
+        <Primary />
       )}
     </>
   );

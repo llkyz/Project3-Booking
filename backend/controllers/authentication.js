@@ -8,13 +8,13 @@ authenticator.get("/", (req, res) => {
   const token = req.cookies.token;
 
   if (!token) {
-    res.status(401).send("Unauthorized, token not found");
+    res.status(401).json("Token not found");
   } else {
     jwt.verify(token, secret, function (err, decoded) {
       if (err) {
-        res.status(401).send("Invalid token");
+        res.status(401).json("Invalid token");
       } else {
-        res.status(200).send("Token Verified");
+        res.status(200).json("Token Verified");
       }
     });
   }

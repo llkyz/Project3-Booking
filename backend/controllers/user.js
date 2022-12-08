@@ -6,8 +6,15 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const isAuthenticated = require("../middleware/isAuthenticated");
 
-router.get("/", (req, res) => {
-  // res.send("User");
+router.get("/", isAuthenticated, async (req, res) => {
+  try {
+    const decoded = jwt.decode(req.cookies.token, { complete: true });
+    username = decoded.payload.username;
+    const result = await User.findOne({ username: username });
+    res.status(200).json({ username: result.username, access: result.access });
+  } catch (err) {
+    res.status(400).json(err);
+  }
 });
 
 router.post("/login", async (req, res) => {

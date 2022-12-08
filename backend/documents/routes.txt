@@ -1,6 +1,6 @@
 Routes
 ------
-GET /fetch/sophie (Get array of open orders from sophie)
+GET /fetch/sophie (Get array of open orders from sophie) 
 GET /fetch/shopify (Get array of open orders from shopify)
 
 GET /calendar (Get all calendar entries)
@@ -14,3 +14,8 @@ POST /user/ (Create new calendar entry)
 GET /user/:id (Get specific calendar entry)
 PUT /user/:id (Update specific calendar entry)
 DELETE /user/:id (Delete specific calendar entry)
+
+GET /checktoken (Check if jsonwebtoken is valid)
+
+- 401: No token found / Invalid token
+- 200: Token Verified

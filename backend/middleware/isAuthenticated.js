@@ -6,7 +6,7 @@ function IsAuthenticated(req, res, next) {
   const token = req.cookies.token;
 
   if (!token) {
-    res.status(401).send("Unauthorized, token not found");
+    res.status(401).send("Token not found");
   } else {
     jwt.verify(token, secret, function (err, decoded) {
       if (err) {

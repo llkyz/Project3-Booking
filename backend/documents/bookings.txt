@@ -1,0 +1,9 @@
+origin - (sophie, shopify, manual)
+ID - (unique ID from platforms, otherwise blank if manually entered)
+price
+participants
+dateTime
+customer
+contact
+ignore (setting true places it in ignore list)
+complete (setting true places it in complete list)

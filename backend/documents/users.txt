@@ -1,0 +1,5 @@
+/*
+username
+password
+access (0 = view-only, 1 = staff-can edit bookings, 2 = admin-can edit staff access)
+*/

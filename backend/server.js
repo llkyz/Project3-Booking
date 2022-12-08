@@ -13,6 +13,8 @@ require("dotenv").config();
 let mongoURI = process.env.DATABASE;
 
 mongoose.set("strictQuery", true);
+mongoose.set("runValidators", true);
+mongoose.set("debug", true);
 mongoose.connect(mongoURI);
 db.on("open", () => console.log("MongoDB connection established"));
 
@@ -45,6 +47,10 @@ app.listen(process.env.PORT, console.log("Listening to port 5000..."));
 
 app.get("/", (req, res) => {
   res.redirect("/calendar");
+});
+
+app.get("/logout", (req, res) => {
+  res.send(200).clearCookie("token");
 });
 
 app.get("*", (req, res) => {
