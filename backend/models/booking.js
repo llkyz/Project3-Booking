@@ -8,6 +8,8 @@ const bookingSchema = mongoose.Schema({
   dateTime: { type: Date },
   customer: { type: String },
   contact: { type: String },
+  ignore: { type: Boolean, default: false },
+  complete: { type: Boolean, default: false },
 });
 
 const Booking = mongoose.model("Booking", bookingSchema);

@@ -17,6 +17,8 @@ mongoose.connect(mongoURI);
 db.on("open", () => console.log("MongoDB connection established"));
 
 app.use(cookieParser());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 app.use(
   cors({
     credentials: true,
@@ -32,10 +34,9 @@ app.use((req, res, next) => {
     "Content-Type",
     "Authorization"
   );
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
   next();
 });
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
 app.use("/checktoken", authController);
 app.use("/user", userController);
 app.use("/fetch", fetchController);

@@ -7,11 +7,35 @@ const isAuthenticated = require("../middleware/isAuthenticated");
 
 router.get("/sophie", isAuthenticated, async (req, res) => {
   let result = await sophieData();
+
+  for (let x = 0; x < result.length; x++) {
+    const searchResult = await Booking.find({
+      origin: result[x].origin,
+      id: result[x].id,
+    });
+    if (searchResult.length != 0) {
+      result.splice(x, 1);
+      x--;
+    }
+  }
+
   res.json(result);
 });
 
 router.get("/shopify", isAuthenticated, async (req, res) => {
   let result = await shopifyData();
+
+  for (let x = 0; x < result.length; x++) {
+    const searchResult = await Booking.find({
+      origin: result[x].origin,
+      id: result[x].id,
+    });
+    if (searchResult.length != 0) {
+      result.splice(x, 1);
+      x--;
+    }
+  }
+
   res.json(result);
 });
 
