@@ -1,6 +1,5 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import CheckAuth from "../Authorization/CheckAuth";
 
 function LoginButton() {
   return (
@@ -18,18 +17,14 @@ function ProfileButton() {
   );
 }
 
-export default function Navbar() {
+export default function Navbar({ loggedIn }) {
   return (
     <div className="navbar">
       <Link to="/">
         <h1>SPPFY CALENDAR</h1>
       </Link>
       <div className="user">
-        <CheckAuth
-          Primary={ProfileButton}
-          Alternative={LoginButton}
-          action={"show"}
-        />
+        {loggedIn ? <ProfileButton /> : <LoginButton />}
       </div>
     </div>
   );

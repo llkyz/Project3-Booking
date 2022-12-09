@@ -1,8 +1,14 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import config from "../config";
 
-export default function Login() {
+export default function Login({ loggedIn }) {
+  const navigate = useNavigate();
+
+  if (loggedIn) {
+    navigate("/profile");
+  }
+
   return (
     <>
       <h1>Login Page</h1>

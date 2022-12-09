@@ -11,6 +11,7 @@ export default function CheckAuth({ Primary, Alternative, action }) {
   useEffect(() => {
     async function checkToken() {
       const response = await fetch(config.BACKEND_URL + "checktoken", {
+        mode: "cors",
         credentials: "include",
       });
       if (response.status === 200) {
@@ -20,6 +21,7 @@ export default function CheckAuth({ Primary, Alternative, action }) {
       }
     }
     checkToken();
+    //eslint-disable-next-line
   }, []);
 
   return (

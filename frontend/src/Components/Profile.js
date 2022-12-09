@@ -1,8 +1,15 @@
 import React, { useState, useEffect } from "react";
 import config from "../config";
+import { useNavigate } from "react-router-dom";
 
-export default function Profile() {
+export default function Profile({ loggedIn, setLoggedIn }) {
   const [profileData, setProfileData] = useState();
+  const [changePassDialog, setChangePassDialog] = useState();
+  const navigate = useNavigate();
+
+  if (!loggedIn) {
+    navigate("/login");
+  }
 
   useEffect(() => {
     async function getProfileData() {
@@ -22,7 +29,53 @@ export default function Profile() {
       method: "GET",
       credentials: "include",
     });
-    console.log(res.status);
+    if (res.status === 200) {
+      navigate("/");
+      setLoggedIn(false);
+    }
+  }
+
+  async function changePassword(event) {
+    event.preventDefault();
+    if (event.target.form[1].value === event.target.form[2].value) {
+      setChangePassDialog(
+        "Current password and new password cannot be the same"
+      );
+    } else {
+      let formBody = [];
+      formBody.push(
+        encodeURIComponent("username") +
+          "=" +
+          encodeURIComponent(profileData.username)
+      );
+      formBody.push(
+        encodeURIComponent("currentpassword") +
+          "=" +
+          encodeURIComponent(event.target.form[1].value)
+      );
+      formBody.push(
+        encodeURIComponent("newpassword") +
+          "=" +
+          encodeURIComponent(event.target.form[2].value)
+      );
+      formBody = formBody.join("&");
+      const res = await fetch(config.BACKEND_URL + "user", {
+        method: "PUT",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+        },
+        body: formBody,
+      });
+      console.log(`Response ${res.status}: ${await res.json()}`);
+      if (res.status === 200) {
+        event.target.form[1].value = "";
+        event.target.form[2].value = "";
+        setChangePassDialog("Password Changed");
+      } else {
+        setChangePassDialog("Passwords do not match");
+      }
+    }
   }
 
   return (
@@ -33,6 +86,22 @@ export default function Profile() {
           <h4>Username: {profileData.username}</h4>
           <h4>Access Level: {profileData.access}</h4>
           <button onClick={doLogout}>Log Out</button>
+          <h2>Change Password</h2>
+          {changePassDialog ?? ""}
+          <form method="POST" action={config.BACKEND_URL + "user?_method=PUT"}>
+            <input type="hidden" name="username" value={profileData.username} />
+            <input
+              type="text"
+              name="currentpassword"
+              placeholder="Current Password"
+            />
+            <input type="text" name="newpassword" placeholder="New Password" />
+            <input
+              type="submit"
+              value="Submit"
+              onClick={(event) => changePassword(event)}
+            />
+          </form>
         </>
       ) : (
         ""

@@ -1,9 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import config from "../config";
 
-export default function Calendar() {
+export default function Calendar({ loggedIn }) {
   const [sophieData, setSophieData] = useState();
   const [shopifyData, setShopifyData] = useState();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    function checkLoggedIn() {
+      if (!loggedIn) {
+        navigate("/login");
+      }
+    }
+    checkLoggedIn();
+  }, [loggedIn, navigate]);
 
   async function submitEntry(
     data,
@@ -12,10 +23,10 @@ export default function Calendar() {
     setdataInput,
     ignoreCheck
   ) {
-    var formBody = [];
-    for (var property in data) {
-      var encodedKey = encodeURIComponent(property);
-      var encodedValue = encodeURIComponent(data[property]);
+    let formBody = [];
+    for (let property in data) {
+      let encodedKey = encodeURIComponent(property);
+      let encodedValue = encodeURIComponent(data[property]);
       formBody.push(encodedKey + "=" + encodedValue);
     }
     console.log(ignoreCheck);
@@ -34,7 +45,7 @@ export default function Calendar() {
     });
     console.log(`Response ${res.status}: ${await res.json()}`);
     if (res.status === 200) {
-      setdataInput(dataInput.filter((d, i) => i != index));
+      setdataInput(dataInput.filter((d, i) => i !== index));
     }
   }
 

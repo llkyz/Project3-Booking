@@ -59,10 +59,34 @@ router.get("/:id", isAuthenticated, async (req, res) => {
   res.json(result);
 });
 
-router.put("/:id", isAuthenticated, async (req, res) => {
-  let result = await User.findByIdAndUpdate(req.params.id, req.body);
-  console.log("Updated User: ", result);
-  res.redirect("/");
+router.put("/", isAuthenticated, async (req, res) => {
+  console.log(req.body);
+  User.findOne({ username: req.body.username }, async function (err, user) {
+    if (err) {
+      console.log(err);
+      res.status(401).json("Error");
+    } else if (!user) {
+      res.status(401).json("Can't find user");
+    } else {
+      if (await bcrypt.compare(req.body.currentpassword, user.password)) {
+        let result = await User.updateOne(
+          { username: req.body.username },
+          {
+            $set: {
+              password: bcrypt.hashSync(
+                req.body.newpassword,
+                bcrypt.genSaltSync(10)
+              ),
+            },
+          }
+        );
+        console.log("Updated User: ", result);
+        res.status(200).json("OK");
+      } else {
+        res.status(401).json("Passwords do not match");
+      }
+    }
+  });
 });
 
 router.delete("/:id", isAuthenticated, async (req, res) => {
