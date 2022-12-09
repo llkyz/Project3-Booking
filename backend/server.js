@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const db = mongoose.connection;
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
-const authController = require("./controllers/authentication");
+const authController = require("./controllers/auth");
 const userController = require("./controllers/user");
 const fetchController = require("./controllers/fetch");
 const calendarController = require("./controllers/calendar");
@@ -32,7 +32,7 @@ app.use(
     optionsSuccessStatus: 204,
   })
 );
-app.use("/checktoken", authController);
+app.use("/auth", authController);
 app.use("/user", userController);
 app.use("/fetch", fetchController);
 app.use("/calendar", calendarController);

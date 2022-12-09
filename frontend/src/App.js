@@ -7,14 +7,15 @@ import Register from "./Components/Register";
 import Calendar from "./Components/Calendar";
 import Profile from "./Components/Profile";
 import config from "./config";
+import checkAccess from "./Authorization/checkAccess";
 
 function App() {
-  const [loggedIn, setLoggedIn] = useState(true);
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [accessLevel, setAccessLevel] = useState(0);
 
   useEffect(() => {
     async function checkToken() {
-      const response = await fetch(config.BACKEND_URL + "checktoken", {
-        mode: "cors",
+      const response = await fetch(config.BACKEND_URL + "auth/checktoken", {
         credentials: "include",
       });
       if (response.status !== 200) {
@@ -22,8 +23,11 @@ function App() {
       }
     }
     checkToken();
+    if (loggedIn) {
+      checkAccess(setAccessLevel);
+    }
     //eslint-disable-next-line
-  }, []);
+  }, [loggedIn]);
 
   return (
     <BrowserRouter>
@@ -35,8 +39,14 @@ function App() {
             path="/login"
             element={<Login loggedIn={loggedIn} setLoggedIn={setLoggedIn} />}
           />
-          <Route path="/register" element={<Register loggedIn={loggedIn} />} />
-          <Route path="/calendar" element={<Calendar loggedIn={loggedIn} />} />
+          <Route
+            path="/register"
+            element={<Register loggedIn={loggedIn} setLoggedIn={setLoggedIn} />}
+          />
+          <Route
+            path="/calendar"
+            element={<Calendar loggedIn={loggedIn} setLoggedIn={setLoggedIn} />}
+          />
           <Route
             path="/profile"
             element={<Profile loggedIn={loggedIn} setLoggedIn={setLoggedIn} />}

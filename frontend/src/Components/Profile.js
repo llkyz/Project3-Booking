@@ -19,7 +19,11 @@ export default function Profile({ loggedIn, setLoggedIn }) {
       });
       let result = await res.json();
       console.log(`Response ${res.status}: ${result}`);
-      setProfileData({ username: result.username, access: result.access });
+      if (res.status === 200) {
+        setProfileData({ username: result.username, access: result.access });
+      } else {
+        setLoggedIn(false);
+      }
     }
     getProfileData();
   }, []);
@@ -84,7 +88,16 @@ export default function Profile({ loggedIn, setLoggedIn }) {
       {profileData ? (
         <>
           <h4>Username: {profileData.username}</h4>
-          <h4>Access Level: {profileData.access}</h4>
+          <h4>
+            Access:{" "}
+            {profileData.access === 0
+              ? "User"
+              : profileData.access === 1
+              ? "Staff"
+              : profileData.access === 2
+              ? "Admin"
+              : "Unknown"}
+          </h4>
           <button onClick={doLogout}>Log Out</button>
           <h2>Change Password</h2>
           {changePassDialog ?? ""}

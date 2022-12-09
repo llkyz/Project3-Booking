@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import config from "../config";
 
-export default function Calendar({ loggedIn }) {
+export default function Calendar({ loggedIn, setLoggedIn }) {
   const [sophieData, setSophieData] = useState();
   const [shopifyData, setShopifyData] = useState();
   const navigate = useNavigate();
@@ -46,6 +46,8 @@ export default function Calendar({ loggedIn }) {
     console.log(`Response ${res.status}: ${await res.json()}`);
     if (res.status === 200) {
       setdataInput(dataInput.filter((d, i) => i !== index));
+    } else {
+      setLoggedIn(false);
     }
   }
 
@@ -55,9 +57,10 @@ export default function Calendar({ loggedIn }) {
     });
     let data = await response.json();
     if (response.status !== 200) {
-      throw Error(data.message);
+      setLoggedIn(false);
+    } else {
+      setSophieData(data);
     }
-    setSophieData(data);
   }
 
   async function getShopifyData() {
@@ -66,9 +69,10 @@ export default function Calendar({ loggedIn }) {
     });
     let data = await response.json();
     if (response.status !== 200) {
-      throw Error(data.message);
+      setLoggedIn(false);
+    } else {
+      setShopifyData(data);
     }
-    setShopifyData(data);
   }
 
   function ShowData({ dataInput, setDataInput }) {

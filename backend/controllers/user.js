@@ -24,7 +24,7 @@ router.post("/login", async (req, res) => {
     if (err) {
       console.log(err);
     } else if (!user) {
-      res.status(401).send("Invalid username or password");
+      res.status(401).json("Invalid username or password");
     } else {
       if (await bcrypt.compare(password, user.password)) {
         console.log("Logged in, token issued");
@@ -35,22 +35,44 @@ router.post("/login", async (req, res) => {
         res
           .status(200)
           .cookie("token", token, { httpOnly: true })
-          .redirect(process.env.FRONTEND_URL);
+          .json("Login Successful");
       } else {
-        res.status(401).send("Invalid username or password");
+        res.status(401).json("Invalid username or password");
       }
     }
   });
 });
 
 router.post("/", async (req, res) => {
-  req.body.password = bcrypt.hashSync(
-    req.body.password,
-    bcrypt.genSaltSync(10)
-  );
-  let newUser = await User.create(req.body);
-  console.log("Created new User: ", newUser);
-  res.redirect(process.env.FRONTEND_URL);
+  let userExists = await User.findOne({ username: req.body.username });
+  if (userExists) {
+    res.status(401).json("Username already exists");
+  } else if (req.body.username < 3) {
+    res.status(401).json("Valid username");
+  } else {
+    let password = req.body.password;
+
+    let testLowerCase = /[a-z]/;
+    let testUpperCase = /[A-Z]/;
+    let testNumber = /[0-9]/;
+
+    let lowerCase = testLowerCase.test(password);
+    let upperCase = testUpperCase.test(password);
+    let number = testNumber.test(password);
+    let length = password.length >= 8;
+
+    if (lowerCase && upperCase && number && length) {
+      req.body.password = bcrypt.hashSync(
+        req.body.password,
+        bcrypt.genSaltSync(10)
+      );
+      let newUser = await User.create(req.body);
+      console.log("Created new User: ", newUser);
+      res.status(200).json("Registration successful");
+    } else {
+      res.status(401).json("Password not valid");
+    }
+  }
 });
 
 router.get("/:id", isAuthenticated, async (req, res) => {
