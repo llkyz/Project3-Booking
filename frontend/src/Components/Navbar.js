@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import hamburger from "../Assets/hamburger.png";
 
@@ -18,20 +18,53 @@ function ProfileButton() {
   );
 }
 
-function SideMenuButton() {
+function SidebarButton({ sidebarVisible, setSidebarVisible }) {
   function toggleSideBar() {
-    console.log("Toggle side bar");
+    if (sidebarVisible) {
+      setSidebarVisible(false);
+    } else {
+      setSidebarVisible(true);
+    }
   }
 
   return (
-    <img src={hamburger} className="sideMenuButton" onClick={toggleSideBar} />
+    <img src={hamburger} className="sidebarButton" onClick={toggleSideBar} />
+  );
+}
+
+function Sidebar({ accessLevel }) {
+  return (
+    <div className="sidebar">
+      {
+        <Link to="/calendar">
+          <h1>{accessLevel === 0 ? "View Calendar" : "View/Edit Calendar"}</h1>
+        </Link>
+      }
+      {accessLevel >= 2 ? (
+        <Link to="/userlist">
+          <h1>User List</h1>
+        </Link>
+      ) : (
+        ""
+      )}
+    </div>
   );
 }
 
 export default function Navbar({ loggedIn, accessLevel }) {
+  const [sidebarVisible, setSidebarVisible] = useState(false);
+
   return (
     <div className="navbar">
-      {loggedIn ? <SideMenuButton /> : ""}
+      {loggedIn ? (
+        <SidebarButton
+          sidebarVisible={sidebarVisible}
+          setSidebarVisible={setSidebarVisible}
+        />
+      ) : (
+        ""
+      )}
+      {loggedIn && sidebarVisible ? <Sidebar accessLevel={accessLevel} /> : ""}
       <Link to="/">
         <h1>SPPFY CALENDAR</h1>
       </Link>

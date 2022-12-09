@@ -8,6 +8,7 @@ import Calendar from "./Components/Calendar";
 import Profile from "./Components/Profile";
 import config from "./config";
 import checkAccess from "./Authorization/checkAccess";
+import UserList from "./Components/UserList";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -18,7 +19,9 @@ function App() {
       const response = await fetch(config.BACKEND_URL + "auth/checktoken", {
         credentials: "include",
       });
-      if (response.status !== 200) {
+      if (response.status === 200) {
+        setLoggedIn(true);
+      } else {
         setLoggedIn(false);
       }
     }
@@ -56,6 +59,16 @@ function App() {
           <Route
             path="/profile"
             element={<Profile loggedIn={loggedIn} setLoggedIn={setLoggedIn} />}
+          />
+          <Route
+            path="/userlist"
+            element={
+              <UserList
+                loggedIn={loggedIn}
+                setLoggedIn={setLoggedIn}
+                accessLevel={accessLevel}
+              />
+            }
           />
         </Routes>
       </div>

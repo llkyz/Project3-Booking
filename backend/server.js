@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const db = mongoose.connection;
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
+const adminController = require("./controllers/admin");
 const authController = require("./controllers/auth");
 const userController = require("./controllers/user");
 const fetchController = require("./controllers/fetch");
@@ -32,6 +33,7 @@ app.use(
     optionsSuccessStatus: 204,
   })
 );
+app.use("/admin", adminController);
 app.use("/auth", authController);
 app.use("/user", userController);
 app.use("/fetch", fetchController);

@@ -52,7 +52,7 @@ code {
   margin-top: 50px;
 }
 
-.sideMenuButton {
+.sidebarButton {
   width: 30px;
   height: 30px;
   object-fit: cover;
@@ -60,4 +60,16 @@ code {
   left: 3%;
   top: 8px;
   cursor: pointer;
+}
+
+.sidebar {
+  position: fixed;
+  width: 250px;
+  height: 1000px;
+  background-color: green;
+  top: 50px;
+}
+
+.userEntry {
+  border: 2px solid black;
 }
