@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import config from "../config";
 
-export default function Calendar({ loggedIn, setLoggedIn }) {
+export default function Calendar({ loggedIn, setLoggedIn, accessLevel }) {
   const [sophieData, setSophieData] = useState();
   const [shopifyData, setShopifyData] = useState();
   const navigate = useNavigate();

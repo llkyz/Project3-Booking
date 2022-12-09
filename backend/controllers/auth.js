@@ -32,7 +32,7 @@ router.get("/checkaccess", async (req, res) => {
         res.status(401).json("Invalid token");
       } else {
         let result = await User.findOne({ username: decoded.username });
-        console.log("Access Level: ", result.access);
+        console.log(`[${username}] Access Level: ${result.access}`);
         res.status(200).json(result.access);
       }
     });

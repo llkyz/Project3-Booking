@@ -4,7 +4,7 @@ const User = require("../models/user");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
-const isAuthenticated = require("../middleware/isAuthenticated");
+const isAuthenticated = require("../functions/isAuthenticated");
 
 router.get("/", isAuthenticated, async (req, res) => {
   try {

@@ -2,7 +2,6 @@ import React from "react";
 import config from "../config";
 
 export default async function checkAccess(setAccessLevel) {
-  console.log("running checkaccess");
   const response = await fetch(config.BACKEND_URL + "auth/checkaccess", {
     mode: "cors",
     credentials: "include",

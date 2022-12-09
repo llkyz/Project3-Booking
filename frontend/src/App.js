@@ -31,7 +31,7 @@ function App() {
 
   return (
     <BrowserRouter>
-      <Navbar loggedIn={loggedIn} />
+      <Navbar loggedIn={loggedIn} accessLevel={accessLevel} />
       <div className="content">
         <Routes>
           <Route index element={<Home />} />
@@ -45,7 +45,13 @@ function App() {
           />
           <Route
             path="/calendar"
-            element={<Calendar loggedIn={loggedIn} setLoggedIn={setLoggedIn} />}
+            element={
+              <Calendar
+                loggedIn={loggedIn}
+                setLoggedIn={setLoggedIn}
+                accessLevel={accessLevel}
+              />
+            }
           />
           <Route
             path="/profile"

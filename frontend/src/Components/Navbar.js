@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import hamburger from "../Assets/hamburger.png";
 
 function LoginButton() {
   return (
@@ -17,9 +18,20 @@ function ProfileButton() {
   );
 }
 
-export default function Navbar({ loggedIn }) {
+function SideMenuButton() {
+  function toggleSideBar() {
+    console.log("Toggle side bar");
+  }
+
+  return (
+    <img src={hamburger} className="sideMenuButton" onClick={toggleSideBar} />
+  );
+}
+
+export default function Navbar({ loggedIn, accessLevel }) {
   return (
     <div className="navbar">
+      {loggedIn ? <SideMenuButton /> : ""}
       <Link to="/">
         <h1>SPPFY CALENDAR</h1>
       </Link>

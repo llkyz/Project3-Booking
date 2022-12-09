@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Booking = require("../models/booking");
-const isAuthenticated = require("../middleware/isAuthenticated");
+const isAuthenticated = require("../functions/isAuthenticated");
 
 router.use(express.json());
 router.get("/", isAuthenticated, async (req, res) => {

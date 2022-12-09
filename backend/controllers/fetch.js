@@ -1,9 +1,9 @@
 const express = require("express");
-const sophieData = require("./fetch/sophie");
-const shopifyData = require("./fetch/shopify");
+const sophieData = require("../functions/sophie");
+const shopifyData = require("../functions/shopify");
 const router = express.Router();
 const Booking = require("../models/booking");
-const isAuthenticated = require("../middleware/isAuthenticated");
+const isAuthenticated = require("../functions/isAuthenticated");
 
 router.get("/sophie", isAuthenticated, async (req, res) => {
   let result = await sophieData();
