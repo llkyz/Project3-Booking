@@ -32,7 +32,7 @@ export default function Profile({ loggedIn, setLoggedIn }) {
   }, []);
 
   async function doLogout() {
-    const res = await fetch(config.BACKEND_URL + "logout", {
+    const res = await fetch(config.BACKEND_URL + "user/logout", {
       method: "GET",
       credentials: "include",
     });

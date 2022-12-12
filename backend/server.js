@@ -42,11 +42,3 @@ app.listen(
   process.env.PORT,
   console.log(`Listening to port ${process.env.PORT}...`)
 );
-
-app.get("/", (req, res) => {
-  res.redirect("/calendar");
-});
-
-app.get("/logout", (req, res) => {
-  res.status(200).clearCookie("token").send();
-});

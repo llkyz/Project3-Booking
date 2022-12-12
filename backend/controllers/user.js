@@ -132,4 +132,8 @@ router.delete("/", isAuthenticated, async (req, res) => {
   }
 });
 
+router.get("/logout", (req, res) => {
+  res.status(200).clearCookie("token").send();
+});
+
 module.exports = router;
