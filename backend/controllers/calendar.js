@@ -3,8 +3,7 @@ const router = express.Router();
 const Booking = require("../models/booking");
 const isAuthenticated = require("../functions/isAuthenticated");
 
-router.use(express.json());
-router.get("/", isAuthenticated, async (req, res) => {
+router.get("/index", isAuthenticated, async (req, res) => {
   let result = await Booking.find();
   res.json(result);
 });
@@ -20,27 +19,28 @@ router.post("/", isAuthenticated, async (req, res) => {
   }
 });
 
-router.get("/:id", isAuthenticated, async (req, res) => {
-  const id = req.params.id;
+router.get("/", isAuthenticated, async (req, res) => {
+  console.log(req.body)
 
-  let result = await Booking.findById(id);
-  res.json(result);
+  // let result = await Booking.findById(id);
+  // res.json(result);
 });
 
-router.put("/:id", isAuthenticated, async (req, res) => {
-  const id = req.params.id;
+router.put("/", isAuthenticated, async (req, res) => {
+  let id = req.body.id
+
+  delete req.body.id
 
   let result = await Booking.findByIdAndUpdate(id, req.body);
   console.log(result);
-  res.redirect("/calendar");
+  res.status(200).json("Booking updated")
 });
 
-router.delete("/:id", isAuthenticated, async (req, res) => {
-  const id = req.params.id;
-
-  let result = await Booking.findByIdAndDelete(id);
+router.delete("/", isAuthenticated, async (req, res) => {
+  let result = await Booking.findByIdAndDelete(req.body.id);
   console.log(result);
-  res.redirect("/calendar");
+  res.status(200).json("Booking deleted")
+  // res.redirect("/calendar");
 });
 
 module.exports = router;
