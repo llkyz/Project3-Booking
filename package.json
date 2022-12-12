@@ -6,7 +6,8 @@
     "start": "cd backend && npm run build && npm run start"
   },
   "workspaces": [
-    "backend"
+    "backend",
+    "frontend"
   ],
   "repository": {
     "type": "git",
