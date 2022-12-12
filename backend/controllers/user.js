@@ -82,7 +82,18 @@ router.get("/:id", isAuthenticated, async (req, res) => {
 });
 
 router.put("/", isAuthenticated, async (req, res) => {
-  console.log(req.body);
+  if (req.body.access) {
+    const decoded = jwt.decode(req.cookies.token, { complete: true });
+    username = decoded.payload.username;
+    const result = await User.findOne({ username: username });
+    if (result.access === "admin") {
+      const result2 = await User.findOneAndUpdate({username: req.body.username}, {$set: {access: req.body.access}})
+      res.status(200).json(`User access updated to ${req.body.access}`)
+    } else {
+      res.status(401).json("Unauthorized access")
+    }
+  }
+  else if (req.body.password) {
   User.findOne({ username: req.body.username }, async function (err, user) {
     if (err) {
       console.log(err);
@@ -109,12 +120,16 @@ router.put("/", isAuthenticated, async (req, res) => {
       }
     }
   });
+}
 });
 
-router.delete("/:id", isAuthenticated, async (req, res) => {
-  let result = await User.findByIdAndDelete(req.params.id);
-  console.log("Deleted User: ", result);
-  res.redirect("/");
+router.delete("/", isAuthenticated, async (req, res) => {
+  let result = await User.findOneAndDelete({username: req.body.username});
+  if (result !== null) {
+    res.status(200).json(`Deleted User: ${result.username}`);
+  } else {
+    res.status(404).json("User not found")
+  }
 });
 
 module.exports = router;

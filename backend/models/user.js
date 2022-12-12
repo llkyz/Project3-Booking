@@ -9,7 +9,7 @@ const userSchema = mongoose.Schema({
     minLength: 3,
   },
   password: { type: String, required: true, trim: true },
-  access: { type: Number, default: 0 },
+  access: { type: String, default: "user" },
 });
 
 const User = mongoose.model("User", userSchema);

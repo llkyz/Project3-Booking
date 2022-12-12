@@ -7,11 +7,13 @@ export default function Profile({ loggedIn, setLoggedIn }) {
   const [changePassDialog, setChangePassDialog] = useState();
   const navigate = useNavigate();
 
-  if (!loggedIn) {
-    navigate("/login");
-  }
-
   useEffect(() => {
+    function checkLoggedIn() {
+      if (!loggedIn) {
+        navigate("/login");
+      }
+    }
+
     async function getProfileData() {
       const res = await fetch(config.BACKEND_URL + "user", {
         method: "GET",
@@ -25,6 +27,7 @@ export default function Profile({ loggedIn, setLoggedIn }) {
         setLoggedIn(false);
       }
     }
+    checkLoggedIn()
     getProfileData();
   }, []);
 
@@ -89,14 +92,7 @@ export default function Profile({ loggedIn, setLoggedIn }) {
         <>
           <h4>Username: {profileData.username}</h4>
           <h4>
-            Access:{" "}
-            {profileData.access === 0
-              ? "User"
-              : profileData.access === 1
-              ? "Staff"
-              : profileData.access === 2
-              ? "Admin"
-              : "Unknown"}
+            Access: {profileData.access}
           </h4>
           <button onClick={doLogout}>Log Out</button>
           <h2>Change Password</h2>

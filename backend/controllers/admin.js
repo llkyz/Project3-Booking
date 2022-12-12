@@ -11,7 +11,7 @@ router.get("/userindex", isAuthenticated, async (req, res) => {
     const decoded = jwt.decode(req.cookies.token, { complete: true });
     username = decoded.payload.username;
     const result = await User.findOne({ username: username });
-    if (result.access === 2) {
+    if (result.access === "admin") {
       const allResults = await User.find(
         {},
         { username: 1, access: 1, _id: 0 }
