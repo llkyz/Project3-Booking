@@ -5,6 +5,10 @@
   "scripts": {
     "start": "cd backend && npm run start"
   },
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/llkyz/Project3-Booking.git"
