@@ -37,9 +37,19 @@ function Sidebar({ accessLevel }) {
     <div className="sidebar">
       {
         <Link to="/calendar">
-          <h1>{accessLevel === "user" ? "View Calendar" : "View/Edit Calendar"}</h1>
+          <h1>Calendar</h1>
         </Link>
       }
+      {accessLevel !== "user" ? (
+        <>
+          <Link to="/bookings">
+          <h1>Bookings</h1>
+          </Link>
+          <Link to="/events">
+          <h1>Events</h1>
+          </Link>
+        </>
+        ) : ""}
       {accessLevel === "admin" ? (
         <Link to="/userlist">
           <h1>User List</h1>

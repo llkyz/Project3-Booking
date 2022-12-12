@@ -9,6 +9,8 @@ import Profile from "./Components/Profile";
 import config from "./config";
 import checkAccess from "./Authorization/checkAccess";
 import UserList from "./Components/UserList";
+import Bookings from "./Components/Bookings";
+import Events from "./Components/Events";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -64,6 +66,26 @@ function App() {
             path="/userlist"
             element={
               <UserList
+                loggedIn={loggedIn}
+                setLoggedIn={setLoggedIn}
+                accessLevel={accessLevel}
+              />
+            }
+          />
+          <Route
+            path="/bookings"
+            element={
+              <Bookings
+                loggedIn={loggedIn}
+                setLoggedIn={setLoggedIn}
+                accessLevel={accessLevel}
+              />
+            }
+          />
+          <Route
+            path="/events"
+            element={
+              <Events
                 loggedIn={loggedIn}
                 setLoggedIn={setLoggedIn}
                 accessLevel={accessLevel}
