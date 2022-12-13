@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import config from "../config";
+import CalendarGrid from "./CalendarGrid";
 
 export default function Calendar({ loggedIn, setLoggedIn, accessLevel }) {
   const [sophieData, setSophieData] = useState();
@@ -107,7 +108,7 @@ export default function Calendar({ loggedIn, setLoggedIn, accessLevel }) {
 
   return (
     <>
-      "Calendar"
+      <CalendarGrid />
       <div onClick={getSophieData}>Get Sophie Data</div>
       {sophieData ? (
         <ShowData dataInput={sophieData} setDataInput={setSophieData} />

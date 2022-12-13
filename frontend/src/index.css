@@ -73,3 +73,64 @@ code {
 .userEntry {
   border: 2px solid black;
 }
+
+.calendargrid {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  font-family: sans-serif;
+  border: 4px solid #e6e6e6;
+  position: relative;
+}
+
+.days {
+  font-weight: bold;
+  text-align: center;
+  height: auto;
+  padding: 10px 0;
+  background: #e9e9e9;
+  border-bottom: 3px solid #cacaca;
+}
+
+.navigation {
+  width: 100%;
+  padding: 10px 8px 14px 8px;
+  border-bottom: 3px solid #b3b3b3;
+}
+
+.navigation div {
+  display: inline-block;
+  width: 33.33%;
+}
+
+.navigation .monthAndYear {
+  text-align: center;
+  font-weight: bold;
+}
+
+.navigation .back, 
+.navigation .forward {
+  cursor: pointer;
+  font-size: 0.7em;
+  color: grey;
+}
+
+.navigation .back {
+  text-align: left;
+}
+
+.navigation .forward {
+  text-align: right;
+}
+
+.cell {
+  background: #fffeee;
+  width: 14.2857%;
+  height: 90px;
+  font-size: 0.7em;
+  box-shadow: 0 0px 1px #393939;
+}
+
+.cell .date {
+  margin: 4px;
+}
