@@ -8,8 +8,7 @@ const adminController = require("./controllers/admin");
 const authController = require("./controllers/auth");
 const userController = require("./controllers/user");
 const fetchController = require("./controllers/fetch");
-const calendarController = require("./controllers/calendar");
-const methodOverride = require("method-override");
+const bookingController = require("./controllers/booking");
 require("dotenv").config();
 
 let mongoURI = process.env.DATABASE;
@@ -23,7 +22,6 @@ db.on("open", () => console.log("MongoDB connection established"));
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(methodOverride("_method"));
 app.use(
   cors({
     origin: "http://127.0.0.1:3000",
@@ -37,8 +35,15 @@ app.use("/admin", adminController);
 app.use("/auth", authController);
 app.use("/user", userController);
 app.use("/fetch", fetchController);
-app.use("/calendar", calendarController);
-app.listen(
-  process.env.PORT,
-  console.log(`Listening to port ${process.env.PORT}...`)
-);
+app.use("/booking", bookingController);
+
+app.get("*", (req, res) => {
+  res.json("Error, path not found")
+})
+
+mongoose.connection.once("open", ()=> {
+  app.listen(
+    process.env.PORT,
+    console.log(`Listening to port ${process.env.PORT}...`)
+  );
+})

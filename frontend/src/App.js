@@ -14,7 +14,7 @@ import Events from "./Components/Events";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
-  const [accessLevel, setAccessLevel] = useState(0);
+  const [accessLevel, setAccessLevel] = useState("user");
 
   useEffect(() => {
     async function checkToken() {
@@ -31,7 +31,6 @@ function App() {
     if (loggedIn) {
       checkAccess(setAccessLevel);
     }
-    //eslint-disable-next-line
   }, [loggedIn]);
 
   return (

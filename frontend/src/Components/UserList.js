@@ -46,13 +46,14 @@ function UserEntry({ data, fetchAllUsers }) {
     let result = await res.json();
     console.log(result)
     fetchAllUsers()
+    setShowAccess(false)
   }
 
     return (
       <div className="userEntry">
         <h4>Username: {data.username}</h4>
         <h4>
-          Access Level: {data.access}
+          Access Level: {data.access[0].toUpperCase() + data.access.substring(1)}
         </h4>
         <button onClick={()=>setShowDelete(true)}>Delete User</button>
         <button onClick={()=>setShowAccess(true)}>Edit User Access</button>
@@ -104,6 +105,7 @@ export default function UserList({ loggedIn, setLoggedIn, accessLevel }) {
     }
     checkLoginAccess();
     fetchAllUsers();
+    // eslint-disable-next-line
   }, [accessLevel, loggedIn, setLoggedIn, navigate]);
 
   return (

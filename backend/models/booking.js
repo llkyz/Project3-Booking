@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const bookingSchema = mongoose.Schema({
   origin: { type: String, required: true },
-  id: { type: Number, required: true },
+  id: { type: Number},
   price: { type: Number },
   participants: { type: Number },
   dateTime: { type: Date },
