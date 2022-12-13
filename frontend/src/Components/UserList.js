@@ -7,16 +7,14 @@ function UserEntry({ data, fetchAllUsers }) {
   const [showAccess, setShowAccess] = useState(false)
 
   async function executeDelete(username) {
-    let formBody = encodeURIComponent("username") +
-    "=" +
-    encodeURIComponent(username);
+    let formBody = {username: username}
     const res = await fetch(config.BACKEND_URL + "user", {
       method: "DELETE",
       credentials: "include",
       headers: {
-        "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+        "Content-Type": "application/json",
       },
-      body: formBody,
+      body: JSON.stringify(formBody),
     });
     let result = await res.json();
     console.log(result)
@@ -25,23 +23,17 @@ function UserEntry({ data, fetchAllUsers }) {
 
   async function executeEdit(username, event) {
     event.preventDefault()
-    let formBody = []
-
-    formBody.push(encodeURIComponent("username") +
-    "=" +
-    encodeURIComponent(username))
-    formBody.push(encodeURIComponent("access") +
-    "=" +
-    encodeURIComponent(event.target.form[0].value))
-    formBody = formBody.join("&");
-
+    let formBody = {
+      username: username,
+      access: event.target.form[0].value
+    }
     const res = await fetch(config.BACKEND_URL + "user", {
       method: "PUT",
       credentials: "include",
       headers: {
-        "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+        "Content-Type": "application/json",
       },
-      body: formBody,
+      body: JSON.stringify(formBody),
     });
     let result = await res.json();
     console.log(result)

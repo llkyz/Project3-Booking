@@ -17,6 +17,11 @@ router.get("/", isAuthenticated, async (req, res) => {
   }
 });
 
+router.get("/logout", (req, res) => {
+  console.log("Logging out")
+  res.status(200).clearCookie("token").send();
+});
+
 router.post("/login", async (req, res) => {
   const { username, password } = req.body;
 
@@ -75,12 +80,6 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.get("/:id", isAuthenticated, async (req, res) => {
-  let result = await User.findById(req.params.id);
-
-  res.json(result);
-});
-
 router.put("/", isAuthenticated, async (req, res) => {
   if (req.body.access) {
     const decoded = jwt.decode(req.cookies.token, { complete: true });
@@ -93,13 +92,13 @@ router.put("/", isAuthenticated, async (req, res) => {
       res.status(401).json("Unauthorized access")
     }
   }
-  else if (req.body.password) {
+  else if (req.body.currentpassword) {
   User.findOne({ username: req.body.username }, async function (err, user) {
     if (err) {
       console.log(err);
-      res.status(401).json("Error");
+      res.status(400).json(err);
     } else if (!user) {
-      res.status(401).json("Can't find user");
+      res.status(400).json("Can't find user");
     } else {
       if (await bcrypt.compare(req.body.currentpassword, user.password)) {
         let result = await User.updateOne(
@@ -114,9 +113,9 @@ router.put("/", isAuthenticated, async (req, res) => {
           }
         );
         console.log("Updated User: ", result);
-        res.status(200).json("OK");
+        res.status(200).json("Password changed");
       } else {
-        res.status(401).json("Passwords do not match");
+        res.status(400).json("Current password is wrong");
       }
     }
   });
@@ -130,10 +129,6 @@ router.delete("/", isAuthenticated, async (req, res) => {
   } else {
     res.status(404).json("User not found")
   }
-});
-
-router.get("/logout", (req, res) => {
-  res.status(200).clearCookie("token").send();
 });
 
 module.exports = router;

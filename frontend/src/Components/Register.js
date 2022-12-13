@@ -79,24 +79,16 @@ export default function Register({ loggedIn }) {
 
   async function registerUser(event) {
     event.preventDefault();
-    let formBody = [];
-    formBody.push(
-      encodeURIComponent("username") +
-        "=" +
-        encodeURIComponent(event.target.form[0].value)
-    );
-    formBody.push(
-      encodeURIComponent("password") +
-        "=" +
-        encodeURIComponent(event.target.form[1].value)
-    );
-    formBody = formBody.join("&");
+    let formBody = {
+      username: event.target.form[0].value,
+      password: event.target.form[1].value
+    };
     const res = await fetch(config.BACKEND_URL + "user", {
       method: "POST",
       headers: {
-        "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+        "Content-Type": "application/json",
       },
-      body: formBody,
+      body: JSON.stringify(formBody),
     });
     let result = await res.json();
     console.log(`Response ${res.status}: ${result}`);

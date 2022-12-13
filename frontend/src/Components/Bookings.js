@@ -185,15 +185,16 @@ function BookingEntry({data, getBookingData}) {
     data.dateTime = new Date(data.dateTime)
     
     async function setComplete(condition) {
-        let formBody = `_id=${data._id}&complete=${condition}`
-
         const res = await fetch(config.BACKEND_URL + "booking", {
             method: "PUT",
             credentials: "include",
             headers: {
-                "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+                "Content-Type": "application/json",
               },
-            body: formBody,
+            body: JSON.stringify({
+              _id: data._id,
+              complete: condition
+            }),
           });
           let result = await res.json();
           console.log(`Response ${res.status}: ${result}`);
@@ -205,15 +206,17 @@ function BookingEntry({data, getBookingData}) {
     }
 
     async function setIgnore(condition) {
-        let formBody = `_id=${data._id}&ignore=${condition}`
 
         const res = await fetch(config.BACKEND_URL + "booking", {
             method: "PUT",
             credentials: "include",
             headers: {
-                "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+                "Content-Type": "application/json",
               },
-            body: formBody,
+            body: JSON.stringify({
+              _id: data._id,
+              ignore: condition
+            }),
           });
           let result = await res.json();
           console.log(`Response ${res.status}: ${result}`);
@@ -225,15 +228,13 @@ function BookingEntry({data, getBookingData}) {
     }
 
     async function deleteEntry() {
-        let formBody = `_id=${data._id}`
-
         const res = await fetch(config.BACKEND_URL + "booking", {
             method: "DELETE",
             credentials: "include",
             headers: {
-                "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+                "Content-Type": "application/json",
               },
-            body: formBody,
+            body: JSON.stringify({_id: data._id}),
           });
           let result = await res.json();
           console.log(`Response ${res.status}: ${result}`);
@@ -267,38 +268,38 @@ function EditModal({data, getBookingData, setShowEdit}) {
 
   async function submitEdit(event) {
     event.preventDefault()
-    let formBody = []
+    let formBody = {
+      _id: data._id,
+      complete: event.target.form[7].checked,
+      ignore: event.target.form[8].checked
+    }
     if (event.target.form[0].value) {
-      formBody.push(`customer=${event.target.form[0].value}`)
+      formBody.customer = event.target.form[0].value
     }
     if (event.target.form[1].value) {
-      formBody.push(`contact=${event.target.form[1].value}`)
+      formBody.contact = event.target.form[1].value
     }
     if (event.target.form[2].value) {
-      formBody.push(`dateTime=${encodeURIComponent(new Date(event.target.form[2].value))}`)
+      formBody.dateTime = new Date(event.target.form[2].value)
     }
     if (event.target.form[3].value) {
-      formBody.push(`price=${event.target.form[3].value}`)
+      formBody.price = event.target.form[3].value
     }
     if (event.target.form[4].value) {
-      formBody.push(`participants=${event.target.form[4].value}`)
+      formBody.participants = event.target.form[4].value
     }
     if (event.target.form[5].value) {
-      formBody.push(`origin=${event.target.form[5].value}`)
+      formBody.origin = event.target.form[5].value
     }
     if (event.target.form[6].value) {
-      formBody.push(`id=${event.target.form[6].value}`)
+      formBody.id = event.target.form[6].value
     }
-    formBody.push(`complete=${event.target.form[7].checked}`)
-    formBody.push(`ignore=${event.target.form[8].checked}`)
-    formBody.push(`_id=${data._id}`)
-    formBody = formBody.join("&")
 
     const res = await fetch(config.BACKEND_URL + "booking", {
       method: "PUT",
       credentials: "include",
       headers: {
-          "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+          "Content-Type": "application/json",
         },
       body: formBody,
     });

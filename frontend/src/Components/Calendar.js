@@ -24,25 +24,21 @@ export default function Calendar({ loggedIn, setLoggedIn, accessLevel }) {
     setdataInput,
     ignoreCheck
   ) {
-    let formBody = [];
+    let formBody = {};
     for (let property in data) {
-      let encodedKey = encodeURIComponent(property);
-      let encodedValue = encodeURIComponent(data[property]);
-      formBody.push(encodedKey + "=" + encodedValue);
+      formBody[property] = data[property]
     }
-    console.log(ignoreCheck);
     if (ignoreCheck) {
-      formBody.push("ignore=true");
+      formBody.ignore = true
     }
-    formBody = formBody.join("&");
 
     const res = await fetch(config.BACKEND_URL + "calendar", {
       method: "POST",
       headers: {
-        "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+        "Content-Type": "application/json",
       },
       credentials: "include",
-      body: formBody,
+      body: JSON.stringify(formBody),
     });
     console.log(`Response ${res.status}: ${await res.json()}`);
     if (res.status === 200) {

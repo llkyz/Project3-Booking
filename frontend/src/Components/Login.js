@@ -12,25 +12,17 @@ export default function Login({ loggedIn, setLoggedIn }) {
 
   async function doLogin(event) {
     event.preventDefault();
-    let formBody = [];
-    formBody.push(
-      encodeURIComponent("username") +
-        "=" +
-        encodeURIComponent(event.target.form[0].value)
-    );
-    formBody.push(
-      encodeURIComponent("password") +
-        "=" +
-        encodeURIComponent(event.target.form[1].value)
-    );
-    formBody = formBody.join("&");
+    let formBody = {
+      username: event.target.form[0].value,
+      password: event.target.form[1].value
+    };
     const res = await fetch(config.BACKEND_URL + "user/login", {
       method: "POST",
       credentials: "include",
       headers: {
-        "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+        "Content-Type": "application/json",
       },
-      body: formBody,
+      body: JSON.stringify(formBody),
     });
     let result = await res.json();
     console.log(`Response ${res.status}: ${result}`);

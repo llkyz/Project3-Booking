@@ -49,39 +49,26 @@ export default function Profile({ loggedIn, setLoggedIn }) {
         "Current password and new password cannot be the same"
       );
     } else {
-      let formBody = [];
-      formBody.push(
-        encodeURIComponent("username") +
-          "=" +
-          encodeURIComponent(profileData.username)
-      );
-      formBody.push(
-        encodeURIComponent("currentpassword") +
-          "=" +
-          encodeURIComponent(event.target.form[1].value)
-      );
-      formBody.push(
-        encodeURIComponent("newpassword") +
-          "=" +
-          encodeURIComponent(event.target.form[2].value)
-      );
-      formBody = formBody.join("&");
+      let formBody = {
+        username: profileData.username,
+        currentpassword: event.target.form[1].value,
+        newpassword: event.target.form[2].value
+      };
       const res = await fetch(config.BACKEND_URL + "user", {
         method: "PUT",
         credentials: "include",
         headers: {
-          "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+          "Content-Type": "application/json",
         },
-        body: formBody,
+        body: JSON.stringify(formBody),
       });
-      console.log(`Response ${res.status}: ${await res.json()}`);
+      let result = await res.json()
+      console.log(`Response ${res.status}: ${result}`);
       if (res.status === 200) {
         event.target.form[1].value = "";
         event.target.form[2].value = "";
-        setChangePassDialog("Password Changed");
-      } else {
-        setChangePassDialog("Passwords do not match");
       }
+      setChangePassDialog(result);
     }
   }
 
@@ -97,7 +84,7 @@ export default function Profile({ loggedIn, setLoggedIn }) {
           <button onClick={doLogout}>Log Out</button>
           <h2>Change Password</h2>
           {changePassDialog ?? ""}
-          <form method="POST" action={config.BACKEND_URL + "user?_method=PUT"}>
+          <form>
             <input type="hidden" name="username" value={profileData.username} />
             <input
               type="text"
