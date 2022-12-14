@@ -14,6 +14,15 @@ router.get("/", isAuthenticated, async (req, res) => {
   }
 });
 
+router.get("/:id", isAuthenticated, async (req, res) => {
+  try {
+    let result = await Pickup.findById(req.params.id);
+    res.status(200).json(result);
+  } catch (err) {
+    res.status(400).json(err);
+  }
+});
+
 router.post("/", isAuthenticated, async (req, res) => {
   try {
     let result = await Pickup.create(req.body);
