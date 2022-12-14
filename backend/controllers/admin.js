@@ -1,12 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const User = require("../models/user");
-const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-require("dotenv").config();
-const isAuthenticated = require("../functions/isAuthenticated");
+const isAdmin = require("../functions/isAdmin");
 
-router.get("/userindex", isAuthenticated, async (req, res) => {
+router.get("/userindex", isAdmin, async (req, res) => {
   try {
     const decoded = jwt.decode(req.cookies.token, { complete: true });
     username = decoded.payload.username;

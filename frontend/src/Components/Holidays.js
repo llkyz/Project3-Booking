@@ -118,7 +118,6 @@ function HolidayEntry({ data, getHolidayData }) {
       body: JSON.stringify({ dateTime: data.dateTime }),
     });
     let result = await res.json();
-    console.log(`Response ${res.status}: ${result}`);
     if (res.status === 200) {
       getHolidayData();
       setShowDelete(false);
@@ -277,7 +276,6 @@ function EditHoliday({ data, getHolidayData, setShowEdit }) {
       body: JSON.stringify(formBody),
     });
     let result = await res.json();
-    console.log(`Response ${res.status}: ${result}`);
     if (res.status === 200) {
       getHolidayData();
       setShowEdit(false);

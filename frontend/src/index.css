@@ -7,6 +7,22 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.backgroundImage {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  top: 50px;
+  object-fit: fill;
+  opacity: 0.5;
+  margin: 0;
+}
+
+.backgroundImage img {
+  width: 100%;
+  height: 100%;
+}
+
 h1 {
   margin: 0;
 }
@@ -18,8 +34,8 @@ code {
 
 .navbar {
   position: fixed;
-  height: 50px;
-  background-color: grey;
+  height: 100px;
+  background-color: white;
   top: 0;
   width: 100%;
   text-align: center;
@@ -27,14 +43,13 @@ code {
 }
 
 .navbar h1 {
-  color: white;
+  color: rgb(50, 50, 50);
   margin: 0 auto;
   width: 100%;
 }
 
 .navbar .user {
   position: fixed;
-  color: red;
   right: 3%;
   top: 8px;
 }
@@ -47,19 +62,20 @@ code {
 
 .content {
   width: 70%;
-  background-color: red;
-  height: 2000px;
+  background-color: rgb(170, 180, 130);
+  height: 100%;
   margin: 0 auto;
-  margin-top: 50px;
+  margin-top: 100px;
+  margin-bottom: 200px;
 }
 
 .sidebarButton {
-  width: 30px;
-  height: 30px;
+  width: 50px;
+  height: 50px;
   object-fit: cover;
   position: fixed;
   left: 3%;
-  top: 8px;
+  top: 20px;
   cursor: pointer;
 }
 
@@ -68,7 +84,7 @@ code {
   width: 250px;
   height: 1000px;
   background-color: green;
-  top: 50px;
+  top: 100px;
 }
 
 .userEntry {
@@ -109,7 +125,7 @@ code {
   font-weight: bold;
 }
 
-.navigation .back, 
+.navigation .back,
 .navigation .forward {
   cursor: pointer;
   font-size: 0.7em;
@@ -134,4 +150,55 @@ code {
 
 .cell .date {
   margin: 4px;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.headerLogo {
+  height: 100px;
+  line-height: 100px;
+  vertical-align: middle;
+  width: fit-content;
+  margin: 0 auto;
+}
+
+.headerLogo img {
+  display: inline-block;
+  height: 80%;
+  vertical-align: middle;
+  margin-right: 20px;
+  cursor: pointer;
+}
+
+.headerLogo h1 {
+  display: inline-block;
+  width: fit-content;
+  vertical-align: middle;
+  cursor: pointer;
+}
+
+.profile {
+  height: 50px;
+  width: 50px;
+  margin-top: 15px;
+  cursor: pointer;
+}
+
+.login {
+  font-size: 1.5em;
+  font-weight: bold;
+  margin-top: 15px;
+  cursor: pointer;
+  color: rgb(50, 50, 50);
+  border: 4px solid rgb(50, 50, 50);
+  border-radius: 20px;
+  padding: 5px 10px;
+}
+
+.login:hover {
+  color: white;
+  background-color: rgb(50, 50, 50);
 }

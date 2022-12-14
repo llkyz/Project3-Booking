@@ -13,10 +13,18 @@ import Bookings from "./Components/Bookings";
 import Holidays from "./Components/Holidays";
 import Offdays from "./Components/Offdays";
 import Pickups from "./Components/Pickups";
+import backgroundImg from "./Assets/background.jpg";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [accessLevel, setAccessLevel] = useState("user");
+  const [scrollOffset, setScrollOffset] = useState(0);
+
+  useEffect(() => {
+    const onScroll = () => setScrollOffset(window.pageYOffset);
+    window.removeEventListener("scroll", onScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
+  }, []);
 
   useEffect(() => {
     async function checkToken() {
@@ -37,10 +45,17 @@ function App() {
 
   return (
     <BrowserRouter>
-      <Navbar loggedIn={loggedIn} accessLevel={accessLevel} />
+      <div className="backgroundImage">
+        <img src={backgroundImg} />
+      </div>
+      <Navbar
+        loggedIn={loggedIn}
+        accessLevel={accessLevel}
+        scrollOffset={scrollOffset}
+      />
       <div className="content">
         <Routes>
-          <Route index element={<Home />} />
+          <Route index element={<Home loggedIn={loggedIn} />} />
           <Route
             path="/login"
             element={<Login loggedIn={loggedIn} setLoggedIn={setLoggedIn} />}

@@ -2,10 +2,11 @@ const express = require("express");
 const router = express.Router();
 const Holiday = require("../models/holiday");
 const isAuthenticated = require("../functions/isAuthenticated");
+const isStaff = require("../functions/isStaff");
 const entryFindCreate = require("../functions/entryFindCreate");
 const entryFindDelete = require("../functions/entryFindDelete");
 
-router.get("/", isAuthenticated, async (req, res) => {
+router.get("/", isStaff, async (req, res) => {
   try {
     let result = await Holiday.find();
     res.status(200).json(result);
@@ -23,7 +24,7 @@ router.get("/:id", isAuthenticated, async (req, res) => {
   }
 });
 
-router.post("/", isAuthenticated, async (req, res) => {
+router.post("/", isStaff, async (req, res) => {
   try {
     console.log(req.body);
     let result = await Holiday.create(req.body);
@@ -37,7 +38,7 @@ router.post("/", isAuthenticated, async (req, res) => {
   }
 });
 
-router.put("/:id", isAuthenticated, async (req, res) => {
+router.put("/:id", isStaff, async (req, res) => {
   try {
     let originalData = await Holiday.findById(req.params.id);
     await entryFindDelete(originalData.dateTime, req.params.id, "holidays");
@@ -51,7 +52,7 @@ router.put("/:id", isAuthenticated, async (req, res) => {
   }
 });
 
-router.delete("/:id", isAuthenticated, async (req, res) => {
+router.delete("/:id", isStaff, async (req, res) => {
   try {
     await entryFindDelete(req.body.dateTime, req.params.id, "holidays");
     let result = await Holiday.findByIdAndDelete(req.params.id);

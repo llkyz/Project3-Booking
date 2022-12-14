@@ -2,10 +2,11 @@ const express = require("express");
 const router = express.Router();
 const Offday = require("../models/offday");
 const isAuthenticated = require("../functions/isAuthenticated");
+const isStaff = require("../functions/isStaff");
 const entryFindCreate = require("../functions/entryFindCreate");
 const entryFindDelete = require("../functions/entryFindDelete");
 
-router.get("/", isAuthenticated, async (req, res) => {
+router.get("/", isStaff, async (req, res) => {
   try {
     let result = await Offday.find();
     res.status(200).json(result);
@@ -23,7 +24,7 @@ router.get("/:id", isAuthenticated, async (req, res) => {
   }
 });
 
-router.post("/", isAuthenticated, async (req, res) => {
+router.post("/", isStaff, async (req, res) => {
   try {
     let result = await Offday.create(req.body);
     await entryFindCreate(req.body.dateTime, result._id, "offdays");
@@ -35,7 +36,7 @@ router.post("/", isAuthenticated, async (req, res) => {
   }
 });
 
-router.put("/:id", isAuthenticated, async (req, res) => {
+router.put("/:id", isStaff, async (req, res) => {
   try {
     let originalData = await Offday.findById(req.params.id);
     await entryFindDelete(originalData.dateTime, req.params.id, "offdays");
@@ -49,7 +50,7 @@ router.put("/:id", isAuthenticated, async (req, res) => {
   }
 });
 
-router.delete("/:id", isAuthenticated, async (req, res) => {
+router.delete("/:id", isStaff, async (req, res) => {
   try {
     await entryFindDelete(req.body.dateTime, req.params.id, "offdays");
     let result = await Offday.findByIdAndDelete(req.params.id);

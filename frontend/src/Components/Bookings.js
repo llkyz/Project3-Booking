@@ -33,7 +33,7 @@ export default function Bookings({ loggedIn, setLoggedIn, accessLevel }) {
     let result = await res.json();
     if (res.status === 200) {
       setBookingData(result);
-    } else if (res.status === 401) {
+    } else {
       console.log(result);
       setLoggedIn(false);
     }
@@ -127,7 +127,6 @@ function BookingEntry({ data, getBookingData }) {
       }),
     });
     let result = await res.json();
-    console.log(`Response ${res.status}: ${result}`);
     if (res.status === 200) {
       getBookingData();
       setShowDelete(false);
@@ -147,7 +146,6 @@ function BookingEntry({ data, getBookingData }) {
       }),
     });
     let result = await res.json();
-    console.log(`Response ${res.status}: ${result}`);
     if (res.status === 200) {
       getBookingData();
       setShowDelete(false);
@@ -165,7 +163,6 @@ function BookingEntry({ data, getBookingData }) {
       body: JSON.stringify({ dateTime: data.dateTime }),
     });
     let result = await res.json();
-    console.log(`Response ${res.status}: ${result}`);
     if (res.status === 200) {
       getBookingData();
       setShowDelete(false);
@@ -395,7 +392,6 @@ function EditBooking({ data, getBookingData, setShowEdit }) {
       body: JSON.stringify(formBody),
     });
     let result = await res.json();
-    console.log(`Response ${res.status}: ${result}`);
     if (res.status === 200) {
       getBookingData();
       setShowEdit(false);

@@ -7,7 +7,6 @@ const User = require("../models/user");
 
 router.get("/checktoken", (req, res) => {
   const token = req.cookies.token;
-
   if (!token) {
     res.status(401).json("Token not found");
   } else {
@@ -23,7 +22,7 @@ router.get("/checktoken", (req, res) => {
 
 router.get("/checkaccess", async (req, res) => {
   const token = req.cookies.token;
-  console.log(token)
+  console.log(token);
   if (!token) {
     res.status(401).json("Token not found");
   } else {

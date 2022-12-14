@@ -5,6 +5,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const isAuthenticated = require("../functions/isAuthenticated");
+const isAdmin = require("../functions/isAdmin");
 
 router.get("/", isAuthenticated, async (req, res) => {
   try {
@@ -124,7 +125,7 @@ router.put("/", isAuthenticated, async (req, res) => {
   }
 });
 
-router.delete("/", isAuthenticated, async (req, res) => {
+router.delete("/", isAdmin, async (req, res) => {
   let result = await User.findOneAndDelete({ username: req.body.username });
   if (result !== null) {
     res.status(200).json(`Deleted User: ${result.username}`);

@@ -2,10 +2,11 @@ const express = require("express");
 const router = express.Router();
 const Pickup = require("../models/pickup");
 const isAuthenticated = require("../functions/isAuthenticated");
+const isStaff = require("../functions/isStaff");
 const entryFindCreate = require("../functions/entryFindCreate");
 const entryFindDelete = require("../functions/entryFindDelete");
 
-router.get("/", isAuthenticated, async (req, res) => {
+router.get("/", isStaff, async (req, res) => {
   try {
     let result = await Pickup.find();
     res.status(200).json(result);
@@ -23,7 +24,7 @@ router.get("/:id", isAuthenticated, async (req, res) => {
   }
 });
 
-router.post("/", isAuthenticated, async (req, res) => {
+router.post("/", isStaff, async (req, res) => {
   try {
     let result = await Pickup.create(req.body);
     await entryFindCreate(req.body.dateTime, result._id, "pickups");
@@ -35,7 +36,7 @@ router.post("/", isAuthenticated, async (req, res) => {
   }
 });
 
-router.put("/:id", isAuthenticated, async (req, res) => {
+router.put("/:id", isStaff, async (req, res) => {
   try {
     let originalData = await Pickup.findById(req.params.id);
     await entryFindDelete(originalData.dateTime, req.params.id, "pickups");
@@ -49,7 +50,7 @@ router.put("/:id", isAuthenticated, async (req, res) => {
   }
 });
 
-router.delete("/:id", isAuthenticated, async (req, res) => {
+router.delete("/:id", isStaff, async (req, res) => {
   try {
     await entryFindDelete(req.body.dateTime, req.params.id, "pickups");
     let result = await Pickup.findByIdAndDelete(req.params.id);

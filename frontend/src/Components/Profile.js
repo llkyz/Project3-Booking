@@ -20,14 +20,13 @@ export default function Profile({ loggedIn, setLoggedIn }) {
         credentials: "include",
       });
       let result = await res.json();
-      console.log(`Response ${res.status}: ${result}`);
       if (res.status === 200) {
         setProfileData({ username: result.username, access: result.access });
       } else {
         setLoggedIn(false);
       }
     }
-    checkLoggedIn()
+    checkLoggedIn();
     getProfileData();
   }, []);
 
@@ -52,7 +51,7 @@ export default function Profile({ loggedIn, setLoggedIn }) {
       let formBody = {
         username: profileData.username,
         currentpassword: event.target.form[1].value,
-        newpassword: event.target.form[2].value
+        newpassword: event.target.form[2].value,
       };
       const res = await fetch(config.BACKEND_URL + "user", {
         method: "PUT",
@@ -62,8 +61,7 @@ export default function Profile({ loggedIn, setLoggedIn }) {
         },
         body: JSON.stringify(formBody),
       });
-      let result = await res.json()
-      console.log(`Response ${res.status}: ${result}`);
+      let result = await res.json();
       if (res.status === 200) {
         event.target.form[1].value = "";
         event.target.form[2].value = "";
@@ -79,7 +77,9 @@ export default function Profile({ loggedIn, setLoggedIn }) {
         <>
           <h4>Username: {profileData.username}</h4>
           <h4>
-            Access: {profileData.access}
+            Access Level:{" "}
+            {profileData.access[0].toUpperCase() +
+              profileData.access.substring(1)}
           </h4>
           <button onClick={doLogout}>Log Out</button>
           <h2>Change Password</h2>

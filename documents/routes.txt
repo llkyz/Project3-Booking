@@ -3,11 +3,32 @@ Routes
 GET /fetch/sophie (Get array of open orders from sophie) 
 GET /fetch/shopify (Get array of open orders from shopify)
 
-GET /calendar (Get all calendar entries)
-POST /calendar/ (Create new calendar entry)
-GET /calendar/:id (Get specific calendar entry)
-PUT /calendar/:id (Update specific calendar entry)
-DELETE /calendar/:id (Delete specific calendar entry)
+GET /entry/range (send dateStart and dateEnd, returns an array of entries within that range)
+GET /entry/:id (Get specific entry)
+
+GET /booking
+GET /booking/:id
+POST /booking
+PUT /booking/:id
+DELETE /booking/:id
+
+GET /holiday
+GET /holiday/:id
+POST /holiday
+PUT /holiday/:id
+DELETE /holiday/:id
+
+GET /offday
+GET /offday/:id
+POST /offday
+PUT /offday/:id
+DELETE /offday/:id
+
+GET /pickup
+GET /pickup/:id
+POST /pickup
+PUT /pickup/:id
+DELETE /pickup/:id
 
 GET /user (Get all calendar entries)
 POST /user/ (Create new calendar entry)
@@ -15,7 +36,10 @@ GET /user/:id (Get specific calendar entry)
 PUT /user/:id (Update specific calendar entry)
 DELETE /user/:id (Delete specific calendar entry)
 
-GET /checktoken (Check if jsonwebtoken is valid)
+GET /admin/userindex (Gets all users [passwords not included])
+
+GET /auth/checktoken (Check if user is logged in and jsonwebtoken is valid)
+GET /auth/checkaccess (Check user's access level)
 
 - 401: No token found / Invalid token
 - 200: Token Verified

@@ -2,10 +2,12 @@ const express = require("express");
 const router = express.Router();
 const Booking = require("../models/booking");
 const isAuthenticated = require("../functions/isAuthenticated");
+const isStaff = require("../functions/isStaff");
 const entryFindCreate = require("../functions/entryFindCreate");
 const entryFindDelete = require("../functions/entryFindDelete");
 
-router.get("/", isAuthenticated, async (req, res) => {
+router.get("/", isStaff, async (req, res) => {
+  console.log("donig get");
   try {
     let result = await Booking.find();
     res.status(200).json(result);
@@ -23,7 +25,7 @@ router.get("/:id", isAuthenticated, async (req, res) => {
   }
 });
 
-router.post("/", isAuthenticated, async (req, res) => {
+router.post("/", isStaff, async (req, res) => {
   try {
     let result = await Booking.create(req.body);
     await entryFindCreate(req.body.dateTime, result._id, "bookings");
@@ -35,7 +37,7 @@ router.post("/", isAuthenticated, async (req, res) => {
   }
 });
 
-router.put("/:id", isAuthenticated, async (req, res) => {
+router.put("/:id", isStaff, async (req, res) => {
   try {
     let originalData = await Booking.findById(req.params.id);
     await entryFindDelete(originalData.dateTime, req.params.id, "bookings");
@@ -49,7 +51,7 @@ router.put("/:id", isAuthenticated, async (req, res) => {
   }
 });
 
-router.delete("/:id", isAuthenticated, async (req, res) => {
+router.delete("/:id", isStaff, async (req, res) => {
   try {
     await entryFindDelete(req.body.dateTime, req.params.id, "bookings");
     let result = await Booking.findByIdAndDelete(req.params.id);
