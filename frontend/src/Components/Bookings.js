@@ -26,7 +26,7 @@ export default function Bookings({ loggedIn, setLoggedIn, accessLevel }) {
   }, [accessLevel, loggedIn, navigate, setLoggedIn]);
 
   async function getBookingData() {
-    const res = await fetch(config.BACKEND_URL + "booking/index", {
+    const res = await fetch(config.BACKEND_URL + "booking", {
       method: "GET",
       credentials: "include",
     });

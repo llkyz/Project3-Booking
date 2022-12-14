@@ -3,6 +3,7 @@
 
 const Entry = require("../models/entry");
 
+//Params: [date to be checked against], [_id of booking/event/holiday etc], ["bookings"/"events"/"holidays"/etc...]
 async function entryFindDelete(dateTimeStr, _id, type) {
   let dateTime = new Date(dateTimeStr);
   let year = dateTime.getFullYear();

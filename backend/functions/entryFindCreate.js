@@ -3,7 +3,8 @@
 
 const Entry = require("../models/entry");
 
-async function entryFindCreate(dateTimeStr) {
+//Params: [date to be checked against], [_id of booking/event/holiday etc], ["bookings"/"events"/"holidays"/etc...]
+async function entryFindCreate(dateTimeStr, _id, type) {
   let dateTime = new Date(dateTimeStr);
   let year = dateTime.getFullYear();
   let month = (dateTime.getMonth() + 1).toLocaleString("en-US", {
@@ -15,13 +16,17 @@ async function entryFindCreate(dateTimeStr) {
     .toLocaleString("en-US", { minimumIntegerDigits: 2, useGrouping: false });
   let dateTimeFormat = year + "-" + month + "-" + day;
   console.log(dateTimeFormat);
-
-  const result = await Entry.findOne({ date: new Date(dateTimeFormat) });
-  if (result === null) {
-    const newEntry = await Entry.create({ date: new Date(dateTimeFormat) });
-    return newEntry;
-  } else {
-    return result;
+  try {
+    const result = await Entry.findOne({ date: new Date(dateTimeFormat) });
+    if (result === null) {
+      await Entry.create({ date: new Date(dateTimeFormat), [type]: [_id] });
+    } else {
+      await Entry.findByIdAndUpdate(result._id, { $push: { [type]: _id } });
+    }
+    return true;
+  } catch (err) {
+    console.log("Error: ", err);
+    return false;
   }
 }
 

@@ -9,6 +9,9 @@ const authController = require("./controllers/auth");
 const userController = require("./controllers/user");
 const fetchController = require("./controllers/fetch");
 const bookingController = require("./controllers/booking");
+const holidayController = require("./controllers/holiday");
+const offdayController = require("./controllers/offday");
+const pickupController = require("./controllers/pickup");
 require("dotenv").config();
 
 let mongoURI = process.env.DATABASE;
@@ -36,14 +39,17 @@ app.use("/auth", authController);
 app.use("/user", userController);
 app.use("/fetch", fetchController);
 app.use("/booking", bookingController);
+app.use("/holiday", holidayController);
+app.use("/offday", offdayController);
+app.use("/pickup", pickupController);
 
 app.get("*", (req, res) => {
-  res.json("Error, path not found")
-})
+  res.json("Error, path not found");
+});
 
-mongoose.connection.once("open", ()=> {
+mongoose.connection.once("open", () => {
   app.listen(
     process.env.PORT,
     console.log(`Listening to port ${process.env.PORT}...`)
   );
-})
+});
