@@ -11,6 +11,9 @@ import checkAccess from "./Authorization/checkAccess";
 import UserList from "./Components/UserList";
 import Bookings from "./Components/Bookings";
 import Events from "./Components/Events";
+import Holidays from "./Components/Holidays";
+import Offdays from "./Components/Offdays";
+import Pickups from "./Components/Pickups";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -85,6 +88,36 @@ function App() {
             path="/events"
             element={
               <Events
+                loggedIn={loggedIn}
+                setLoggedIn={setLoggedIn}
+                accessLevel={accessLevel}
+              />
+            }
+          />
+          <Route
+            path="/holidays"
+            element={
+              <Holidays
+                loggedIn={loggedIn}
+                setLoggedIn={setLoggedIn}
+                accessLevel={accessLevel}
+              />
+            }
+          />
+          <Route
+            path="/offdays"
+            element={
+              <Offdays
+                loggedIn={loggedIn}
+                setLoggedIn={setLoggedIn}
+                accessLevel={accessLevel}
+              />
+            }
+          />
+          <Route
+            path="/pickups"
+            element={
+              <Pickups
                 loggedIn={loggedIn}
                 setLoggedIn={setLoggedIn}
                 accessLevel={accessLevel}

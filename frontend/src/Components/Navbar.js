@@ -43,13 +43,24 @@ function Sidebar({ accessLevel }) {
       {accessLevel !== "user" ? (
         <>
           <Link to="/bookings">
-          <h1>Bookings</h1>
+            <h2>Bookings</h2>
           </Link>
           <Link to="/events">
-          <h1>Events</h1>
+            <h2>Events</h2>
+          </Link>
+          <Link to="/holidays">
+            <h2>Holidays</h2>
+          </Link>
+          <Link to="/Offdays">
+            <h2>Offdays</h2>
+          </Link>
+          <Link to="/Pickups">
+            <h2>Pickups</h2>
           </Link>
         </>
-        ) : ""}
+      ) : (
+        ""
+      )}
       {accessLevel === "admin" ? (
         <Link to="/userlist">
           <h1>User List</h1>
