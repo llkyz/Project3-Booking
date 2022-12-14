@@ -26,13 +26,13 @@ export default function Calendar({ loggedIn, setLoggedIn, accessLevel }) {
   ) {
     let formBody = {};
     for (let property in data) {
-      formBody[property] = data[property]
+      formBody[property] = data[property];
     }
     if (ignoreCheck) {
-      formBody.ignore = true
+      formBody.ignore = true;
     }
 
-    const res = await fetch(config.BACKEND_URL + "calendar", {
+    const res = await fetch(config.BACKEND_URL + "booking", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
