@@ -11,11 +11,8 @@ router.get("/userindex", isAuthenticated, async (req, res) => {
     const decoded = jwt.decode(req.cookies.token, { complete: true });
     username = decoded.payload.username;
     const result = await User.findOne({ username: username });
-    if (result.access === "admin") {
-      const allResults = await User.find(
-        {},
-        { username: 1, access: 1, _id: 0 }
-      );
+    if (result.access === "admin" || result.access === "staff") {
+      const allResults = await User.find({}, { username: 1, access: 1 });
       res.status(200).json(allResults);
     } else {
       res.status(403).json("Insufficient access level");

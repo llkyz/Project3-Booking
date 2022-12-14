@@ -26,15 +26,13 @@ router.post("/", isAuthenticated, async (req, res) => {
   }
 });
 
-router.put("/", isAuthenticated, async (req, res) => {
+router.put("/:id", isAuthenticated, async (req, res) => {
   try {
-    let originalData = await Pickup.findById(req.body._id);
-    await entryFindDelete(originalData.dateTime, req.body._id, "pickups");
-    await entryFindCreate(req.body.dateTime, req.body._id, "pickups");
+    let originalData = await Pickup.findById(req.params.id);
+    await entryFindDelete(originalData.dateTime, req.params.id, "pickups");
+    await entryFindCreate(req.body.dateTime, req.params.id, "pickups");
 
-    let _id = req.body._id;
-    delete req.body._id;
-    let result2 = await Pickup.findByIdAndUpdate(_id, req.body);
+    let result2 = await Pickup.findByIdAndUpdate(req.params.id, req.body);
     console.log(result2);
     res.status(200).json("Pickup updated");
   } catch (err) {
@@ -42,10 +40,10 @@ router.put("/", isAuthenticated, async (req, res) => {
   }
 });
 
-router.delete("/", isAuthenticated, async (req, res) => {
+router.delete("/:id", isAuthenticated, async (req, res) => {
   try {
-    await entryFindDelete(req.body.dateTime, req.body._id, "pickups");
-    let result = await Pickup.findByIdAndDelete(req.body._id);
+    await entryFindDelete(req.body.dateTime, req.params.id, "pickups");
+    let result = await Pickup.findByIdAndDelete(req.params.id);
     console.log(result);
     res.status(200).json("Pickup deleted");
   } catch (err) {

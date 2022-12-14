@@ -26,7 +26,12 @@ async function entryFindDelete(dateTimeStr, _id, type) {
       { $pull: { [type]: _id } },
       { new: true }
     );
-    if (result2.bookings.length === 0 && result2.events.length === 0) {
+    if (
+      result2.bookings.length === 0 &&
+      result2.holidays.length === 0 &&
+      result2.offdays.length === 0 &&
+      result2.pickups.length === 0
+    ) {
       await Entry.findOneAndDelete({ date: new Date(dateTimeFormat) });
     }
   }

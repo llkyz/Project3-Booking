@@ -18,7 +18,7 @@ router.get("/", isAuthenticated, async (req, res) => {
 });
 
 router.get("/logout", (req, res) => {
-  console.log("Logging out")
+  console.log("Logging out");
   res.status(200).clearCookie("token").send();
 });
 
@@ -35,7 +35,7 @@ router.post("/login", async (req, res) => {
         console.log("Logged in, token issued");
         const payload = { username };
         const token = jwt.sign(payload, process.env.SECRET, {
-          expiresIn: "1h",
+          expiresIn: "12h",
         });
         res
           .status(200)
@@ -86,48 +86,50 @@ router.put("/", isAuthenticated, async (req, res) => {
     username = decoded.payload.username;
     const result = await User.findOne({ username: username });
     if (result.access === "admin") {
-      const result2 = await User.findOneAndUpdate({username: req.body.username}, {$set: {access: req.body.access}})
-      res.status(200).json(`User access updated to ${req.body.access}`)
+      const result2 = await User.findOneAndUpdate(
+        { username: req.body.username },
+        { $set: { access: req.body.access } }
+      );
+      res.status(200).json(`User access updated to ${req.body.access}`);
     } else {
-      res.status(401).json("Unauthorized access")
+      res.status(401).json("Unauthorized access");
     }
-  }
-  else if (req.body.currentpassword) {
-  User.findOne({ username: req.body.username }, async function (err, user) {
-    if (err) {
-      console.log(err);
-      res.status(400).json(err);
-    } else if (!user) {
-      res.status(400).json("Can't find user");
-    } else {
-      if (await bcrypt.compare(req.body.currentpassword, user.password)) {
-        let result = await User.updateOne(
-          { username: req.body.username },
-          {
-            $set: {
-              password: bcrypt.hashSync(
-                req.body.newpassword,
-                bcrypt.genSaltSync(10)
-              ),
-            },
-          }
-        );
-        console.log("Updated User: ", result);
-        res.status(200).json("Password changed");
+  } else if (req.body.currentpassword) {
+    User.findOne({ username: req.body.username }, async function (err, user) {
+      if (err) {
+        console.log(err);
+        res.status(400).json(err);
+      } else if (!user) {
+        res.status(400).json("Can't find user");
       } else {
-        res.status(400).json("Current password is wrong");
+        if (await bcrypt.compare(req.body.currentpassword, user.password)) {
+          let result = await User.updateOne(
+            { username: req.body.username },
+            {
+              $set: {
+                password: bcrypt.hashSync(
+                  req.body.newpassword,
+                  bcrypt.genSaltSync(10)
+                ),
+              },
+            }
+          );
+          console.log("Updated User: ", result);
+          res.status(200).json("Password changed");
+        } else {
+          res.status(400).json("Current password is wrong");
+        }
       }
-    }
-  });
-}
+    });
+  }
 });
 
 router.delete("/", isAuthenticated, async (req, res) => {
-  let result = await User.findOneAndDelete({username: req.body.username});
+  let result = await User.findOneAndDelete({ username: req.body.username });
   if (result !== null) {
     res.status(200).json(`Deleted User: ${result.username}`);
   } else {
-    res.status(404).json("User not found")
+    res.status(404).json("User not found");
   }
 });
 

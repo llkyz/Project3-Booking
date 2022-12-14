@@ -10,7 +10,6 @@ import config from "./config";
 import checkAccess from "./Authorization/checkAccess";
 import UserList from "./Components/UserList";
 import Bookings from "./Components/Bookings";
-import Events from "./Components/Events";
 import Holidays from "./Components/Holidays";
 import Offdays from "./Components/Offdays";
 import Pickups from "./Components/Pickups";
@@ -78,16 +77,6 @@ function App() {
             path="/bookings"
             element={
               <Bookings
-                loggedIn={loggedIn}
-                setLoggedIn={setLoggedIn}
-                accessLevel={accessLevel}
-              />
-            }
-          />
-          <Route
-            path="/events"
-            element={
-              <Events
                 loggedIn={loggedIn}
                 setLoggedIn={setLoggedIn}
                 accessLevel={accessLevel}

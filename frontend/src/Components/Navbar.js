@@ -45,16 +45,13 @@ function Sidebar({ accessLevel }) {
           <Link to="/bookings">
             <h2>Bookings</h2>
           </Link>
-          <Link to="/events">
-            <h2>Events</h2>
-          </Link>
           <Link to="/holidays">
             <h2>Holidays</h2>
           </Link>
-          <Link to="/Offdays">
+          <Link to="/offdays">
             <h2>Offdays</h2>
           </Link>
-          <Link to="/Pickups">
+          <Link to="/pickups">
             <h2>Pickups</h2>
           </Link>
         </>

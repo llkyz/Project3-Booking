@@ -3,7 +3,8 @@ const mongoose = require("mongoose");
 const offdaySchema = mongoose.Schema({
   dateTime: { type: Date },
   staff: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-  reason: { type: String, required: true },
+  staffName: { type: String },
+  reason: { type: String },
 });
 
 const Offday = mongoose.model("Offday", offdaySchema);

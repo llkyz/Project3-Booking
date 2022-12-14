@@ -26,15 +26,13 @@ router.post("/", isAuthenticated, async (req, res) => {
   }
 });
 
-router.put("/", isAuthenticated, async (req, res) => {
+router.put("/:id", isAuthenticated, async (req, res) => {
   try {
-    let originalData = await Booking.findById(req.body._id);
-    await entryFindDelete(originalData.dateTime, req.body._id, "bookings");
-    await entryFindCreate(req.body.dateTime, req.body._id, "bookings");
+    let originalData = await Booking.findById(req.params.id);
+    await entryFindDelete(originalData.dateTime, req.params.id, "bookings");
+    await entryFindCreate(req.body.dateTime, req.params.id, "bookings");
 
-    let _id = req.body._id;
-    delete req.body._id;
-    let result2 = await Booking.findByIdAndUpdate(_id, req.body);
+    let result2 = await Booking.findByIdAndUpdate(req.params.id, req.body);
     console.log(result2);
     res.status(200).json("Booking updated");
   } catch (err) {
@@ -42,10 +40,10 @@ router.put("/", isAuthenticated, async (req, res) => {
   }
 });
 
-router.delete("/", isAuthenticated, async (req, res) => {
+router.delete("/:id", isAuthenticated, async (req, res) => {
   try {
-    await entryFindDelete(req.body.dateTime, req.body._id, "bookings");
-    let result = await Booking.findByIdAndDelete(req.body._id);
+    await entryFindDelete(req.body.dateTime, req.params.id, "bookings");
+    let result = await Booking.findByIdAndDelete(req.params.id);
     console.log(result);
     res.status(200).json("Booking deleted");
   } catch (err) {

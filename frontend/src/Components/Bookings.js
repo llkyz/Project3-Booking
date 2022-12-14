@@ -31,7 +31,6 @@ export default function Bookings({ loggedIn, setLoggedIn, accessLevel }) {
       credentials: "include",
     });
     let result = await res.json();
-    console.log(`Response ${res.status}: ${result}`);
     if (res.status === 200) {
       setBookingData(result);
     } else if (res.status === 401) {
@@ -68,6 +67,170 @@ export default function Bookings({ loggedIn, setLoggedIn, accessLevel }) {
         ""
       )}
     </>
+  );
+}
+
+function BookingList({ bookingData, category, getBookingData }) {
+  let myList = bookingData.map((data) => data);
+
+  if (category === "all") {
+    myList = myList.filter((data) => data.ignore === false);
+  } else if (category === "open") {
+    myList = myList.filter(
+      (data) => data.complete === false && data.ignore === false
+    );
+  } else if (category === "complete") {
+    myList = myList.filter(
+      (data) => data.complete === true && data.ignore === false
+    );
+  } else if (category === "ignored") {
+    myList = myList.filter((data) => data.ignore === true);
+  }
+
+  return (
+    <>
+      {myList.map((data) => (
+        <BookingEntry
+          key={data._id}
+          data={data}
+          getBookingData={getBookingData}
+        />
+      ))}
+    </>
+  );
+}
+
+function BookingEntry({ data, getBookingData }) {
+  const [showDetails, setShowDetails] = useState(false);
+  const [showDelete, setShowDelete] = useState(false);
+  const [showEdit, setShowEdit] = useState(false);
+
+  function toggleDetails() {
+    if (showDetails) {
+      setShowDetails(false);
+    } else {
+      setShowDetails(true);
+    }
+  }
+
+  data.dateTime = new Date(data.dateTime);
+
+  async function setComplete(condition) {
+    const res = await fetch(config.BACKEND_URL + `booking/${data._id}`, {
+      method: "PUT",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        complete: condition,
+      }),
+    });
+    let result = await res.json();
+    console.log(`Response ${res.status}: ${result}`);
+    if (res.status === 200) {
+      getBookingData();
+      setShowDelete(false);
+      setShowDetails(false);
+    }
+  }
+
+  async function setIgnore(condition) {
+    const res = await fetch(config.BACKEND_URL + `booking/${data._id}`, {
+      method: "PUT",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        ignore: condition,
+      }),
+    });
+    let result = await res.json();
+    console.log(`Response ${res.status}: ${result}`);
+    if (res.status === 200) {
+      getBookingData();
+      setShowDelete(false);
+      setShowDetails(false);
+    }
+  }
+
+  async function deleteEntry() {
+    const res = await fetch(config.BACKEND_URL + `booking/${data._id}`, {
+      method: "DELETE",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ dateTime: data.dateTime }),
+    });
+    let result = await res.json();
+    console.log(`Response ${res.status}: ${result}`);
+    if (res.status === 200) {
+      getBookingData();
+      setShowDelete(false);
+      setShowDetails(false);
+    }
+  }
+
+  return (
+    <div style={{ border: "2px solid black" }}>
+      <div onClick={toggleDetails}>Show</div>
+      <p>
+        Customer: {data.customer} | Contact: {data.contact} | Date:{" "}
+        {data.dateTime.toLocaleDateString("en-SG", {
+          weekday: "short",
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+        })}{" "}
+        | Time:{" "}
+        {data.dateTime.toLocaleTimeString("en-SG", {
+          hour: "2-digit",
+          minute: "2-digit",
+        })}
+      </p>
+      {showDetails ? (
+        <div>
+          <p>
+            Price: {data.price} | Participants: {data.participants} | Origin:{" "}
+            {data.origin} | ID: {data.id}
+          </p>
+          <button onClick={() => setShowEdit(true)}>Edit</button>
+          {data.complete === false && data.ignore === false ? (
+            <button onClick={() => setComplete(true)}>Add to Complete</button>
+          ) : (
+            <button onClick={() => setComplete(false)}>Set to Open</button>
+          )}
+          {data.ignore === false ? (
+            <button onClick={() => setIgnore(true)}>Add to Ignore</button>
+          ) : (
+            <button onClick={() => setIgnore(false)}>Remove from Ignore</button>
+          )}
+          <button onClick={() => setShowDelete(true)}>Delete Entry</button>
+          {showDelete ? (
+            <div>
+              <p>Really delete this entry?</p>
+              <button onClick={deleteEntry}>Confirm</button>
+              <button onClick={() => setShowDelete(false)}>Cancel</button>
+            </div>
+          ) : (
+            ""
+          )}
+        </div>
+      ) : (
+        ""
+      )}
+      {showEdit ? (
+        <EditBooking
+          data={data}
+          getBookingData={getBookingData}
+          setShowEdit={setShowEdit}
+        />
+      ) : (
+        ""
+      )}
+    </div>
   );
 }
 
@@ -209,198 +372,21 @@ function NewBooking({ setNewBooking, getBookingData }) {
   );
 }
 
-function BookingList({ bookingData, category, getBookingData }) {
-  let myList = bookingData.map((data) => data);
-
-  if (category === "all") {
-    myList = myList.filter((data) => data.ignore === false);
-  } else if (category === "open") {
-    myList = myList.filter(
-      (data) => data.complete === false && data.ignore === false
-    );
-  } else if (category === "complete") {
-    myList = myList.filter(
-      (data) => data.complete === true && data.ignore === false
-    );
-  } else if (category === "ignored") {
-    myList = myList.filter((data) => data.ignore === true);
-  }
-
-  return (
-    <>
-      {myList.map((data) => (
-        <BookingEntry data={data} getBookingData={getBookingData} />
-      ))}
-    </>
-  );
-}
-
-function BookingEntry({ data, getBookingData }) {
-  const [showDetails, setShowDetails] = useState(false);
-  const [showDelete, setShowDelete] = useState(false);
-  const [showEdit, setShowEdit] = useState(false);
-
-  function toggleDetails() {
-    if (showDetails) {
-      setShowDetails(false);
-    } else {
-      setShowDetails(true);
-    }
-  }
-
-  data.dateTime = new Date(data.dateTime);
-
-  async function setComplete(condition) {
-    const res = await fetch(config.BACKEND_URL + "booking", {
-      method: "PUT",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        _id: data._id,
-        complete: condition,
-      }),
-    });
-    let result = await res.json();
-    console.log(`Response ${res.status}: ${result}`);
-    if (res.status === 200) {
-      getBookingData();
-      setShowDelete(false);
-      setShowDetails(false);
-    }
-  }
-
-  async function setIgnore(condition) {
-    const res = await fetch(config.BACKEND_URL + "booking", {
-      method: "PUT",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        _id: data._id,
-        ignore: condition,
-      }),
-    });
-    let result = await res.json();
-    console.log(`Response ${res.status}: ${result}`);
-    if (res.status === 200) {
-      getBookingData();
-      setShowDelete(false);
-      setShowDetails(false);
-    }
-  }
-
-  async function deleteEntry() {
-    const res = await fetch(config.BACKEND_URL + "booking", {
-      method: "DELETE",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ _id: data._id, dateTime: data.dateTime }),
-    });
-    let result = await res.json();
-    console.log(`Response ${res.status}: ${result}`);
-    if (res.status === 200) {
-      getBookingData();
-      setShowDelete(false);
-      setShowDetails(false);
-    }
-  }
-
-  return (
-    <div style={{ border: "2px solid black" }}>
-      <div onClick={toggleDetails}>Show</div>
-      <p>
-        Customer: {data.customer} | Contact: {data.contact} | Date:{" "}
-        {data.dateTime.toLocaleDateString("en-SG", {
-          weekday: "short",
-          year: "numeric",
-          month: "short",
-          day: "numeric",
-        })}{" "}
-        | Time:{" "}
-        {data.dateTime.toLocaleTimeString("en-SG", {
-          hour: "2-digit",
-          minute: "2-digit",
-        })}
-      </p>
-      {showDetails ? (
-        <div>
-          <p>
-            Price: {data.price} | Participants: {data.participants} | Origin:{" "}
-            {data.origin} | ID: {data.id}
-          </p>
-          <button onClick={() => setShowEdit(true)}>Edit</button>
-          {data.complete === false && data.ignore === false ? (
-            <button onClick={() => setComplete(true)}>Add to Complete</button>
-          ) : (
-            <button onClick={() => setComplete(false)}>Set to Open</button>
-          )}
-          {data.ignore === false ? (
-            <button onClick={() => setIgnore(true)}>Add to Ignore</button>
-          ) : (
-            <button onClick={() => setIgnore(false)}>Remove from Ignore</button>
-          )}
-          <button onClick={() => setShowDelete(true)}>Delete Entry</button>
-          {showDelete ? (
-            <div>
-              <p>Really delete this entry?</p>
-              <button onClick={deleteEntry}>Confirm</button>
-              <button onClick={() => setShowDelete(false)}>Cancel</button>
-            </div>
-          ) : (
-            ""
-          )}
-        </div>
-      ) : (
-        ""
-      )}
-      {showEdit ? (
-        <EditModal
-          data={data}
-          getBookingData={getBookingData}
-          setShowEdit={setShowEdit}
-        />
-      ) : (
-        ""
-      )}
-    </div>
-  );
-}
-
-function EditModal({ data, getBookingData, setShowEdit }) {
+function EditBooking({ data, getBookingData, setShowEdit }) {
   async function submitEdit(event) {
     event.preventDefault();
     let formBody = {
-      _id: data._id,
+      customer: event.target.form[0].value,
+      contact: event.target.form[1].value,
+      dateTime: new Date(event.target.form[2].value),
+      price: event.target.form[3].value,
+      participants: event.target.form[4].value,
+      origin: event.target.form[5].value,
+      id: event.target.form[6].value,
       complete: event.target.form[7].checked,
       ignore: event.target.form[8].checked,
     };
-    if (event.target.form[0].value) {
-      formBody.customer = event.target.form[0].value;
-    }
-    if (event.target.form[1].value) {
-      formBody.contact = event.target.form[1].value;
-    }
-    if (event.target.form[2].value) {
-      formBody.dateTime = new Date(event.target.form[2].value);
-    }
-    if (event.target.form[3].value) {
-      formBody.price = event.target.form[3].value;
-    }
-    if (event.target.form[4].value) {
-      formBody.participants = event.target.form[4].value;
-    }
-    if (event.target.form[5].value) {
-      formBody.origin = event.target.form[5].value;
-    }
-    if (event.target.form[6].value) {
-      formBody.id = event.target.form[6].value;
-    }
-    const res = await fetch(config.BACKEND_URL + "booking", {
+    const res = await fetch(config.BACKEND_URL + `booking/${data._id}`, {
       method: "PUT",
       credentials: "include",
       headers: {
@@ -468,11 +454,11 @@ function EditModal({ data, getBookingData, setShowEdit }) {
         <form>
           <div>
             <label htmlFor="customer">Customer: </label>
-            <input type="text" name="customer" placeholder={data.customer} />
+            <input type="text" name="customer" defaultValue={data.customer} />
           </div>
           <div>
             <label htmlFor="contact">Contact: </label>
-            <input type="text" name="contact" placeholder={data.contact} />
+            <input type="text" name="contact" defaultValue={data.contact} />
           </div>
           <div>
             <label htmlFor="date">Date / Time: </label>
@@ -484,23 +470,23 @@ function EditModal({ data, getBookingData, setShowEdit }) {
           </div>
           <div>
             <label htmlFor="price">Price: </label>
-            <input type="number" name="price" placeholder={data.price} />
+            <input type="number" name="price" defaultValue={data.price} />
           </div>
           <div>
             <label htmlFor="participants">Participants: </label>
             <input
               type="number"
               name="participants"
-              placeholder={data.participants}
+              defaultValue={data.participants}
             />
           </div>
           <div>
             <label htmlFor="origin">Origin: </label>
-            <input type="text" name="origin" placeholder={data.origin} />
+            <input type="text" name="origin" defaultValue={data.origin} />
           </div>
           <div>
             <label htmlFor="id">ID: </label>
-            <input type="number" name="id" placeholder={data.id} />
+            <input type="number" name="id" defaultValue={data.id} />
           </div>
           <div>
             <label htmlFor="complete">Complete: </label>
