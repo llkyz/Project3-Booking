@@ -42,13 +42,47 @@ export default function Bookings({ loggedIn, setLoggedIn, accessLevel }) {
   return (
     <>
       <h1>Bookings</h1>
-      <div>
-        <button onClick={() => setNewBooking(true)}>Create new booking</button>
+      <div className="buttonContainer">
+        <div id="buttonRight">
+          <button id="newEntry" onClick={() => setNewBooking(true)}>
+            CREATE NEW
+          </button>
+        </div>
+        <div id="buttonLeft">
+          <button
+            className={
+              category === "open" ? "filterButtonSelected" : "filterButton"
+            }
+            onClick={() => setCategory("open")}
+          >
+            Open
+          </button>
+          <button
+            className={
+              category === "complete" ? "filterButtonSelected" : "filterButton"
+            }
+            onClick={() => setCategory("complete")}
+          >
+            Complete
+          </button>
+          <button
+            className={
+              category === "all" ? "filterButtonSelected" : "filterButton"
+            }
+            onClick={() => setCategory("all")}
+          >
+            All
+          </button>
+          <button
+            className={
+              category === "ignored" ? "filterButtonSelected" : "filterButton"
+            }
+            onClick={() => setCategory("ignored")}
+          >
+            Ignored
+          </button>
+        </div>
       </div>
-      <button onClick={() => setCategory("open")}>Open</button>
-      <button onClick={() => setCategory("complete")}>Complete</button>
-      <button onClick={() => setCategory("all")}>All</button>
-      <button onClick={() => setCategory("ignored")}>Ignored</button>
       {bookingData ? (
         <BookingList
           bookingData={bookingData}
@@ -126,11 +160,12 @@ function BookingEntry({ data, getBookingData }) {
         complete: condition,
       }),
     });
-    let result = await res.json();
     if (res.status === 200) {
       getBookingData();
       setShowDelete(false);
       setShowDetails(false);
+    } else {
+      console.log("Error: ", await res.json());
     }
   }
 
@@ -145,11 +180,12 @@ function BookingEntry({ data, getBookingData }) {
         ignore: condition,
       }),
     });
-    let result = await res.json();
     if (res.status === 200) {
       getBookingData();
       setShowDelete(false);
       setShowDetails(false);
+    } else {
+      console.log("Error: ", await res.json());
     }
   }
 
@@ -162,58 +198,106 @@ function BookingEntry({ data, getBookingData }) {
       },
       body: JSON.stringify({ dateTime: data.dateTime }),
     });
-    let result = await res.json();
     if (res.status === 200) {
       getBookingData();
       setShowDelete(false);
       setShowDetails(false);
+    } else {
+      console.log("Error: ", await res.json());
     }
   }
 
   return (
-    <div style={{ border: "2px solid black" }}>
-      <div onClick={toggleDetails}>Show</div>
-      <p>
-        Customer: {data.customer} | Contact: {data.contact} | Date:{" "}
-        {data.dateTime.toLocaleDateString("en-SG", {
-          weekday: "short",
-          year: "numeric",
-          month: "short",
-          day: "numeric",
-        })}{" "}
-        | Time:{" "}
-        {data.dateTime.toLocaleTimeString("en-SG", {
-          hour: "2-digit",
-          minute: "2-digit",
-        })}
-      </p>
+    <div className="entry">
+      <div className="arrowContainer" onClick={toggleDetails}>
+        <div className={showDetails ? "showLessButton" : "showMoreButton"} />
+      </div>
+      <div className="entryTextGrid" style={{ marginLeft: "7%" }}>
+        <div className="entryTextGrid">
+          <div className="label">Customer</div>
+          <div className="entryTextItem">{data.customer}</div>
+          <div className="label">Contact</div>
+          <div className="entryTextItem">{data.contact ?? "N/A"}</div>
+        </div>
+        <div className="entryTextGrid">
+          <div className="label">Date</div>
+          <div className="entryTextItem">
+            {data.dateTime.toLocaleDateString("en-SG", {
+              weekday: "short",
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+            })}
+          </div>
+          <div className="label">Time</div>
+          <div className="entryTextItem">
+            {data.dateTime.toLocaleTimeString("en-SG", {
+              hour: "2-digit",
+              minute: "2-digit",
+            })}
+          </div>
+        </div>
+      </div>
       {showDetails ? (
-        <div>
-          <p>
-            Price: {data.price} | Participants: {data.participants} | Origin:{" "}
-            {data.origin} | ID: {data.id}
-          </p>
-          <button onClick={() => setShowEdit(true)}>Edit</button>
-          {data.complete === false && data.ignore === false ? (
-            <button onClick={() => setComplete(true)}>Add to Complete</button>
-          ) : (
-            <button onClick={() => setComplete(false)}>Set to Open</button>
-          )}
-          {data.ignore === false ? (
-            <button onClick={() => setIgnore(true)}>Add to Ignore</button>
-          ) : (
-            <button onClick={() => setIgnore(false)}>Remove from Ignore</button>
-          )}
-          <button onClick={() => setShowDelete(true)}>Delete Entry</button>
-          {showDelete ? (
-            <div>
-              <p>Really delete this entry?</p>
-              <button onClick={deleteEntry}>Confirm</button>
-              <button onClick={() => setShowDelete(false)}>Cancel</button>
+        <div className="entryDetails">
+          <div className="entryTextGrid" style={{ marginLeft: "7%" }}>
+            <div className="entryTextGrid">
+              <div className="label">Price</div>
+              <div className="entryTextItem">{data.price ?? "N/A"}</div>
+              <div className="label">Participants</div>
+              <div className="entryTextItem">{data.participants ?? "N/A"}</div>
             </div>
-          ) : (
-            ""
-          )}
+            <div className="entryTextGrid">
+              <div className="label">Origin</div>
+              <div className="entryTextItem">
+                {data.origin[0].toUpperCase() + data.origin.substring(1)}
+              </div>
+              <div className="label">ID</div>
+              <div className="entryTextItem">{data.id ?? "N/A"}</div>
+            </div>
+          </div>
+          <div className="modButtonContainer">
+            <button className="modButton" onClick={() => setShowEdit(true)}>
+              Edit
+            </button>
+            {data.complete === false && data.ignore === false ? (
+              <button className="modButton" onClick={() => setComplete(true)}>
+                Add to Complete
+              </button>
+            ) : (
+              <button className="modButton" onClick={() => setComplete(false)}>
+                Set to Open
+              </button>
+            )}
+            {data.ignore === false ? (
+              <button className="modButton" onClick={() => setIgnore(true)}>
+                Add to Ignore
+              </button>
+            ) : (
+              <button className="modButton" onClick={() => setIgnore(false)}>
+                Remove from Ignore
+              </button>
+            )}
+            <button className="modButton" onClick={() => setShowDelete(true)}>
+              Delete Entry
+            </button>
+            {showDelete ? (
+              <div>
+                <h3>Really delete this entry?</h3>
+                <button className="modButton" onClick={deleteEntry}>
+                  Confirm
+                </button>
+                <button
+                  className="modButton"
+                  onClick={() => setShowDelete(false)}
+                >
+                  Cancel
+                </button>
+              </div>
+            ) : (
+              ""
+            )}
+          </div>
         </div>
       ) : (
         ""
@@ -299,71 +383,59 @@ function NewBooking({ setNewBooking, getBookingData }) {
           zIndex: 10,
         }}
       />
-      <div
-        style={{
-          backgroundColor: "white",
-          position: "fixed",
-          height: "60%",
-          width: "500px",
-          zIndex: 20,
-          top: 0,
-          bottom: 0,
-          left: 0,
-          right: 0,
-          margin: "auto",
-          textAlign: "center",
-        }}
-      >
+
+      <div className="entryModal">
         <h1>New Booking</h1>
-        {errorMesssage ? <h4>{errorMesssage}</h4> : ""}
-        <form>
-          <div>
-            <label htmlFor="customer">Customer* : </label>
-            <input type="text" name="customer" />
-          </div>
-          <div>
-            <label htmlFor="contact">Contact : </label>
-            <input type="text" name="contact" />
-          </div>
-          <div>
-            <label htmlFor="date">Date / Time: </label>
-            <input
-              type="datetime-local"
-              name="date"
-              defaultValue={defaultDateTime}
-            />
-          </div>
-          <div>
-            <label htmlFor="price">Price: </label>
-            <input type="number" name="price" />
-          </div>
-          <div>
-            <label htmlFor="participants">Participants: </label>
-            <input type="number" name="participants" />
-          </div>
-          <div>
-            <label htmlFor="origin">Origin: </label>
-            <input type="text" name="origin" defaultValue="Manual" disabled />
-          </div>
-          <div>
-            <label htmlFor="id">ID: </label>
-            <input type="number" name="id" />
-          </div>
-          <div>
-            <label htmlFor="complete">Complete: </label>
-            <input type="checkbox" name="complete" />
-          </div>
-          <div>
-            <label htmlFor="ignore">Ignore: </label>
-            <input type="checkbox" name="ignore" />
-          </div>
+        {errorMesssage ? <h3 style={{ color: "red" }}>{errorMesssage}</h3> : ""}
+        <form className="entryForm">
+          <div className="label">Customer*</div>
+          <input className="entryFormChild" type="text" name="customer" />
+          <div className="label">Contact</div>
+          <input className="entryFormChild" type="text" name="contact" />
+          <div className="label">Date / Time</div>
           <input
+            className="entryFormChild"
+            type="datetime-local"
+            name="date"
+            defaultValue={defaultDateTime}
+          />
+          <div className="label">Price</div>
+          <input className="entryFormChild" type="number" name="price" />
+          <div className="label">Participants</div>
+          <input className="entryFormChild" type="number" name="participants" />
+          <div className="label">Origin</div>
+          <input
+            className="entryFormChild"
+            type="text"
+            name="origin"
+            defaultValue="Manual"
+            disabled
+          />
+          <div className="label">ID</div>
+          <input className="entryFormChild" type="number" name="id" />
+          <div className="label">Complete</div>
+          <input className="entryFormChild" type="checkbox" name="complete" />
+          <div className="label">Ignore</div>
+          <input className="entryFormChild" type="checkbox" name="ignore" />
+          <input
+            className="entryFormSubmit"
+            style={{
+              gridColumn: "1 / span 2",
+              margin: "auto 20%",
+              marginTop: "20px",
+            }}
             type="submit"
             value="Submit"
             onClick={(event) => createBooking(event)}
           />
         </form>
-        <button onClick={() => setNewBooking(false)}>Cancel</button>
+        <button
+          className="modButton"
+          style={{ marginTop: "30px" }}
+          onClick={() => setNewBooking(false)}
+        >
+          Cancel
+        </button>
       </div>
     </>
   );
@@ -391,10 +463,11 @@ function EditBooking({ data, getBookingData, setShowEdit }) {
       },
       body: JSON.stringify(formBody),
     });
-    let result = await res.json();
     if (res.status === 200) {
       getBookingData();
       setShowEdit(false);
+    } else {
+      console.log("Error: ", await res.json());
     }
   }
 
@@ -431,82 +504,91 @@ function EditBooking({ data, getBookingData, setShowEdit }) {
           zIndex: 10,
         }}
       />
-      <div
-        style={{
-          backgroundColor: "white",
-          position: "fixed",
-          height: "60%",
-          width: "500px",
-          zIndex: 20,
-          top: 0,
-          bottom: 0,
-          left: 0,
-          right: 0,
-          margin: "auto",
-          textAlign: "center",
-        }}
-      >
+      <div className="entryModal">
         <h1>Edit Booking</h1>
-        <form>
-          <div>
-            <label htmlFor="customer">Customer: </label>
-            <input type="text" name="customer" defaultValue={data.customer} />
-          </div>
-          <div>
-            <label htmlFor="contact">Contact: </label>
-            <input type="text" name="contact" defaultValue={data.contact} />
-          </div>
-          <div>
-            <label htmlFor="date">Date / Time: </label>
-            <input
-              type="datetime-local"
-              name="date"
-              defaultValue={defaultDateTime}
-            />
-          </div>
-          <div>
-            <label htmlFor="price">Price: </label>
-            <input type="number" name="price" defaultValue={data.price} />
-          </div>
-          <div>
-            <label htmlFor="participants">Participants: </label>
-            <input
-              type="number"
-              name="participants"
-              defaultValue={data.participants}
-            />
-          </div>
-          <div>
-            <label htmlFor="origin">Origin: </label>
-            <input type="text" name="origin" defaultValue={data.origin} />
-          </div>
-          <div>
-            <label htmlFor="id">ID: </label>
-            <input type="number" name="id" defaultValue={data.id} />
-          </div>
-          <div>
-            <label htmlFor="complete">Complete: </label>
-            <input
-              type="checkbox"
-              name="complete"
-              defaultChecked={data.complete ?? ""}
-            />
-          </div>
-          <div>
-            <label htmlFor="ignore">Ignore: </label>
-            <input
-              type="checkbox"
-              name="ignore"
-              defaultChecked={data.ignore ?? ""}
-            />
-          </div>
+        <form className="entryForm">
+          <div className="label">Customer</div>
           <input
+            className="entryFormChild"
+            type="text"
+            name="customer"
+            defaultValue={data.customer}
+          />
+          <div className="label">Contact</div>
+          <input
+            className="entryFormChild"
+            type="text"
+            name="contact"
+            defaultValue={data.contact}
+          />
+          <div className="label">Date / Time</div>
+          <input
+            className="entryFormChild"
+            type="datetime-local"
+            name="date"
+            defaultValue={defaultDateTime}
+          />
+          <div className="label">Price</div>
+          <input
+            className="entryFormChild"
+            type="number"
+            name="price"
+            defaultValue={data.price}
+          />
+          <div className="label">Participants</div>
+          <input
+            className="entryFormChild"
+            type="number"
+            name="participants"
+            defaultValue={data.participants}
+          />
+          <div className="label">Origin</div>
+          <input
+            className="entryFormChild"
+            type="text"
+            name="origin"
+            defaultValue={data.origin}
+          />
+          <div className="label">ID</div>
+          <input
+            className="entryFormChild"
+            type="number"
+            name="id"
+            defaultValue={data.id}
+          />
+          <div className="label">Complete</div>
+          <input
+            className="entryFormChild"
+            type="checkbox"
+            name="complete"
+            defaultChecked={data.complete ?? ""}
+          />
+          <div className="label">Ignore</div>
+          <input
+            className="entryFormChild"
+            type="checkbox"
+            name="ignore"
+            defaultChecked={data.ignore ?? ""}
+          />
+          <input
+            className="entryFormSubmit"
+            style={{
+              gridColumn: "1 / span 2",
+              margin: "auto 20%",
+              marginTop: "20px",
+            }}
             type="submit"
             value="Submit"
             onClick={(event) => submitEdit(event)}
           />
         </form>
-        <button onClick={() => setShowEdit(false)}>Cancel</button>
+        <button
+          className="modButton"
+          style={{ marginTop: "30px" }}
+          onClick={() => setShowEdit(false)}
+        >
+          Cancel
+        </button>
       </div>
     </>
   );

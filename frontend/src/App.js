@@ -46,89 +46,95 @@ function App() {
   return (
     <BrowserRouter>
       <div className="backgroundImage">
-        <img src={backgroundImg} />
+        <img src={backgroundImg} alt="background" />
       </div>
       <Navbar
         loggedIn={loggedIn}
         accessLevel={accessLevel}
         scrollOffset={scrollOffset}
       />
-      <div className="content">
-        <Routes>
-          <Route index element={<Home loggedIn={loggedIn} />} />
-          <Route
-            path="/login"
-            element={<Login loggedIn={loggedIn} setLoggedIn={setLoggedIn} />}
-          />
-          <Route
-            path="/register"
-            element={<Register loggedIn={loggedIn} setLoggedIn={setLoggedIn} />}
-          />
-          <Route
-            path="/calendar"
-            element={
-              <Calendar
-                loggedIn={loggedIn}
-                setLoggedIn={setLoggedIn}
-                accessLevel={accessLevel}
-              />
-            }
-          />
-          <Route
-            path="/profile"
-            element={<Profile loggedIn={loggedIn} setLoggedIn={setLoggedIn} />}
-          />
-          <Route
-            path="/userlist"
-            element={
-              <UserList
-                loggedIn={loggedIn}
-                setLoggedIn={setLoggedIn}
-                accessLevel={accessLevel}
-              />
-            }
-          />
-          <Route
-            path="/bookings"
-            element={
-              <Bookings
-                loggedIn={loggedIn}
-                setLoggedIn={setLoggedIn}
-                accessLevel={accessLevel}
-              />
-            }
-          />
-          <Route
-            path="/holidays"
-            element={
-              <Holidays
-                loggedIn={loggedIn}
-                setLoggedIn={setLoggedIn}
-                accessLevel={accessLevel}
-              />
-            }
-          />
-          <Route
-            path="/offdays"
-            element={
-              <Offdays
-                loggedIn={loggedIn}
-                setLoggedIn={setLoggedIn}
-                accessLevel={accessLevel}
-              />
-            }
-          />
-          <Route
-            path="/pickups"
-            element={
-              <Pickups
-                loggedIn={loggedIn}
-                setLoggedIn={setLoggedIn}
-                accessLevel={accessLevel}
-              />
-            }
-          />
-        </Routes>
+      <div className="contentContainer">
+        <div className="content">
+          <Routes>
+            <Route index element={<Home loggedIn={loggedIn} />} />
+            <Route
+              path="/login"
+              element={<Login loggedIn={loggedIn} setLoggedIn={setLoggedIn} />}
+            />
+            <Route
+              path="/register"
+              element={
+                <Register loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
+              }
+            />
+            <Route
+              path="/calendar"
+              element={
+                <Calendar
+                  loggedIn={loggedIn}
+                  setLoggedIn={setLoggedIn}
+                  accessLevel={accessLevel}
+                />
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <Profile loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
+              }
+            />
+            <Route
+              path="/userlist"
+              element={
+                <UserList
+                  loggedIn={loggedIn}
+                  setLoggedIn={setLoggedIn}
+                  accessLevel={accessLevel}
+                />
+              }
+            />
+            <Route
+              path="/bookings"
+              element={
+                <Bookings
+                  loggedIn={loggedIn}
+                  setLoggedIn={setLoggedIn}
+                  accessLevel={accessLevel}
+                />
+              }
+            />
+            <Route
+              path="/holidays"
+              element={
+                <Holidays
+                  loggedIn={loggedIn}
+                  setLoggedIn={setLoggedIn}
+                  accessLevel={accessLevel}
+                />
+              }
+            />
+            <Route
+              path="/offdays"
+              element={
+                <Offdays
+                  loggedIn={loggedIn}
+                  setLoggedIn={setLoggedIn}
+                  accessLevel={accessLevel}
+                />
+              }
+            />
+            <Route
+              path="/pickups"
+              element={
+                <Pickups
+                  loggedIn={loggedIn}
+                  setLoggedIn={setLoggedIn}
+                  accessLevel={accessLevel}
+                />
+              }
+            />
+          </Routes>
+        </div>
       </div>
     </BrowserRouter>
   );

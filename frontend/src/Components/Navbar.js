@@ -35,10 +35,11 @@ function ProfileButton({ scrollOffset }) {
     <img
       className="profile"
       src={profilePic}
+      alt="profile"
       onClick={gotoProfile}
       style={
         scrollOffset > 200
-          ? { height: "30px", width: "30px", marginTop: "0px" }
+          ? { height: "30px", width: "30px", marginTop: "2px" }
           : {}
       }
     />
@@ -57,6 +58,7 @@ function SidebarButton({ sidebarVisible, setSidebarVisible, scrollOffset }) {
   return (
     <img
       src={hamburger}
+      alt="menu"
       className="sidebarButton"
       onClick={toggleSideBar}
       style={
