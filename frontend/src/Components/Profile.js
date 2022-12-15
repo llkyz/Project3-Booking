@@ -75,29 +75,66 @@ export default function Profile({ loggedIn, setLoggedIn }) {
       <h1>Profile Page</h1>
       {profileData ? (
         <>
-          <h4>Username: {profileData.username}</h4>
-          <h4>
-            Access Level:{" "}
-            {profileData.access[0].toUpperCase() +
-              profileData.access.substring(1)}
-          </h4>
-          <button onClick={doLogout}>Log Out</button>
+          <div className="entry">
+            <div className="entryTextGrid" style={{ margin: "auto 7%" }}>
+              <div className="entryTextGrid">
+                <div className="label" style={{ fontSize: "1.5em" }}>
+                  Username
+                </div>
+                <div className="entryTextItem" style={{ fontSize: "1.5em" }}>
+                  {profileData.username}
+                </div>
+              </div>
+              <div className="entryTextGrid">
+                <div className="label" style={{ fontSize: "1.5em" }}>
+                  Access Level
+                </div>
+                <div className="entryTextItem" style={{ fontSize: "1.5em" }}>
+                  {profileData.access[0].toUpperCase() +
+                    profileData.access.substring(1)}
+                </div>
+              </div>
+            </div>
+          </div>
           <h2>Change Password</h2>
           {changePassDialog ?? ""}
-          <form>
+          <form className="entryForm" style={{ margin: "auto 20%" }}>
             <input type="hidden" name="username" value={profileData.username} />
+            <div className="label">Current Password</div>
             <input
-              type="text"
+              className="entryFormChild"
+              type="password"
               name="currentpassword"
-              placeholder="Current Password"
             />
-            <input type="text" name="newpassword" placeholder="New Password" />
+            <div className="label">New Password</div>
             <input
+              className="entryFormChild"
+              type="password"
+              name="newpassword"
+            />
+            <input
+              className="entryFormSubmit"
+              style={{
+                gridColumn: "1 / span 2",
+                margin: "auto 20%",
+              }}
               type="submit"
               value="Submit"
               onClick={(event) => changePassword(event)}
             />
           </form>
+          <button
+            className="modButton"
+            style={{
+              marginTop: "40px",
+              fontSize: "1.5em",
+              fontWeight: "bold",
+              border: "3px solid rgb(50,50,50)",
+            }}
+            onClick={doLogout}
+          >
+            Log Out
+          </button>
         </>
       ) : (
         ""

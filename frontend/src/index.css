@@ -115,10 +115,6 @@ code {
   text-decoration: underline;
 }
 
-.userEntry {
-  border: 2px solid black;
-}
-
 .calendargrid {
   display: flex;
   flex-wrap: wrap;
