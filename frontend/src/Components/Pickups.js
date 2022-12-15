@@ -42,12 +42,39 @@ export default function Pickups({ loggedIn, setLoggedIn, accessLevel }) {
   return (
     <>
       <h1>Pickups</h1>
-      <div>
-        <button onClick={() => setNewPickup(true)}>Create new pickup</button>
+      <div className="buttonContainer">
+        <div id="buttonLeft">
+          <button id="newEntry" onClick={() => setNewPickup(true)}>
+            CREATE NEW
+          </button>
+        </div>
+        <div id="buttonRight">
+          <button
+            className={
+              category === "upcoming" ? "filterButtonSelected" : "filterButton"
+            }
+            onClick={() => setCategory("upcoming")}
+          >
+            Upcoming
+          </button>
+          <button
+            className={
+              category === "complete" ? "filterButtonSelected" : "filterButton"
+            }
+            onClick={() => setCategory("complete")}
+          >
+            Complete
+          </button>
+          <button
+            className={
+              category === "all" ? "filterButtonSelected" : "filterButton"
+            }
+            onClick={() => setCategory("all")}
+          >
+            All
+          </button>
+        </div>
       </div>
-      <button onClick={() => setCategory("upcoming")}>Upcoming</button>
-      <button onClick={() => setCategory("complete")}>Complete</button>
-      <button onClick={() => setCategory("all")}>All</button>
       {pickupData ? (
         <PickupList
           pickupData={pickupData}
@@ -122,32 +149,57 @@ function PickupEntry({ data, getPickupData }) {
   data.dateTime = new Date(data.dateTime);
 
   return (
-    <div style={{ border: "2px solid black" }}>
-      <div onClick={toggleDetails}>Show</div>
-      <p>
-        Customer: {data.customer} | Date:{" "}
-        {data.dateTime.toLocaleDateString("en-SG", {
-          weekday: "short",
-          year: "numeric",
-          month: "short",
-          day: "numeric",
-        })}{" "}
-        | Time:{" "}
-        {data.dateTime.toLocaleTimeString("en-SG", {
-          hour: "2-digit",
-          minute: "2-digit",
-        })}
-        | Item: {data.item ? data.item : "N/A"}
-      </p>
+    <div className="entry">
+      <div className="arrowContainer" onClick={toggleDetails}>
+        <div className={showDetails ? "showLessButton" : "showMoreButton"} />
+      </div>
+
+      <div className="entryTextGrid" style={{ marginLeft: "7%" }}>
+        <div className="entryTextGrid">
+          <div className="label">Customer</div>
+          <div className="entryTextItem">{data.customer}</div>
+          <div className="label">Item</div>
+          <div className="entryTextItem">{data.item ? data.item : "N/A"}</div>
+        </div>
+        <div className="entryTextGrid">
+          <div className="label">Date</div>
+          <div className="entryTextItem">
+            {data.dateTime.toLocaleDateString("en-SG", {
+              weekday: "short",
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+            })}
+          </div>
+          <div className="label">Time</div>
+          <div className="entryTextItem">
+            {data.dateTime.toLocaleTimeString("en-SG", {
+              hour: "2-digit",
+              minute: "2-digit",
+            })}
+          </div>
+        </div>
+      </div>
       {showDetails ? (
-        <div>
-          <button onClick={() => setShowEdit(true)}>Edit</button>
-          <button onClick={() => setShowDelete(true)}>Delete Pickup</button>
+        <div className="modButtonContainer">
+          <button className="modButton" onClick={() => setShowEdit(true)}>
+            Edit
+          </button>
+          <button className="modButton" onClick={() => setShowDelete(true)}>
+            Delete Pickup
+          </button>
           {showDelete ? (
             <div>
-              <p>Really delete this pickup?</p>
-              <button onClick={deleteEntry}>Confirm</button>
-              <button onClick={() => setShowDelete(false)}>Cancel</button>
+              <h3>Really delete this pickup?</h3>
+              <button className="modButton" onClick={deleteEntry}>
+                Confirm
+              </button>
+              <button
+                className="modButton"
+                onClick={() => setShowDelete(false)}
+              >
+                Cancel
+              </button>
             </div>
           ) : (
             ""
@@ -221,47 +273,41 @@ function NewPickup({ setNewPickup, getPickupData }) {
           zIndex: 10,
         }}
       />
-      <div
-        style={{
-          backgroundColor: "white",
-          position: "fixed",
-          height: "60%",
-          width: "500px",
-          zIndex: 20,
-          top: 0,
-          bottom: 0,
-          left: 0,
-          right: 0,
-          margin: "auto",
-          textAlign: "center",
-        }}
-      >
+
+      <div className="entryModal">
         <h1>New Pickup</h1>
-        {errorMesssage ? <h4>{errorMesssage}</h4> : ""}
-        <form>
-          <div>
-            <label htmlFor="customer">Customer: </label>
-            <input type="text" name="customer" />
-          </div>
-          <div>
-            <label htmlFor="date">Date: </label>
-            <input
-              type="datetime-local"
-              name="date"
-              defaultValue={defaultDateTime}
-            />
-          </div>
-          <div>
-            <label htmlFor="item">Item: </label>
-            <input type="text" name="item" />
-          </div>
+        {errorMesssage ? <h3 style={{ color: "red" }}>{errorMesssage}</h3> : ""}
+        <form className="entryForm">
+          <div className="label">Customer</div>
+          <input className="entryFormChild" type="text" name="customer" />
+          <div className="label">Date / Time</div>
           <input
+            className="entryFormChild"
+            type="datetime-local"
+            name="date"
+            defaultValue={defaultDateTime}
+          />
+          <div className="label">Item</div>
+          <input className="entryFormChild" type="text" name="item" />
+          <input
+            className="entryFormSubmit"
+            style={{
+              gridColumn: "1 / span 2",
+              margin: "auto 20%",
+              marginTop: "20px",
+            }}
             type="submit"
             value="Submit"
             onClick={(event) => createPickup(event)}
           />
         </form>
-        <button onClick={() => setNewPickup(false)}>Cancel</button>
+        <button
+          className="modButton"
+          style={{ marginTop: "30px" }}
+          onClick={() => setNewPickup(false)}
+        >
+          Cancel
+        </button>
       </div>
     </>
   );
@@ -324,46 +370,50 @@ function EditPickup({ data, getPickupData, setShowEdit }) {
           zIndex: 10,
         }}
       />
-      <div
-        style={{
-          backgroundColor: "white",
-          position: "fixed",
-          height: "60%",
-          width: "500px",
-          zIndex: 20,
-          top: 0,
-          bottom: 0,
-          left: 0,
-          right: 0,
-          margin: "auto",
-          textAlign: "center",
-        }}
-      >
-        <h1>Edit Pickup</h1>
-        <form>
-          <div>
-            <label htmlFor="customer">Customer: </label>
-            <input type="text" name="customer" defaultValue={data.customer} />
-          </div>
-          <div>
-            <label htmlFor="date">Date / Time: </label>
-            <input
-              type="datetime-local"
-              name="date"
-              defaultValue={defaultDateTime}
-            />
-          </div>
-          <div>
-            <label htmlFor="item">Item: </label>
-            <input type="text" name="item" defaultValue={data.item} />
-          </div>
+
+      <div className="entryModal">
+        <h1>Edit Holiday</h1>
+        <form className="entryForm">
+          <div className="label">Customer</div>
           <input
+            className="entryFormChild"
+            type="text"
+            name="title"
+            defaultValue={data.customer}
+          />
+          <div className="label">Date / Time</div>
+          <input
+            className="entryFormChild"
+            type="datetime-local"
+            name="date"
+            defaultValue={defaultDateTime}
+          />
+          <div className="label">Item</div>
+          <input
+            className="entryFormChild"
+            type="text"
+            name="title"
+            defaultValue={data.item}
+          />
+          <input
+            className="entryFormSubmit"
+            style={{
+              gridColumn: "1 / span 2",
+              margin: "auto 20%",
+              marginTop: "20px",
+            }}
             type="submit"
             value="Submit"
             onClick={(event) => submitEdit(event)}
           />
         </form>
-        <button onClick={() => setShowEdit(false)}>Cancel</button>
+        <button
+          className="modButton"
+          style={{ marginTop: "30px" }}
+          onClick={() => setShowEdit(false)}
+        >
+          Cancel
+        </button>
       </div>
     </>
   );

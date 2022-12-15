@@ -43,12 +43,12 @@ export default function Bookings({ loggedIn, setLoggedIn, accessLevel }) {
     <>
       <h1>Bookings</h1>
       <div className="buttonContainer">
-        <div id="buttonRight">
+        <div id="buttonLeft">
           <button id="newEntry" onClick={() => setNewBooking(true)}>
             CREATE NEW
           </button>
         </div>
-        <div id="buttonLeft">
+        <div id="buttonRight">
           <button
             className={
               category === "open" ? "filterButtonSelected" : "filterButton"
@@ -243,7 +243,9 @@ function BookingEntry({ data, getBookingData }) {
           <div className="entryTextGrid" style={{ marginLeft: "7%" }}>
             <div className="entryTextGrid">
               <div className="label">Price</div>
-              <div className="entryTextItem">{data.price ?? "N/A"}</div>
+              <div className="entryTextItem">
+                {data.price ? "$" + data.price.toFixed(2) : "N/A"}
+              </div>
               <div className="label">Participants</div>
               <div className="entryTextItem">{data.participants ?? "N/A"}</div>
             </div>
@@ -548,6 +550,7 @@ function EditBooking({ data, getBookingData, setShowEdit }) {
             type="text"
             name="origin"
             defaultValue={data.origin}
+            disabled
           />
           <div className="label">ID</div>
           <input

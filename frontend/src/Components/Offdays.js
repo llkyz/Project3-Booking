@@ -42,12 +42,39 @@ export default function Offdays({ loggedIn, setLoggedIn, accessLevel }) {
   return (
     <>
       <h1>Offdays</h1>
-      <div>
-        <button onClick={() => setNewOffday(true)}>Create new offday</button>
+      <div className="buttonContainer">
+        <div id="buttonLeft">
+          <button id="newEntry" onClick={() => setNewOffday(true)}>
+            CREATE NEW
+          </button>
+        </div>
+        <div id="buttonRight">
+          <button
+            className={
+              category === "upcoming" ? "filterButtonSelected" : "filterButton"
+            }
+            onClick={() => setCategory("upcoming")}
+          >
+            Upcoming
+          </button>
+          <button
+            className={
+              category === "complete" ? "filterButtonSelected" : "filterButton"
+            }
+            onClick={() => setCategory("complete")}
+          >
+            Complete
+          </button>
+          <button
+            className={
+              category === "all" ? "filterButtonSelected" : "filterButton"
+            }
+            onClick={() => setCategory("all")}
+          >
+            All
+          </button>
+        </div>
       </div>
-      <button onClick={() => setCategory("upcoming")}>Upcoming</button>
-      <button onClick={() => setCategory("complete")}>Complete</button>
-      <button onClick={() => setCategory("all")}>All</button>
       {offdayData ? (
         <OffdayList
           offdayData={offdayData}
@@ -122,27 +149,51 @@ function OffdayEntry({ data, getOffdayData }) {
   data.dateTime = new Date(data.dateTime);
 
   return (
-    <div style={{ border: "2px solid black" }}>
-      <div onClick={toggleDetails}>Show</div>
-      <p>
-        Staff: {data.staffName} | Date:
-        {data.dateTime.toLocaleDateString("en-SG", {
-          weekday: "short",
-          year: "numeric",
-          month: "short",
-          day: "numeric",
-        })}{" "}
-        | Reason: {data.reason ? data.reason : "N/A"}
-      </p>
+    <div className="entry">
+      <div className="arrowContainer" onClick={toggleDetails}>
+        <div className={showDetails ? "showLessButton" : "showMoreButton"} />
+      </div>
+      <div className="entryTextGrid" style={{ marginLeft: "7%" }}>
+        <div className="entryTextGrid">
+          <div className="label">Staff</div>
+          <div className="entryTextItem">{data.staffName}</div>
+          <div className="label">Date</div>
+          <div className="entryTextItem">
+            {data.dateTime.toLocaleDateString("en-SG", {
+              weekday: "short",
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+            })}
+          </div>
+        </div>
+        <div className="entryTextGrid">
+          <div className="label">Reason</div>
+          <div className="entryTextItem">
+            {data.reason ? data.reason : "N/A"}
+          </div>
+        </div>
+      </div>
       {showDetails ? (
-        <div>
-          <button onClick={() => setShowEdit(true)}>Edit</button>
-          <button onClick={() => setShowDelete(true)}>Delete Offday</button>
+        <div className="modButtonContainer">
+          <button className="modButton" onClick={() => setShowEdit(true)}>
+            Edit
+          </button>
+          <button className="modButton" onClick={() => setShowDelete(true)}>
+            Delete Offday
+          </button>
           {showDelete ? (
             <div>
-              <p>Really delete this offday?</p>
-              <button onClick={deleteEntry}>Confirm</button>
-              <button onClick={() => setShowDelete(false)}>Cancel</button>
+              <h3>Really delete this offday?</h3>
+              <button className="modButton" onClick={deleteEntry}>
+                Confirm
+              </button>
+              <button
+                className="modButton"
+                onClick={() => setShowDelete(false)}
+              >
+                Cancel
+              </button>
             </div>
           ) : (
             ""
@@ -236,53 +287,51 @@ function NewOffday({ setNewOffday, getOffdayData }) {
           zIndex: 10,
         }}
       />
-      <div
-        style={{
-          backgroundColor: "white",
-          position: "fixed",
-          height: "60%",
-          width: "500px",
-          zIndex: 20,
-          top: 0,
-          bottom: 0,
-          left: 0,
-          right: 0,
-          margin: "auto",
-          textAlign: "center",
-        }}
-      >
+
+      <div className="entryModal">
         <h1>New Offday</h1>
-        {errorMesssage ? <h4>{errorMesssage}</h4> : ""}
-        <form>
-          <div>
-            <label htmlFor="staff">Staff : </label>
-            <select id="staff" name="staff">
-              {staffList
-                ? staffList.map((data) => {
-                    return (
-                      <option key={data._id} value={data._id}>
-                        {data.username}
-                      </option>
-                    );
-                  })
-                : ""}
-            </select>
-          </div>
-          <div>
-            <label htmlFor="date">Date: </label>
-            <input type="date" name="date" defaultValue={defaultDateTime} />
-          </div>
-          <div>
-            <label htmlFor="reason">Reason : </label>
-            <input type="text" name="reason" />
-          </div>
+        {errorMesssage ? <h3 style={{ color: "red" }}>{errorMesssage}</h3> : ""}
+        <form className="entryForm">
+          <div className="label">Staff</div>
+          <select className="entryFormChild" id="staff" name="staff">
+            {staffList
+              ? staffList.map((data) => {
+                  return (
+                    <option key={data._id} value={data._id}>
+                      {data.username}
+                    </option>
+                  );
+                })
+              : ""}
+          </select>
+          <div className="label">Date</div>
           <input
+            className="entryFormChild"
+            type="date"
+            name="date"
+            defaultValue={defaultDateTime}
+          />
+          <div className="label">Reason</div>
+          <input className="entryFormChild" type="text" name="reason" />
+          <input
+            className="entryFormSubmit"
+            style={{
+              gridColumn: "1 / span 2",
+              margin: "auto 20%",
+              marginTop: "20px",
+            }}
             type="submit"
             value="Submit"
             onClick={(event) => createOffday(event)}
           />
         </form>
-        <button onClick={() => setNewOffday(false)}>Cancel</button>
+        <button
+          className="modButton"
+          style={{ marginTop: "30px" }}
+          onClick={() => setNewOffday(false)}
+        >
+          Cancel
+        </button>
       </div>
     </>
   );
@@ -359,54 +408,62 @@ function EditOffday({ data, getOffdayData, setShowEdit }) {
           zIndex: 10,
         }}
       />
-      <div
-        style={{
-          backgroundColor: "white",
-          position: "fixed",
-          height: "60%",
-          width: "500px",
-          zIndex: 20,
-          top: 0,
-          bottom: 0,
-          left: 0,
-          right: 0,
-          margin: "auto",
-          textAlign: "center",
-        }}
-      >
-        <h1>Edit Offday</h1>
-        <form>
-          <div>
-            <label htmlFor="staff">Staff : </label>
-            {staffList ? (
-              <select id="staff" name="staff" defaultValue={data.staff}>
-                {staffList.map((staffData) => {
-                  return (
-                    <option key={staffData._id} value={staffData._id}>
-                      {staffData.username}
-                    </option>
-                  );
-                })}
-              </select>
-            ) : (
-              ""
-            )}
-          </div>
-          <div>
-            <label htmlFor="date">Date: </label>
-            <input type="date" name="date" defaultValue={defaultDateTime} />
-          </div>
-          <div>
-            <label htmlFor="reason">Reason : </label>
-            <input type="text" name="reason" defaultValue={data.reason} />
-          </div>
+
+      <div className="entryModal">
+        <h1>Edit Holiday</h1>
+        <form className="entryForm">
+          <div className="label">Staff</div>
+          {staffList ? (
+            <select
+              className="entryFormChild"
+              id="staff"
+              name="staff"
+              defaultValue={data.staff}
+            >
+              {staffList.map((staffData) => {
+                return (
+                  <option key={staffData._id} value={staffData._id}>
+                    {staffData.username}
+                  </option>
+                );
+              })}
+            </select>
+          ) : (
+            ""
+          )}
+          <div className="label">Date</div>
           <input
+            className="entryFormChild"
+            type="date"
+            name="date"
+            defaultValue={defaultDateTime}
+          />
+          <div className="label">Reason</div>
+          <input
+            className="entryFormChild"
+            type="text"
+            name="reason"
+            defaultValue={data.reason}
+          />
+          <input
+            className="entryFormSubmit"
+            style={{
+              gridColumn: "1 / span 2",
+              margin: "auto 20%",
+              marginTop: "20px",
+            }}
             type="submit"
             value="Submit"
             onClick={(event) => submitEdit(event)}
           />
         </form>
-        <button onClick={() => setShowEdit(false)}>Cancel</button>
+        <button
+          className="modButton"
+          style={{ marginTop: "30px" }}
+          onClick={() => setShowEdit(false)}
+        >
+          Cancel
+        </button>
       </div>
     </>
   );

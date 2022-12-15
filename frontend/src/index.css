@@ -289,6 +289,7 @@ a {
   border-bottom-left-radius: 7px;
   margin-right: 5px;
   text-align: right;
+  height: fit-content;
 }
 
 .arrowContainer {
