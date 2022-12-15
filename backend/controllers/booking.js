@@ -7,7 +7,6 @@ const entryFindCreate = require("../functions/entryFindCreate");
 const entryFindDelete = require("../functions/entryFindDelete");
 
 router.get("/", isStaff, async (req, res) => {
-  console.log("donig get");
   try {
     let result = await Booking.find();
     res.status(200).json(result);

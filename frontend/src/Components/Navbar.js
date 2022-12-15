@@ -79,16 +79,16 @@ function Sidebar({ accessLevel, scrollOffset }) {
       {accessLevel !== "user" ? (
         <>
           <Link to="/bookings">
-            <h2>Bookings</h2>
+            <h3>Bookings</h3>
           </Link>
           <Link to="/holidays">
-            <h2>Holidays</h2>
+            <h3>Holidays</h3>
           </Link>
           <Link to="/offdays">
-            <h2>Offdays</h2>
+            <h3>Offdays</h3>
           </Link>
           <Link to="/pickups">
-            <h2>Pickups</h2>
+            <h3>Pickups</h3>
           </Link>
         </>
       ) : (
@@ -120,51 +120,53 @@ export default function Navbar({ loggedIn, accessLevel, scrollOffset }) {
   }
 
   return (
-    <div
-      className="navbar"
-      style={scrollOffset > 200 ? { height: "50px" } : {}}
-    >
-      {loggedIn ? (
-        <SidebarButton
-          sidebarVisible={sidebarVisible}
-          setSidebarVisible={setSidebarVisible}
-          scrollOffset={scrollOffset}
-        />
-      ) : (
-        ""
-      )}
+    <>
       {loggedIn && sidebarVisible ? (
         <Sidebar accessLevel={accessLevel} scrollOffset={scrollOffset} />
       ) : (
         ""
       )}
       <div
-        className="headerLogo"
+        className="navbar"
         style={scrollOffset > 200 ? { height: "50px" } : {}}
       >
-        <img
-          src={spffyLogo}
-          alt="SppfyLogo"
-          onClick={loggedIn ? gotoCalendar : gotoHome}
-          style={
-            scrollOffset > 200
-              ? { marginRight: "0", verticalAlign: "top", marginTop: "5px" }
-              : {}
-          }
-        />
-        {scrollOffset > 200 ? (
-          ""
-        ) : (
-          <h1 onClick={loggedIn ? gotoCalendar : gotoHome}>CALENDAR</h1>
-        )}
-      </div>
-      <div className="user">
         {loggedIn ? (
-          <ProfileButton scrollOffset={scrollOffset} />
+          <SidebarButton
+            sidebarVisible={sidebarVisible}
+            setSidebarVisible={setSidebarVisible}
+            scrollOffset={scrollOffset}
+          />
         ) : (
-          <LoginButton scrollOffset={scrollOffset} />
+          ""
         )}
+        <div
+          className="headerLogo"
+          style={scrollOffset > 200 ? { height: "50px" } : {}}
+        >
+          <img
+            src={spffyLogo}
+            alt="SppfyLogo"
+            onClick={loggedIn ? gotoCalendar : gotoHome}
+            style={
+              scrollOffset > 200
+                ? { marginRight: "0", verticalAlign: "top", marginTop: "5px" }
+                : {}
+            }
+          />
+          {scrollOffset > 200 ? (
+            ""
+          ) : (
+            <h1 onClick={loggedIn ? gotoCalendar : gotoHome}>CALENDAR</h1>
+          )}
+        </div>
+        <div className="user">
+          {loggedIn ? (
+            <ProfileButton scrollOffset={scrollOffset} />
+          ) : (
+            <LoginButton scrollOffset={scrollOffset} />
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
