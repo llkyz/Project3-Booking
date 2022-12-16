@@ -14,7 +14,7 @@ export default function Login({ loggedIn, setLoggedIn }) {
     event.preventDefault();
     let formBody = {
       username: event.target.form[0].value,
-      password: event.target.form[1].value
+      password: event.target.form[1].value,
     };
     const res = await fetch(config.BACKEND_URL + "user/login", {
       method: "POST",
@@ -36,20 +36,37 @@ export default function Login({ loggedIn, setLoggedIn }) {
 
   return (
     <>
-      <h1>Login Page</h1>
-      {errorMessage ? <h2>Invalid username/password</h2> : ""}
-      <form method="POST" action={config.BACKEND_URL + "user/login"}>
-        <input type="text" name="username" placeholder="User Name" />
-        <input type="text" name="password" placeholder="Password" />
+      <h1>Login</h1>
+      {errorMessage ? (
+        <h3 style={{ color: "red" }}>Invalid username/password</h3>
+      ) : (
+        ""
+      )}
+      <form
+        method="POST"
+        action={config.BACKEND_URL + "user/login"}
+        className="entryForm"
+        style={{ width: "50%", margin: "0 auto", marginTop: "30px" }}
+      >
+        <div className="label">Username</div>
+        <input type="text" name="username" />
+        <div className="label">Password</div>
+        <input type="password" name="password" />
         <input
+          className="entryFormSubmit"
+          style={{
+            gridColumn: "1 / span 2",
+            margin: "auto 20%",
+            marginTop: "20px",
+          }}
           type="submit"
-          value="Log In"
+          value="Login"
           onClick={(event) => doLogin(event)}
         />
       </form>
 
       <Link to="/register">
-        <h4>New? Register here</h4>
+        <h4>New to our site? Register here</h4>
       </Link>
     </>
   );

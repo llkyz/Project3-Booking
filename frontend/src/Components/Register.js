@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import config from "../config";
 import { Link, useNavigate } from "react-router-dom";
+import tick from "../Assets/tick.svg";
 
 export default function Register({ loggedIn }) {
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
-  const [usernameAlert, setUsernameAlert] = useState();
+  const [usernameAlert, setUsernameAlert] = useState(false);
   const [password, setPassword] = useState("");
   const [passwordAlert, setPasswordAlert] = useState({
     lowercase: false,
@@ -18,10 +19,10 @@ export default function Register({ loggedIn }) {
 
   useEffect(() => {
     function checkUsername() {
-      if (username.length < 3 && username.length !== 0) {
-        setUsernameAlert(true);
-      } else {
+      if (username.length < 3) {
         setUsernameAlert(false);
+      } else {
+        setUsernameAlert(true);
       }
     }
     checkUsername();
@@ -53,26 +54,46 @@ export default function Register({ loggedIn }) {
   function PasswordValidation() {
     return (
       <div>
-        {passwordAlert.lowercase ? (
-          ""
-        ) : (
-          <p>Password must contain at least 1 lowercase letter</p>
-        )}
-        {passwordAlert.uppercase ? (
-          ""
-        ) : (
-          <p>Password must contain at least 1 uppercase letter</p>
-        )}
-        {passwordAlert.number ? (
-          ""
-        ) : (
-          <p>Password must contain at least 1 number</p>
-        )}
-        {passwordAlert.length ? (
-          ""
-        ) : (
-          <p>Password length must be at least 8 characters</p>
-        )}
+        {
+          <div className="validationEntry">
+            <h4 className="validation">At least 1 lowercase letter</h4>
+            {passwordAlert.lowercase ? (
+              <img className="validationTick" src={tick} alt="tick" />
+            ) : (
+              ""
+            )}
+          </div>
+        }
+        {
+          <div className="validationEntry">
+            <h4 className="validation">At least 1 uppercase letter</h4>
+            {passwordAlert.uppercase ? (
+              <img className="validationTick" src={tick} alt="tick" />
+            ) : (
+              ""
+            )}
+          </div>
+        }
+        {
+          <div className="validationEntry">
+            <h4 className="validation">At least 1 number</h4>
+            {passwordAlert.number ? (
+              <img className="validationTick" src={tick} alt="tick" />
+            ) : (
+              ""
+            )}
+          </div>
+        }
+        {
+          <div className="validationEntry">
+            <h4 className="validation">At least 8 characters long</h4>
+            {passwordAlert.length ? (
+              <img className="validationTick" src={tick} alt="tick" />
+            ) : (
+              ""
+            )}
+          </div>
+        }
       </div>
     );
   }
@@ -81,7 +102,7 @@ export default function Register({ loggedIn }) {
     event.preventDefault();
     let formBody = {
       username: event.target.form[0].value,
-      password: event.target.form[1].value
+      password: event.target.form[1].value,
     };
     const res = await fetch(config.BACKEND_URL + "user", {
       method: "POST",
@@ -104,48 +125,80 @@ export default function Register({ loggedIn }) {
 
   return (
     <>
-      <h1>Register New User</h1>
-      {registerUserResult ? <h2>{registerUserResult}</h2> : ""}
+      <h1>Register</h1>
+      {registerUserResult ? (
+        <h2 style={{ margin: "50px auto" }}>{registerUserResult}</h2>
+      ) : (
+        ""
+      )}
       {registerSuccess ? (
         <Link to="/login">
-          <h4>Go to Login</h4>
+          <h4 style={{ textDecoration: "underline" }}>Go to Login</h4>
         </Link>
       ) : (
-        <form method="POST" action={config.BACKEND_URL + "user/"}>
-          <input
-            type="text"
-            name="username"
-            placeholder="User Name"
-            value={username}
-            onChange={(event) => setUsername(event.target.value)}
-          />
-          <input
-            type="text"
-            name="password"
-            placeholder="Password"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-          />
-          <input
-            type="submit"
-            value="Register"
-            disabled={
-              passwordAlert.lowercase &&
-              passwordAlert.uppercase &&
-              passwordAlert.number &&
-              passwordAlert.length
-                ? false
-                : true
-            }
-            onClick={(event) => registerUser(event)}
-          />
-          {usernameAlert ? (
-            <h4>Username must be at least 3 characters long</h4>
-          ) : (
-            ""
-          )}
-          {password ? <PasswordValidation /> : ""}
-        </form>
+        <>
+          <form
+            method="POST"
+            action={config.BACKEND_URL + "user/"}
+            className="entryForm"
+            style={{ width: "50%", margin: "0 auto", marginTop: "30px" }}
+          >
+            <div className="label">Username</div>
+            <input
+              type="text"
+              name="username"
+              autoComplete="off"
+              className="entryFormChild"
+              value={username}
+              onChange={(event) => setUsername(event.target.value)}
+            />
+            <div className="label">Password</div>
+            <input
+              type="password"
+              name="password"
+              className="entryFormChild"
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+            />
+            <input
+              type="submit"
+              value="Register"
+              className="entryFormSubmit"
+              style={{
+                gridColumn: "1 / span 2",
+                margin: "auto 20%",
+                marginTop: "20px",
+              }}
+              disabled={
+                passwordAlert.lowercase &&
+                passwordAlert.uppercase &&
+                passwordAlert.number &&
+                passwordAlert.length &&
+                usernameAlert
+                  ? false
+                  : true
+              }
+              onClick={(event) => registerUser(event)}
+            />
+          </form>
+          <div className="registerValidationContainer">
+            <div className="registerValidation">
+              <div className="registerValidationHeader">Username</div>
+              <div className="validationEntry">
+                <h4 className="validation">At least 3 characters long</h4>
+                {usernameAlert ? (
+                  <img className="validationTick" src={tick} alt="tick" />
+                ) : (
+                  ""
+                )}
+              </div>
+            </div>
+            <div className="registerValidation">
+              <div className="registerValidationHeader">Password</div>
+              <PasswordValidation />
+            </div>
+          </div>
+        </>
       )}
     </>
   );

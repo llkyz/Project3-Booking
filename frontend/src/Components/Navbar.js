@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import hamburger from "../Assets/hamburger.png";
 import spffyLogo from "../Assets/sppfy_logo.png";
@@ -68,9 +68,30 @@ function SidebarButton({ sidebarVisible, setSidebarVisible, scrollOffset }) {
   );
 }
 
-function Sidebar({ accessLevel, scrollOffset }) {
+function useOutsideClick(ref, setSidebarVisible) {
+  useEffect(() => {
+    function handleOutsideClick(event) {
+      if (ref.current && !ref.current.contains(event.target)) {
+        setSidebarVisible(false);
+      }
+    }
+    document.addEventListener("mousedown", handleOutsideClick);
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, [ref, setSidebarVisible]);
+}
+
+function Sidebar({ accessLevel, scrollOffset, setSidebarVisible }) {
+  const wrapper = useRef(null);
+  useOutsideClick(wrapper, setSidebarVisible);
+
   return (
-    <div className="sidebar" style={scrollOffset > 200 ? { top: "50px" } : {}}>
+    <div
+      ref={wrapper}
+      className="sidebar"
+      style={scrollOffset > 200 ? { top: "50px" } : {}}
+    >
       {
         <Link to="/calendar">
           <h1>Calendar</h1>
@@ -122,7 +143,11 @@ export default function Navbar({ loggedIn, accessLevel, scrollOffset }) {
   return (
     <>
       {loggedIn && sidebarVisible ? (
-        <Sidebar accessLevel={accessLevel} scrollOffset={scrollOffset} />
+        <Sidebar
+          accessLevel={accessLevel}
+          scrollOffset={scrollOffset}
+          setSidebarVisible={setSidebarVisible}
+        />
       ) : (
         ""
       )}
