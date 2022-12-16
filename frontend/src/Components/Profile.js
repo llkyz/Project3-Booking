@@ -28,7 +28,7 @@ export default function Profile({ loggedIn, setLoggedIn }) {
     }
     checkLoggedIn();
     getProfileData();
-  }, []);
+  }, [setLoggedIn, loggedIn, navigate]);
 
   async function doLogout() {
     const res = await fetch(config.BACKEND_URL + "user/logout", {
@@ -97,7 +97,7 @@ export default function Profile({ loggedIn, setLoggedIn }) {
             </div>
           </div>
           <h2>Change Password</h2>
-          {changePassDialog ?? ""}
+          {changePassDialog ? <h4>{changePassDialog}</h4> : ""}
           <form className="entryForm" style={{ margin: "auto 20%" }}>
             <input type="hidden" name="username" value={profileData.username} />
             <div className="label">Current Password</div>

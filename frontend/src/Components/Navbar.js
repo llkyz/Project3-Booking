@@ -46,7 +46,12 @@ function ProfileButton({ scrollOffset }) {
   );
 }
 
-function SidebarButton({ sidebarVisible, setSidebarVisible, scrollOffset }) {
+function SidebarButton({
+  sidebarVisible,
+  setSidebarVisible,
+  scrollOffset,
+  myRef,
+}) {
   function toggleSideBar() {
     if (sidebarVisible) {
       setSidebarVisible(false);
@@ -57,6 +62,7 @@ function SidebarButton({ sidebarVisible, setSidebarVisible, scrollOffset }) {
 
   return (
     <img
+      ref={myRef}
       src={hamburger}
       alt="menu"
       className="sidebarButton"
@@ -68,23 +74,34 @@ function SidebarButton({ sidebarVisible, setSidebarVisible, scrollOffset }) {
   );
 }
 
-function useOutsideClick(ref, setSidebarVisible) {
+function useOutsideClick(ref, setSidebarVisible, sidebarButtonRef) {
   useEffect(() => {
     function handleOutsideClick(event) {
-      if (ref.current && !ref.current.contains(event.target)) {
+      if (
+        ref.current &&
+        !(
+          ref.current.contains(event.target) ||
+          sidebarButtonRef.current.contains(event.target)
+        )
+      ) {
         setSidebarVisible(false);
       }
     }
-    document.addEventListener("mousedown", handleOutsideClick);
+    document.addEventListener("mouseup", handleOutsideClick);
     return () => {
-      document.removeEventListener("mousedown", handleOutsideClick);
+      document.removeEventListener("mouseup", handleOutsideClick);
     };
   }, [ref, setSidebarVisible]);
 }
 
-function Sidebar({ accessLevel, scrollOffset, setSidebarVisible }) {
-  const wrapper = useRef(null);
-  useOutsideClick(wrapper, setSidebarVisible);
+function Sidebar({
+  accessLevel,
+  scrollOffset,
+  setSidebarVisible,
+  sidebarButtonRef,
+}) {
+  const wrapper = useRef();
+  useOutsideClick(wrapper, setSidebarVisible, sidebarButtonRef);
 
   return (
     <div
@@ -129,6 +146,7 @@ function Sidebar({ accessLevel, scrollOffset, setSidebarVisible }) {
 export default function Navbar({ loggedIn, accessLevel, scrollOffset }) {
   const [sidebarVisible, setSidebarVisible] = useState(false);
   const navigate = useNavigate();
+  const sidebarButtonRef = useRef();
 
   function gotoHome() {
     window.scrollTo(0, 0);
@@ -147,6 +165,7 @@ export default function Navbar({ loggedIn, accessLevel, scrollOffset }) {
           accessLevel={accessLevel}
           scrollOffset={scrollOffset}
           setSidebarVisible={setSidebarVisible}
+          sidebarButtonRef={sidebarButtonRef}
         />
       ) : (
         ""
@@ -160,6 +179,7 @@ export default function Navbar({ loggedIn, accessLevel, scrollOffset }) {
             sidebarVisible={sidebarVisible}
             setSidebarVisible={setSidebarVisible}
             scrollOffset={scrollOffset}
+            myRef={sidebarButtonRef}
           />
         ) : (
           ""
