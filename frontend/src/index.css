@@ -118,7 +118,6 @@ code {
 .wrapper {
   width: 99%;
   min-height: 00px;
-  border: 1px solid;
   margin: 5px;
   margin: 0 auto;
 }
@@ -130,6 +129,7 @@ code {
   justify-content: space-around;
   align-items: center;
   font-size: 20px;
+  font-weight: bold;
   background: rgb(166, 236, 166);
 }
 
@@ -157,7 +157,8 @@ code {
   min-height: 100px;
   text-align: right;
   padding: 5px;
-  background: rgb(249, 249, 151); 
+  background: rgb(249, 249, 151);
+  cursor: pointer;
 }
 
 .today {
@@ -167,6 +168,7 @@ code {
   padding: 5px;
   background: rgb(166, 236, 166);
   font-weight: bold;
+  cursor: pointer;
 }
 
 .events {
@@ -177,6 +179,62 @@ code {
   padding: 8px;
   border-radius: 5px;
   margin: 1px;
+}
+
+.modal {
+  background: white;
+  position: absolute;
+  width: 400px;
+  height: 500px;
+  top: 55%;
+  left: 50%;
+  border-radius: 5px;
+  box-shadow: 10px 10px 10px grey;
+  transform: translate(-50%, -50%);
+}
+
+.addModal {
+  background: rgb(236, 253, 229);
+  position: absolute;
+  width: 400px;
+  height: 500px;
+  top: 55%;
+  left: 50%;
+  border-radius: 5px;
+  box-shadow: 10px 10px 10px grey;
+  transform: translate(-50%, -50%);
+}
+
+.closeModal {
+  position: absolute;
+  top: 90%;
+  left: 3%;
+  height: 35px;
+  width: 380px;
+  background: rgb(247, 204, 204);
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.addEvent{
+  position: absolute;
+  top: 81%;
+  left: 3%;
+  height: 35px;
+  width: 380px;
+  background: rgb(220, 247, 206);
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.modalContents {
+  padding: 30px;
+}
+
+.addModalContents {
+  color: green;
+  padding: 30px;
 }
 
 a {
