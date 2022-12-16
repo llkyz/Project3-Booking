@@ -82,7 +82,10 @@ export default function Holidays({ loggedIn, setLoggedIn, accessLevel }) {
           getHolidayData={getHolidayData}
         />
       ) : (
-        ""
+        <>
+          <div className="loading" />
+          <h1>Loading...</h1>
+        </>
       )}
       {newHoliday ? (
         <NewHoliday

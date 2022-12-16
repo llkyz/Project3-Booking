@@ -1,10 +1,19 @@
 import React, { useState, useEffect } from "react";
 import config from "../config";
 import { useNavigate } from "react-router-dom";
+import tick from "../Assets/tick.svg";
 
 export default function Profile({ loggedIn, setLoggedIn }) {
   const [profileData, setProfileData] = useState();
   const [changePassDialog, setChangePassDialog] = useState();
+  const [oldPassword, setOldPassword] = useState("");
+  const [password, setPassword] = useState("");
+  const [passwordAlert, setPasswordAlert] = useState({
+    lowercase: false,
+    uppercase: false,
+    number: false,
+    length: false,
+  });
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -29,6 +38,25 @@ export default function Profile({ loggedIn, setLoggedIn }) {
     checkLoggedIn();
     getProfileData();
   }, [setLoggedIn, loggedIn, navigate]);
+
+  useEffect(() => {
+    function checkPassword() {
+      let testLowerCase = /[a-z]/;
+      let testUpperCase = /[A-Z]/;
+      let testNumber = /[0-9]/;
+      let testLength = false;
+      if (password) {
+        testLength = password.length >= 8;
+      }
+      setPasswordAlert({
+        lowercase: testLowerCase.test(password),
+        uppercase: testUpperCase.test(password),
+        number: testNumber.test(password),
+        length: testLength,
+      });
+    }
+    checkPassword();
+  }, [password]);
 
   async function doLogout() {
     const res = await fetch(config.BACKEND_URL + "user/logout", {
@@ -63,11 +91,58 @@ export default function Profile({ loggedIn, setLoggedIn }) {
       });
       let result = await res.json();
       if (res.status === 200) {
-        event.target.form[1].value = "";
-        event.target.form[2].value = "";
+        setPassword("");
+        setOldPassword("");
       }
       setChangePassDialog(result);
     }
+  }
+
+  function PasswordValidation() {
+    return (
+      <div>
+        {
+          <div className="validationEntry">
+            <h4 className="validation">At least 1 lowercase letter</h4>
+            {passwordAlert.lowercase ? (
+              <img className="validationTick" src={tick} alt="tick" />
+            ) : (
+              ""
+            )}
+          </div>
+        }
+        {
+          <div className="validationEntry">
+            <h4 className="validation">At least 1 uppercase letter</h4>
+            {passwordAlert.uppercase ? (
+              <img className="validationTick" src={tick} alt="tick" />
+            ) : (
+              ""
+            )}
+          </div>
+        }
+        {
+          <div className="validationEntry">
+            <h4 className="validation">At least 1 number</h4>
+            {passwordAlert.number ? (
+              <img className="validationTick" src={tick} alt="tick" />
+            ) : (
+              ""
+            )}
+          </div>
+        }
+        {
+          <div className="validationEntry">
+            <h4 className="validation">At least 8 characters long</h4>
+            {passwordAlert.length ? (
+              <img className="validationTick" src={tick} alt="tick" />
+            ) : (
+              ""
+            )}
+          </div>
+        }
+      </div>
+    );
   }
 
   return (
@@ -105,12 +180,16 @@ export default function Profile({ loggedIn, setLoggedIn }) {
               className="entryFormChild"
               type="password"
               name="currentpassword"
+              value={oldPassword}
+              onChange={(self) => setOldPassword(self.target.value)}
             />
             <div className="label">New Password</div>
             <input
               className="entryFormChild"
               type="password"
               name="newpassword"
+              value={password}
+              onChange={(self) => setPassword(self.target.value)}
             />
             <input
               className="entryFormSubmit"
@@ -120,16 +199,34 @@ export default function Profile({ loggedIn, setLoggedIn }) {
               }}
               type="submit"
               value="Submit"
+              disabled={
+                passwordAlert.lowercase &&
+                passwordAlert.uppercase &&
+                passwordAlert.number &&
+                passwordAlert.length &&
+                oldPassword.length !== 0
+                  ? false
+                  : true
+              }
               onClick={(event) => changePassword(event)}
             />
           </form>
+          {password ? (
+            <div className="registerValidation" style={{ marginTop: "20px" }}>
+              <div className="registerValidationHeader">New Password</div>
+              <PasswordValidation />
+            </div>
+          ) : (
+            ""
+          )}
           <button
             className="modButton"
             style={{
-              marginTop: "40px",
+              margin: "40px auto 0px auto",
               fontSize: "1.5em",
               fontWeight: "bold",
               border: "3px solid rgb(50,50,50)",
+              display: "block",
             }}
             onClick={doLogout}
           >
@@ -137,7 +234,10 @@ export default function Profile({ loggedIn, setLoggedIn }) {
           </button>
         </>
       ) : (
-        ""
+        <>
+          <div className="loading" />
+          <h1>Loading...</h1>
+        </>
       )}
     </>
   );

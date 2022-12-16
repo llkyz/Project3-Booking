@@ -82,7 +82,10 @@ export default function Offdays({ loggedIn, setLoggedIn, accessLevel }) {
           getOffdayData={getOffdayData}
         />
       ) : (
-        ""
+        <>
+          <div className="loading" />
+          <h1>Loading...</h1>
+        </>
       )}
       {newOffday ? (
         <NewOffday setNewOffday={setNewOffday} getOffdayData={getOffdayData} />

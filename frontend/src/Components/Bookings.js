@@ -90,7 +90,10 @@ export default function Bookings({ loggedIn, setLoggedIn, accessLevel }) {
           getBookingData={getBookingData}
         />
       ) : (
-        ""
+        <>
+          <div className="loading" />
+          <h1>Loading...</h1>
+        </>
       )}
       {newBooking ? (
         <NewBooking

@@ -234,15 +234,20 @@ export default function UserList({ loggedIn, setLoggedIn, accessLevel }) {
   return (
     <>
       <h1 style={{ marginBottom: "30px" }}>User List</h1>
-      {userData
-        ? userData.map((data) => (
-            <UserEntry
-              key={data.username}
-              data={data}
-              fetchAllUsers={fetchAllUsers}
-            />
-          ))
-        : ""}
+      {userData ? (
+        userData.map((data) => (
+          <UserEntry
+            key={data.username}
+            data={data}
+            fetchAllUsers={fetchAllUsers}
+          />
+        ))
+      ) : (
+        <>
+          <div className="loading" />
+          <h1>Loading...</h1>
+        </>
+      )}
     </>
   );
 }

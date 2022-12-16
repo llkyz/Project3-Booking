@@ -82,7 +82,10 @@ export default function Pickups({ loggedIn, setLoggedIn, accessLevel }) {
           getPickupData={getPickupData}
         />
       ) : (
-        ""
+        <>
+          <div className="loading" />
+          <h1>Loading...</h1>
+        </>
       )}
       {newPickup ? (
         <NewPickup setNewPickup={setNewPickup} getPickupData={getPickupData} />
