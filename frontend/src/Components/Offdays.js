@@ -250,25 +250,33 @@ function NewOffday({ setNewOffday, getOffdayData }) {
 
   async function createOffday(event) {
     event.preventDefault();
-    let formBody = {
-      staff: event.target.form[0].selectedOptions[0].value,
-      staffName: event.target.form[0].selectedOptions[0].text,
-      dateTime: event.target.form[1].value,
-      reason: event.target.form[2].value,
-    };
+    if (!event.target.form[0].selectedOptions[0].value) {
+      setErrorMessage("Required field: Staff");
+    } else if (!event.target.form[1].value) {
+      setErrorMessage("Required field: Date");
+    } else {
+      let formBody = {
+        staff: event.target.form[0].selectedOptions[0].value,
+        staffName: event.target.form[0].selectedOptions[0].text,
+        dateTime: event.target.form[1].value,
+        reason: event.target.form[2].value,
+      };
 
-    const res = await fetch(config.BACKEND_URL + "offday", {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formBody),
-    });
-    if (res.status === 200) {
-      getOffdayData();
-      setErrorMessage(false);
-      setNewOffday(false);
+      const res = await fetch(config.BACKEND_URL + "offday", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formBody),
+      });
+      if (res.status === 200) {
+        getOffdayData();
+        setErrorMessage(false);
+        setNewOffday(false);
+      } else {
+        setErrorMessage(await res.json());
+      }
     }
   }
 
@@ -338,6 +346,7 @@ function NewOffday({ setNewOffday, getOffdayData }) {
 }
 
 function EditOffday({ data, getOffdayData, setShowEdit }) {
+  const [errorMesssage, setErrorMessage] = useState();
   const [staffList, setStaffList] = useState();
 
   useEffect(() => {
@@ -360,25 +369,31 @@ function EditOffday({ data, getOffdayData, setShowEdit }) {
 
   async function submitEdit(event) {
     event.preventDefault();
-    let formBody = {
-      staff: event.target.form[0].selectedOptions[0].value,
-      staffName: event.target.form[0].selectedOptions[0].text,
-      dateTime: new Date(event.target.form[1].value),
-      reason: event.target.form[2].value,
-    };
-    const res = await fetch(config.BACKEND_URL + `offday/${data._id}`, {
-      method: "PUT",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formBody),
-    });
-    if (res.status === 200) {
-      getOffdayData();
-      setShowEdit(false);
+    if (!event.target.form[0].selectedOptions[0].value) {
+      setErrorMessage("Required field: Staff");
+    } else if (!event.target.form[1].value) {
+      setErrorMessage("Required field: Date");
     } else {
-      console.log("Error: ", await res.json());
+      let formBody = {
+        staff: event.target.form[0].selectedOptions[0].value,
+        staffName: event.target.form[0].selectedOptions[0].text,
+        dateTime: new Date(event.target.form[1].value),
+        reason: event.target.form[2].value,
+      };
+      const res = await fetch(config.BACKEND_URL + `offday/${data._id}`, {
+        method: "PUT",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formBody),
+      });
+      if (res.status === 200) {
+        getOffdayData();
+        setShowEdit(false);
+      } else {
+        setErrorMessage(await res.json());
+      }
     }
   }
 
@@ -410,7 +425,8 @@ function EditOffday({ data, getOffdayData, setShowEdit }) {
       />
 
       <div className="entryModal">
-        <h1>Edit Holiday</h1>
+        <h1>Edit Offday</h1>
+        {errorMesssage ? <h3 style={{ color: "red" }}>{errorMesssage}</h3> : ""}
         <form className="entryForm">
           <div className="label">Staff</div>
           {staffList ? (

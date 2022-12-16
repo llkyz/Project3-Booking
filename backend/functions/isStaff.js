@@ -15,7 +15,7 @@ async function IsStaff(req, res, next) {
           res.status(401).send("Invalid token");
         } else {
           req.username = decoded.username;
-          const result = await User.findOne({ username: username });
+          const result = await User.findOne({ username: req.username });
           if (result.access === "admin" || result.access === "staff") {
             next();
           } else {

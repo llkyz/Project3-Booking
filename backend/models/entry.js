@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const entrySchema = mongoose.Schema({
-  date: { type: Date },
+  date: { type: Date, required: true },
   bookings: [{ type: mongoose.Schema.Types.ObjectId, ref: "Booking" }],
   holidays: [{ type: mongoose.Schema.Types.ObjectId, ref: "Holiday" }],
   offdays: [{ type: mongoose.Schema.Types.ObjectId, ref: "Offday" }],

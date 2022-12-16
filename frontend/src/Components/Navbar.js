@@ -91,7 +91,7 @@ function useOutsideClick(ref, setSidebarVisible, sidebarButtonRef) {
     return () => {
       document.removeEventListener("mouseup", handleOutsideClick);
     };
-  }, [ref, setSidebarVisible]);
+  }, [ref, setSidebarVisible, sidebarButtonRef]);
 }
 
 function Sidebar({

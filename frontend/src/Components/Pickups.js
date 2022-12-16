@@ -237,24 +237,31 @@ function NewPickup({ setNewPickup, getPickupData }) {
 
   async function createPickup(event) {
     event.preventDefault();
-    let formBody = {
-      customer: event.target.form[0].value,
-      dateTime: event.target.form[1].value,
-      item: event.target.form[2].value,
-    };
-
-    const res = await fetch(config.BACKEND_URL + "pickup", {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formBody),
-    });
-    if (res.status === 200) {
-      getPickupData();
-      setErrorMessage(false);
-      setNewPickup(false);
+    if (!event.target.form[0].value) {
+      setErrorMessage("Required field: Customer");
+    } else if (!event.target.form[1].value) {
+      setErrorMessage("Required field: Date / Time");
+    } else {
+      let formBody = {
+        customer: event.target.form[0].value,
+        dateTime: event.target.form[1].value,
+        item: event.target.form[2].value,
+      };
+      const res = await fetch(config.BACKEND_URL + "pickup", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formBody),
+      });
+      if (res.status === 200) {
+        getPickupData();
+        setErrorMessage(false);
+        setNewPickup(false);
+      } else {
+        setErrorMessage(await res.json());
+      }
     }
   }
 
@@ -278,7 +285,7 @@ function NewPickup({ setNewPickup, getPickupData }) {
         <h1>New Pickup</h1>
         {errorMesssage ? <h3 style={{ color: "red" }}>{errorMesssage}</h3> : ""}
         <form className="entryForm">
-          <div className="label">Customer</div>
+          <div className="label">Customer*</div>
           <input className="entryFormChild" type="text" name="customer" />
           <div className="label">Date / Time</div>
           <input
@@ -314,26 +321,34 @@ function NewPickup({ setNewPickup, getPickupData }) {
 }
 
 function EditPickup({ data, getPickupData, setShowEdit }) {
+  const [errorMesssage, setErrorMessage] = useState();
+
   async function submitEdit(event) {
     event.preventDefault();
-    let formBody = {
-      customer: event.target.form[0].value,
-      dateTime: event.target.form[1].value,
-      item: event.target.form[2].value,
-    };
-    const res = await fetch(config.BACKEND_URL + `pickup/${data._id}`, {
-      method: "PUT",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formBody),
-    });
-    if (res.status === 200) {
-      getPickupData();
-      setShowEdit(false);
+    if (!event.target.form[0].value) {
+      setErrorMessage("Required field: Customer");
+    } else if (!event.target.form[1].value) {
+      setErrorMessage("Required field: Date / Time");
     } else {
-      console.log("Error: ", await res.json());
+      let formBody = {
+        customer: event.target.form[0].value,
+        dateTime: event.target.form[1].value,
+        item: event.target.form[2].value,
+      };
+      const res = await fetch(config.BACKEND_URL + `pickup/${data._id}`, {
+        method: "PUT",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formBody),
+      });
+      if (res.status === 200) {
+        getPickupData();
+        setShowEdit(false);
+      } else {
+        setErrorMessage(await res.json());
+      }
     }
   }
 
@@ -372,9 +387,10 @@ function EditPickup({ data, getPickupData, setShowEdit }) {
       />
 
       <div className="entryModal">
-        <h1>Edit Holiday</h1>
+        <h1>Edit Pickup</h1>
+        {errorMesssage ? <h3 style={{ color: "red" }}>{errorMesssage}</h3> : ""}
         <form className="entryForm">
-          <div className="label">Customer</div>
+          <div className="label">Customer*</div>
           <input
             className="entryFormChild"
             type="text"

@@ -233,7 +233,9 @@ function NewHoliday({ setNewHoliday, getHolidayData }) {
   async function createHoliday(event) {
     event.preventDefault();
     if (!event.target.form[0].value) {
-      setErrorMessage("Holiday title is required");
+      setErrorMessage("Required field: Title");
+    } else if (!event.target.form[1].value) {
+      setErrorMessage("Required field: Date");
     } else {
       let formBody = {};
       formBody.title = event.target.form[0].value;
@@ -250,6 +252,8 @@ function NewHoliday({ setNewHoliday, getHolidayData }) {
         getHolidayData();
         setErrorMessage(false);
         setNewHoliday(false);
+      } else {
+        setErrorMessage(await res.json());
       }
     }
   }
@@ -308,25 +312,33 @@ function NewHoliday({ setNewHoliday, getHolidayData }) {
 }
 
 function EditHoliday({ data, getHolidayData, setShowEdit }) {
+  const [errorMesssage, setErrorMessage] = useState();
+
   async function submitEdit(event) {
     event.preventDefault();
-    let formBody = {
-      title: event.target.form[0].value,
-      dateTime: new Date(event.target.form[1].value),
-    };
-    const res = await fetch(config.BACKEND_URL + `holiday/${data._id}`, {
-      method: "PUT",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formBody),
-    });
-    if (res.status === 200) {
-      getHolidayData();
-      setShowEdit(false);
+    if (!event.target.form[0].value) {
+      setErrorMessage("Required field: Title");
+    } else if (!event.target.form[1].value) {
+      setErrorMessage("Required field: Date");
     } else {
-      console.log("Error: ", await res.json());
+      let formBody = {
+        title: event.target.form[0].value,
+        dateTime: new Date(event.target.form[1].value),
+      };
+      const res = await fetch(config.BACKEND_URL + `holiday/${data._id}`, {
+        method: "PUT",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formBody),
+      });
+      if (res.status === 200) {
+        getHolidayData();
+        setShowEdit(false);
+      } else {
+        setErrorMessage(await res.json());
+      }
     }
   }
 
@@ -359,8 +371,9 @@ function EditHoliday({ data, getHolidayData, setShowEdit }) {
 
       <div className="entryModal">
         <h1>Edit Holiday</h1>
+        {errorMesssage ? <h3 style={{ color: "red" }}>{errorMesssage}</h3> : ""}
         <form className="entryForm">
-          <div className="label">Title</div>
+          <div className="label">Title*</div>
           <input
             className="entryFormChild"
             type="text"

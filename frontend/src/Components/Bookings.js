@@ -334,7 +334,9 @@ function NewBooking({ setNewBooking, getBookingData }) {
   async function createBooking(event) {
     event.preventDefault();
     if (!event.target.form[0].value) {
-      setErrorMessage("Customer name is required");
+      setErrorMessage("Required field: Customer");
+    } else if (!event.target.form[2].value) {
+      setErrorMessage("Required field: Date / Time");
     } else {
       let formBody = {};
       formBody.customer = event.target.form[0].value;
@@ -366,6 +368,8 @@ function NewBooking({ setNewBooking, getBookingData }) {
         getBookingData();
         setErrorMessage(false);
         setNewBooking(false);
+      } else {
+        setErrorMessage(await res.json());
       }
     }
   }
@@ -444,32 +448,40 @@ function NewBooking({ setNewBooking, getBookingData }) {
 }
 
 function EditBooking({ data, getBookingData, setShowEdit }) {
+  const [errorMesssage, setErrorMessage] = useState();
+
   async function submitEdit(event) {
     event.preventDefault();
-    let formBody = {
-      customer: event.target.form[0].value,
-      contact: event.target.form[1].value,
-      dateTime: new Date(event.target.form[2].value),
-      price: event.target.form[3].value,
-      participants: event.target.form[4].value,
-      origin: event.target.form[5].value,
-      id: event.target.form[6].value,
-      complete: event.target.form[7].checked,
-      ignore: event.target.form[8].checked,
-    };
-    const res = await fetch(config.BACKEND_URL + `booking/${data._id}`, {
-      method: "PUT",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formBody),
-    });
-    if (res.status === 200) {
-      getBookingData();
-      setShowEdit(false);
+    if (!event.target.form[0].value) {
+      setErrorMessage("Required field: Customer");
+    } else if (!event.target.form[2].value) {
+      setErrorMessage("Required field: Date / Time");
     } else {
-      console.log("Error: ", await res.json());
+      let formBody = {
+        customer: event.target.form[0].value,
+        contact: event.target.form[1].value,
+        dateTime: new Date(event.target.form[2].value),
+        price: event.target.form[3].value,
+        participants: event.target.form[4].value,
+        origin: event.target.form[5].value,
+        id: event.target.form[6].value,
+        complete: event.target.form[7].checked,
+        ignore: event.target.form[8].checked,
+      };
+      const res = await fetch(config.BACKEND_URL + `booking/${data._id}`, {
+        method: "PUT",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formBody),
+      });
+      if (res.status === 200) {
+        getBookingData();
+        setShowEdit(false);
+      } else {
+        setErrorMessage(await res.json());
+      }
     }
   }
 
@@ -508,8 +520,9 @@ function EditBooking({ data, getBookingData, setShowEdit }) {
       />
       <div className="entryModal">
         <h1>Edit Booking</h1>
+        {errorMesssage ? <h3 style={{ color: "red" }}>{errorMesssage}</h3> : ""}
         <form className="entryForm">
-          <div className="label">Customer</div>
+          <div className="label">Customer*</div>
           <input
             className="entryFormChild"
             type="text"

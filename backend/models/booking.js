@@ -2,10 +2,10 @@ const mongoose = require("mongoose");
 
 const bookingSchema = mongoose.Schema({
   origin: { type: String, required: true },
-  id: { type: Number},
+  id: { type: Number },
   price: { type: Number },
   participants: { type: Number },
-  dateTime: { type: Date },
+  dateTime: { type: Date, required: true },
   customer: { type: String },
   contact: { type: String },
   ignore: { type: Boolean, default: false },
