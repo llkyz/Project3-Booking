@@ -1,29 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import config from "../config";
 
-export default function Offdays({ loggedIn, setLoggedIn, accessLevel }) {
-  const navigate = useNavigate();
+export default function Offdays({ loggedIn, accessLevel }) {
   const [offdayData, setOffdayData] = useState();
   const [newOffday, setNewOffday] = useState(false);
   const [category, setCategory] = useState("upcoming");
 
   useEffect(() => {
-    function checkLoggedIn() {
-      if (!loggedIn) {
-        navigate("/login");
-      }
+    if (accessLevel === "staff" || accessLevel === "admin") {
+      getOffdayData();
     }
-    function checkAccess() {
-      if (accessLevel !== "staff" && accessLevel !== "admin") {
-        navigate("/login");
-      }
-    }
-    checkLoggedIn();
-    checkAccess();
-    getOffdayData();
     // eslint-disable-next-line
-  }, [accessLevel, loggedIn, navigate, setLoggedIn]);
+  }, [accessLevel]);
 
   async function getOffdayData() {
     const res = await fetch(config.BACKEND_URL + "offday", {
@@ -35,60 +23,76 @@ export default function Offdays({ loggedIn, setLoggedIn, accessLevel }) {
       setOffdayData(result);
     } else if (res.status === 401) {
       console.log(result);
-      setLoggedIn(false);
     }
   }
 
   return (
     <>
-      <h1>Offdays</h1>
-      <div className="buttonContainer">
-        <div id="buttonLeft">
-          <button id="newEntry" onClick={() => setNewOffday(true)}>
-            CREATE NEW
-          </button>
-        </div>
-        <div id="buttonRight">
-          <button
-            className={
-              category === "upcoming" ? "filterButtonSelected" : "filterButton"
-            }
-            onClick={() => setCategory("upcoming")}
-          >
-            Upcoming
-          </button>
-          <button
-            className={
-              category === "complete" ? "filterButtonSelected" : "filterButton"
-            }
-            onClick={() => setCategory("complete")}
-          >
-            Complete
-          </button>
-          <button
-            className={
-              category === "all" ? "filterButtonSelected" : "filterButton"
-            }
-            onClick={() => setCategory("all")}
-          >
-            All
-          </button>
-        </div>
-      </div>
-      {offdayData ? (
-        <OffdayList
-          offdayData={offdayData}
-          category={category}
-          getOffdayData={getOffdayData}
-        />
-      ) : (
-        <>
-          <div className="loading" />
-          <h1>Loading...</h1>
-        </>
-      )}
-      {newOffday ? (
-        <NewOffday setNewOffday={setNewOffday} getOffdayData={getOffdayData} />
+      {loggedIn ? (
+        accessLevel === "staff" || accessLevel === "admin" ? (
+          <>
+            <h1>Offdays</h1>
+            <div className="buttonContainer">
+              <div id="buttonLeft">
+                <button id="newEntry" onClick={() => setNewOffday(true)}>
+                  CREATE NEW
+                </button>
+              </div>
+              <div id="buttonRight">
+                <button
+                  className={
+                    category === "upcoming"
+                      ? "filterButtonSelected"
+                      : "filterButton"
+                  }
+                  onClick={() => setCategory("upcoming")}
+                >
+                  Upcoming
+                </button>
+                <button
+                  className={
+                    category === "complete"
+                      ? "filterButtonSelected"
+                      : "filterButton"
+                  }
+                  onClick={() => setCategory("complete")}
+                >
+                  Complete
+                </button>
+                <button
+                  className={
+                    category === "all" ? "filterButtonSelected" : "filterButton"
+                  }
+                  onClick={() => setCategory("all")}
+                >
+                  All
+                </button>
+              </div>
+            </div>
+            {offdayData ? (
+              <OffdayList
+                offdayData={offdayData}
+                category={category}
+                getOffdayData={getOffdayData}
+              />
+            ) : (
+              <>
+                <div className="loading" />
+                <h1>Loading...</h1>
+              </>
+            )}
+            {newOffday ? (
+              <NewOffday
+                setNewOffday={setNewOffday}
+                getOffdayData={getOffdayData}
+              />
+            ) : (
+              ""
+            )}
+          </>
+        ) : (
+          <h1>Insufficient user access</h1>
+        )
       ) : (
         ""
       )}

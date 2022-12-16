@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router";
 import config from "../config";
 
 function UserEntry({ data, fetchAllUsers }) {
@@ -17,9 +16,11 @@ function UserEntry({ data, fetchAllUsers }) {
       },
       body: JSON.stringify(formBody),
     });
-    let result = await res.json();
-    console.log(result);
-    fetchAllUsers();
+    if (res.status !== 200) {
+      console.log(await res.json());
+    } else {
+      fetchAllUsers();
+    }
   }
 
   async function executeEdit(username, event) {
@@ -36,10 +37,12 @@ function UserEntry({ data, fetchAllUsers }) {
       },
       body: JSON.stringify(formBody),
     });
-    let result = await res.json();
-    console.log(result);
-    fetchAllUsers();
-    setShowAccess(false);
+    if (res.status !== 200) {
+      console.log(await res.json());
+    } else {
+      fetchAllUsers();
+      setShowAccess(false);
+    }
   }
 
   function toggleDetails() {
@@ -160,50 +163,19 @@ function UserEntry({ data, fetchAllUsers }) {
       ) : (
         ""
       )}
-
-      {/* 
-      <h4>Username: {data.username}</h4>
-      <h4>
-        Access Level: {data.access[0].toUpperCase() + data.access.substring(1)}
-      </h4>
-      <button onClick={() => setShowDelete(true)}>Delete User</button>
-      <button onClick={() => setShowAccess(true)}>Edit User Access</button>
-      {showDelete ? (
-        <div className="deleteUser">
-          <h3>Delete this user?</h3>
-          <button onClick={() => executeDelete(data.username)}>Confirm</button>
-          <button onClick={() => setShowDelete(false)}>Cancel</button>
-        </div>
-      ) : (
-        ""
-      )}
-      {showAccess ? (
-        <div className="editUser">
-          <h3>Edit User Access</h3>
-          <form>
-            <select id="access" name="access">
-              <option value="user">User</option>
-              <option value="staff">Staff</option>
-              <option value="admin">Admin</option>
-            </select>
-            <input
-              type="submit"
-              value="Submit"
-              onClick={(event) => executeEdit(data.username, event)}
-            />
-          </form>
-          <button onClick={() => setShowAccess(false)}>Cancel</button>
-        </div>
-      ) : (
-        ""
-      )} */}
     </div>
   );
 }
 
-export default function UserList({ loggedIn, setLoggedIn, accessLevel }) {
+export default function UserList({ loggedIn, accessLevel }) {
   const [userData, setUserData] = useState();
-  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (accessLevel === "admin") {
+      fetchAllUsers();
+    }
+    // eslint-disable-next-line
+  }, [accessLevel]);
 
   async function fetchAllUsers() {
     const res = await fetch(config.BACKEND_URL + "admin/userindex", {
@@ -213,40 +185,37 @@ export default function UserList({ loggedIn, setLoggedIn, accessLevel }) {
     let result = await res.json();
     if (res.status === 200) {
       setUserData(result);
-    } else if (res.status === 401) {
-      setLoggedIn(false);
     } else {
       console.log(result);
     }
   }
 
-  useEffect(() => {
-    function checkLoginAccess() {
-      if (!loggedIn || accessLevel !== "admin") {
-        navigate("/login");
-      }
-    }
-    checkLoginAccess();
-    fetchAllUsers();
-    // eslint-disable-next-line
-  }, [accessLevel, loggedIn, setLoggedIn, navigate]);
-
   return (
     <>
-      <h1 style={{ marginBottom: "30px" }}>User List</h1>
-      {userData ? (
-        userData.map((data) => (
-          <UserEntry
-            key={data.username}
-            data={data}
-            fetchAllUsers={fetchAllUsers}
-          />
-        ))
+      {loggedIn ? (
+        accessLevel === "staff" || accessLevel === "admin" ? (
+          <>
+            <h1 style={{ marginBottom: "30px" }}>User List</h1>
+            {userData ? (
+              userData.map((data) => (
+                <UserEntry
+                  key={data.username}
+                  data={data}
+                  fetchAllUsers={fetchAllUsers}
+                />
+              ))
+            ) : (
+              <>
+                <div className="loading" />
+                <h1>Loading...</h1>
+              </>
+            )}
+          </>
+        ) : (
+          <h1>Insufficient user access</h1>
+        )
       ) : (
-        <>
-          <div className="loading" />
-          <h1>Loading...</h1>
-        </>
+        ""
       )}
     </>
   );

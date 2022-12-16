@@ -1,0 +1,43 @@
+User Schema
+===================
+username: String, required, trim, unique, minLength(3)
+password: String, required, trim
+access: String, default("User")
+
+Entry Schema
+===================
+date: Date, required
+bookings: Array of Objects(Booking schema)
+holidays: Array of Objects(Holiday schema)
+offdays: Array of Objects(Offday schema)
+pickups: Array of Objects(Pickup schema)
+
+Booking Schema
+===================
+origin: String, required
+id: Number
+price: Number
+participants: Number
+dateTime: Date, required
+customer: String
+contact: String
+ignore: Boolean, default(false)
+complete: Boolean, default(false)
+
+Holday Schema
+===================
+dateTime: Date, required
+title: String, required
+
+Offday Schema
+===================
+dateTime: Date, required
+staff: Object(User schema)
+staffName: String
+reason: String
+
+Pickup Schema
+===================
+dateTime: Date, required
+customer: String, required
+item: String

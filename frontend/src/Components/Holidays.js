@@ -1,29 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import config from "../config";
 
-export default function Holidays({ loggedIn, setLoggedIn, accessLevel }) {
-  const navigate = useNavigate();
+export default function Holidays({ loggedIn, accessLevel }) {
   const [holidayData, setHolidayData] = useState();
   const [newHoliday, setNewHoliday] = useState(false);
   const [category, setCategory] = useState("upcoming");
 
   useEffect(() => {
-    function checkLoggedIn() {
-      if (!loggedIn) {
-        navigate("/login");
-      }
+    if (accessLevel === "staff" || accessLevel === "admin") {
+      getHolidayData();
     }
-    function checkAccess() {
-      if (accessLevel !== "staff" && accessLevel !== "admin") {
-        navigate("/login");
-      }
-    }
-    checkLoggedIn();
-    checkAccess();
-    getHolidayData();
     // eslint-disable-next-line
-  }, [accessLevel, loggedIn, navigate, setLoggedIn]);
+  }, [accessLevel]);
 
   async function getHolidayData() {
     const res = await fetch(config.BACKEND_URL + "holiday", {
@@ -35,63 +23,76 @@ export default function Holidays({ loggedIn, setLoggedIn, accessLevel }) {
       setHolidayData(result);
     } else if (res.status === 401) {
       console.log(result);
-      setLoggedIn(false);
     }
   }
 
   return (
     <>
-      <h1>Holidays</h1>
-      <div className="buttonContainer">
-        <div id="buttonLeft">
-          <button id="newEntry" onClick={() => setNewHoliday(true)}>
-            CREATE NEW
-          </button>
-        </div>
-        <div id="buttonRight">
-          <button
-            className={
-              category === "upcoming" ? "filterButtonSelected" : "filterButton"
-            }
-            onClick={() => setCategory("upcoming")}
-          >
-            Upcoming
-          </button>
-          <button
-            className={
-              category === "complete" ? "filterButtonSelected" : "filterButton"
-            }
-            onClick={() => setCategory("complete")}
-          >
-            Complete
-          </button>
-          <button
-            className={
-              category === "all" ? "filterButtonSelected" : "filterButton"
-            }
-            onClick={() => setCategory("all")}
-          >
-            All
-          </button>
-        </div>
-      </div>
-      {holidayData ? (
-        <HolidayList
-          holidayData={holidayData}
-          category={category}
-          getHolidayData={getHolidayData}
-        />
-      ) : (
-        <>
-          <div className="loading" />
-          <h1>Loading...</h1>
-        </>
-      )}
-      {newHoliday ? (
-        <NewHoliday
-          setNewHoliday={setNewHoliday}
-          getHolidayData={getHolidayData}
-        />
+      {loggedIn ? (
+        accessLevel === "staff" || accessLevel === "admin" ? (
+          <>
+            <h1>Holidays</h1>
+            <div className="buttonContainer">
+              <div id="buttonLeft">
+                <button id="newEntry" onClick={() => setNewHoliday(true)}>
+                  CREATE NEW
+                </button>
+              </div>
+              <div id="buttonRight">
+                <button
+                  className={
+                    category === "upcoming"
+                      ? "filterButtonSelected"
+                      : "filterButton"
+                  }
+                  onClick={() => setCategory("upcoming")}
+                >
+                  Upcoming
+                </button>
+                <button
+                  className={
+                    category === "complete"
+                      ? "filterButtonSelected"
+                      : "filterButton"
+                  }
+                  onClick={() => setCategory("complete")}
+                >
+                  Complete
+                </button>
+                <button
+                  className={
+                    category === "all" ? "filterButtonSelected" : "filterButton"
+                  }
+                  onClick={() => setCategory("all")}
+                >
+                  All
+                </button>
+              </div>
+            </div>
+            {holidayData ? (
+              <HolidayList
+                holidayData={holidayData}
+                category={category}
+                getHolidayData={getHolidayData}
+              />
+            ) : (
+              <>
+                <div className="loading" />
+                <h1>Loading...</h1>
+              </>
+            )}
+            {newHoliday ? (
+              <NewHoliday
+                setNewHoliday={setNewHoliday}
+                getHolidayData={getHolidayData}
+              />
+            ) : (
+              ""
+            )}
+          </>
+        ) : (
+          <h1>Insufficient user access</h1>
+        )
       ) : (
         ""
       )}

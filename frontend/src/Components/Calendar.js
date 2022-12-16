@@ -1,21 +1,10 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
 import config from "../config";
 import CalendarGrid from "./CalendarGrid";
 
-export default function Calendar({ loggedIn, setLoggedIn, accessLevel }) {
+export default function Calendar({ loggedIn }) {
   const [sophieData, setSophieData] = useState();
   const [shopifyData, setShopifyData] = useState();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    function checkLoggedIn() {
-      if (!loggedIn) {
-        navigate("/login");
-      }
-    }
-    checkLoggedIn();
-  }, [loggedIn, navigate]);
 
   async function submitEntry(
     data,
@@ -44,7 +33,7 @@ export default function Calendar({ loggedIn, setLoggedIn, accessLevel }) {
     if (res.status === 200) {
       setdataInput(dataInput.filter((d, i) => i !== index));
     } else {
-      setLoggedIn(false);
+      console.log(data);
     }
   }
 
@@ -53,10 +42,10 @@ export default function Calendar({ loggedIn, setLoggedIn, accessLevel }) {
       credentials: "include",
     });
     let data = await response.json();
-    if (response.status !== 200) {
-      setLoggedIn(false);
-    } else {
+    if (response.status === 200) {
       setSophieData(data);
+    } else {
+      console.log(data);
     }
   }
 
@@ -65,10 +54,10 @@ export default function Calendar({ loggedIn, setLoggedIn, accessLevel }) {
       credentials: "include",
     });
     let data = await response.json();
-    if (response.status !== 200) {
-      setLoggedIn(false);
-    } else {
+    if (response.status === 200) {
       setShopifyData(data);
+    } else {
+      console.log(data);
     }
   }
 
@@ -104,16 +93,22 @@ export default function Calendar({ loggedIn, setLoggedIn, accessLevel }) {
 
   return (
     <>
-      <CalendarGrid />
-      <div onClick={getSophieData}>Get Sophie Data</div>
-      {sophieData ? (
-        <ShowData dataInput={sophieData} setDataInput={setSophieData} />
-      ) : (
-        ""
-      )}
-      <div onClick={getShopifyData}>Get Shopify Data</div>
-      {shopifyData ? (
-        <ShowData dataInput={shopifyData} setDataInput={setShopifyData} />
+      {loggedIn ? (
+        <>
+          <CalendarGrid />
+          <div onClick={getSophieData}>Get Sophie Data</div>
+          {sophieData ? (
+            <ShowData dataInput={sophieData} setDataInput={setSophieData} />
+          ) : (
+            ""
+          )}
+          <div onClick={getShopifyData}>Get Shopify Data</div>
+          {shopifyData ? (
+            <ShowData dataInput={shopifyData} setDataInput={setShopifyData} />
+          ) : (
+            ""
+          )}
+        </>
       ) : (
         ""
       )}

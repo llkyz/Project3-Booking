@@ -1,29 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import config from "../config";
 
-export default function Bookings({ loggedIn, setLoggedIn, accessLevel }) {
-  const navigate = useNavigate();
+export default function Bookings({ loggedIn, accessLevel }) {
   const [bookingData, setBookingData] = useState();
   const [newBooking, setNewBooking] = useState(false);
   const [category, setCategory] = useState("open");
 
   useEffect(() => {
-    function checkLoggedIn() {
-      if (!loggedIn) {
-        navigate("/login");
-      }
+    if (accessLevel === "staff" || accessLevel === "admin") {
+      getBookingData();
     }
-    function checkAccess() {
-      if (accessLevel !== "staff" && accessLevel !== "admin") {
-        navigate("/login");
-      }
-    }
-    checkLoggedIn();
-    checkAccess();
-    getBookingData();
     // eslint-disable-next-line
-  }, [accessLevel, loggedIn, navigate, setLoggedIn]);
+  }, [accessLevel]);
 
   async function getBookingData() {
     const res = await fetch(config.BACKEND_URL + "booking", {
@@ -35,71 +23,86 @@ export default function Bookings({ loggedIn, setLoggedIn, accessLevel }) {
       setBookingData(result);
     } else {
       console.log(result);
-      setLoggedIn(false);
     }
   }
 
   return (
     <>
-      <h1>Bookings</h1>
-      <div className="buttonContainer">
-        <div id="buttonLeft">
-          <button id="newEntry" onClick={() => setNewBooking(true)}>
-            CREATE NEW
-          </button>
-        </div>
-        <div id="buttonRight">
-          <button
-            className={
-              category === "open" ? "filterButtonSelected" : "filterButton"
-            }
-            onClick={() => setCategory("open")}
-          >
-            Open
-          </button>
-          <button
-            className={
-              category === "complete" ? "filterButtonSelected" : "filterButton"
-            }
-            onClick={() => setCategory("complete")}
-          >
-            Complete
-          </button>
-          <button
-            className={
-              category === "all" ? "filterButtonSelected" : "filterButton"
-            }
-            onClick={() => setCategory("all")}
-          >
-            All
-          </button>
-          <button
-            className={
-              category === "ignored" ? "filterButtonSelected" : "filterButton"
-            }
-            onClick={() => setCategory("ignored")}
-          >
-            Ignored
-          </button>
-        </div>
-      </div>
-      {bookingData ? (
-        <BookingList
-          bookingData={bookingData}
-          category={category}
-          getBookingData={getBookingData}
-        />
-      ) : (
-        <>
-          <div className="loading" />
-          <h1>Loading...</h1>
-        </>
-      )}
-      {newBooking ? (
-        <NewBooking
-          setNewBooking={setNewBooking}
-          getBookingData={getBookingData}
-        />
+      {loggedIn ? (
+        accessLevel === "staff" || accessLevel === "admin" ? (
+          <>
+            <h1>Bookings</h1>
+            <div className="buttonContainer">
+              <div id="buttonLeft">
+                <button id="newEntry" onClick={() => setNewBooking(true)}>
+                  CREATE NEW
+                </button>
+              </div>
+              <div id="buttonRight">
+                <button
+                  className={
+                    category === "open"
+                      ? "filterButtonSelected"
+                      : "filterButton"
+                  }
+                  onClick={() => setCategory("open")}
+                >
+                  Open
+                </button>
+                <button
+                  className={
+                    category === "complete"
+                      ? "filterButtonSelected"
+                      : "filterButton"
+                  }
+                  onClick={() => setCategory("complete")}
+                >
+                  Complete
+                </button>
+                <button
+                  className={
+                    category === "all" ? "filterButtonSelected" : "filterButton"
+                  }
+                  onClick={() => setCategory("all")}
+                >
+                  All
+                </button>
+                <button
+                  className={
+                    category === "ignored"
+                      ? "filterButtonSelected"
+                      : "filterButton"
+                  }
+                  onClick={() => setCategory("ignored")}
+                >
+                  Ignored
+                </button>
+              </div>
+            </div>
+            {bookingData ? (
+              <BookingList
+                bookingData={bookingData}
+                category={category}
+                getBookingData={getBookingData}
+              />
+            ) : (
+              <>
+                <div className="loading" />
+                <h1>Loading...</h1>
+              </>
+            )}
+            {newBooking ? (
+              <NewBooking
+                setNewBooking={setNewBooking}
+                getBookingData={getBookingData}
+              />
+            ) : (
+              ""
+            )}
+          </>
+        ) : (
+          <h1>Insufficient user access</h1>
+        )
       ) : (
         ""
       )}

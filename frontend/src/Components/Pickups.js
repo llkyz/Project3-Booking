@@ -1,29 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import config from "../config";
 
-export default function Pickups({ loggedIn, setLoggedIn, accessLevel }) {
-  const navigate = useNavigate();
+export default function Pickups({ loggedIn, accessLevel }) {
   const [pickupData, setPickupData] = useState();
   const [newPickup, setNewPickup] = useState(false);
   const [category, setCategory] = useState("upcoming");
 
   useEffect(() => {
-    function checkLoggedIn() {
-      if (!loggedIn) {
-        navigate("/login");
-      }
+    if (accessLevel === "staff" || accessLevel === "admin") {
+      getPickupData();
     }
-    function checkAccess() {
-      if (accessLevel !== "staff" && accessLevel !== "admin") {
-        navigate("/login");
-      }
-    }
-    checkLoggedIn();
-    checkAccess();
-    getPickupData();
     // eslint-disable-next-line
-  }, [accessLevel, loggedIn, navigate, setLoggedIn]);
+  }, [accessLevel]);
 
   async function getPickupData() {
     const res = await fetch(config.BACKEND_URL + "pickup", {
@@ -35,60 +23,76 @@ export default function Pickups({ loggedIn, setLoggedIn, accessLevel }) {
       setPickupData(result);
     } else if (res.status === 401) {
       console.log(result);
-      setLoggedIn(false);
     }
   }
 
   return (
     <>
-      <h1>Pickups</h1>
-      <div className="buttonContainer">
-        <div id="buttonLeft">
-          <button id="newEntry" onClick={() => setNewPickup(true)}>
-            CREATE NEW
-          </button>
-        </div>
-        <div id="buttonRight">
-          <button
-            className={
-              category === "upcoming" ? "filterButtonSelected" : "filterButton"
-            }
-            onClick={() => setCategory("upcoming")}
-          >
-            Upcoming
-          </button>
-          <button
-            className={
-              category === "complete" ? "filterButtonSelected" : "filterButton"
-            }
-            onClick={() => setCategory("complete")}
-          >
-            Complete
-          </button>
-          <button
-            className={
-              category === "all" ? "filterButtonSelected" : "filterButton"
-            }
-            onClick={() => setCategory("all")}
-          >
-            All
-          </button>
-        </div>
-      </div>
-      {pickupData ? (
-        <PickupList
-          pickupData={pickupData}
-          category={category}
-          getPickupData={getPickupData}
-        />
-      ) : (
-        <>
-          <div className="loading" />
-          <h1>Loading...</h1>
-        </>
-      )}
-      {newPickup ? (
-        <NewPickup setNewPickup={setNewPickup} getPickupData={getPickupData} />
+      {loggedIn ? (
+        accessLevel === "staff" || accessLevel === "admin" ? (
+          <>
+            <h1>Pickups</h1>
+            <div className="buttonContainer">
+              <div id="buttonLeft">
+                <button id="newEntry" onClick={() => setNewPickup(true)}>
+                  CREATE NEW
+                </button>
+              </div>
+              <div id="buttonRight">
+                <button
+                  className={
+                    category === "upcoming"
+                      ? "filterButtonSelected"
+                      : "filterButton"
+                  }
+                  onClick={() => setCategory("upcoming")}
+                >
+                  Upcoming
+                </button>
+                <button
+                  className={
+                    category === "complete"
+                      ? "filterButtonSelected"
+                      : "filterButton"
+                  }
+                  onClick={() => setCategory("complete")}
+                >
+                  Complete
+                </button>
+                <button
+                  className={
+                    category === "all" ? "filterButtonSelected" : "filterButton"
+                  }
+                  onClick={() => setCategory("all")}
+                >
+                  All
+                </button>
+              </div>
+            </div>
+            {pickupData ? (
+              <PickupList
+                pickupData={pickupData}
+                category={category}
+                getPickupData={getPickupData}
+              />
+            ) : (
+              <>
+                <div className="loading" />
+                <h1>Loading...</h1>
+              </>
+            )}
+            {newPickup ? (
+              <NewPickup
+                setNewPickup={setNewPickup}
+                getPickupData={getPickupData}
+              />
+            ) : (
+              ""
+            )}
+          </>
+        ) : (
+          <h1>Insufficient user access</h1>
+        )
       ) : (
         ""
       )}

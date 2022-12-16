@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import config from "../config";
 
 export default function Login({ loggedIn, setLoggedIn }) {
-  const [errorMessage, setErrorMessage] = useState(false);
+  const [errorMessage, setErrorMessage] = useState();
   const navigate = useNavigate();
 
   if (loggedIn) {
@@ -24,24 +24,18 @@ export default function Login({ loggedIn, setLoggedIn }) {
       },
       body: JSON.stringify(formBody),
     });
-    let result = await res.json();
-    console.log(`Response ${res.status}: ${result}`);
     if (res.status === 200) {
       setLoggedIn(true);
       navigate("/profile");
     } else {
-      setErrorMessage(true);
+      setErrorMessage(await res.json());
     }
   }
 
   return (
     <>
       <h1>Login</h1>
-      {errorMessage ? (
-        <h3 style={{ color: "red" }}>Invalid username/password</h3>
-      ) : (
-        ""
-      )}
+      {errorMessage ? <h3 style={{ color: "red" }}>{errorMessage}</h3> : ""}
       <form
         method="POST"
         action={config.BACKEND_URL + "user/login"}
