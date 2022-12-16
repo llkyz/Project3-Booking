@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router";
+import sppfyLogo from "../Assets/sppfy_logo.png";
 
 export default function Home({ loggedIn }) {
   const navigate = useNavigate();
@@ -11,11 +12,14 @@ export default function Home({ loggedIn }) {
       }
     }
     checkLoggedIn();
-  }, []);
+  }, [loggedIn, navigate]);
 
   return (
-    <h1>
-      Welcome to Sppfy Calendar! To utilise the calendar app, please log in.
-    </h1>
+    <>
+      <img src={sppfyLogo} alt="logo" style={{ marginTop: "100px" }} />
+      <h1 style={{ marginTop: "100px", marginBottom: "100px" }}>
+        Welcome to SPPFY Calendar! Please log in to use the calendar app.
+      </h1>
+    </>
   );
 }

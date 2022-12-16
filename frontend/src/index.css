@@ -394,12 +394,56 @@ a {
   display: inline-grid;
   margin: auto 5px;
   font-size: large;
-  border: 2px solid rgb(50, 50, 50);
+  border: 2px solid #323232;
   border-radius: 5px;
   cursor: pointer;
 }
 
-.entryFormSubmit:hover {
+.entryFormSubmit:hover:enabled {
   background-color: rgb(50, 50, 50);
   color: white;
+}
+
+.entryFormSubmit:disabled {
+  border: 2px solid transparent;
+  cursor: default;
+}
+
+.registerValidationContainer {
+  width: 70%;
+  margin: 0 auto;
+  margin-top: 50px;
+}
+
+.registerValidation {
+  width: 45%;
+  margin: auto 5px;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.registerValidationHeader {
+  color: white;
+  font-weight: 600;
+  background-color: rgb(100, 110, 60);
+  padding: 2px;
+}
+
+.validationEntry {
+  width: 90%;
+  display: flex;
+  justify-content: space-between;
+  margin: 0 auto;
+}
+
+.validation {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 10px 0;
+}
+
+.validationTick {
+  display: inline-block;
+  width: 20px;
+  vertical-align: middle;
 }
