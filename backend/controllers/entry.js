@@ -3,14 +3,12 @@ const router = express.Router();
 const Entry = require("../models/entry");
 const isAuthenticated = require("../functions/isAuthenticated");
 
-router.get("/range", isAuthenticated, async (req, res) => {
+router.get("/range/:year&:month", isAuthenticated, async (req, res) => {
   try {
-    req.body.dateStart;
-    req.body.dateEnd;
     const result = await Entry.find({
       date: {
-        $gte: new Date(req.body.dateStart),
-        $lt: new Date(req.body.dateEnd),
+        $gte: new Date(req.params.year, req.params.month, 1),
+        $lte: new Date(req.params.year, parseInt(req.params.month) + 1, 1),
       },
     });
     res.status(200).json(result);

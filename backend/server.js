@@ -12,6 +12,7 @@ const bookingController = require("./controllers/booking");
 const holidayController = require("./controllers/holiday");
 const offdayController = require("./controllers/offday");
 const pickupController = require("./controllers/pickup");
+const entryController = require("./controllers/entry");
 require("dotenv").config();
 
 let mongoURI = process.env.DATABASE;
@@ -42,6 +43,7 @@ app.use("/booking", bookingController);
 app.use("/holiday", holidayController);
 app.use("/offday", offdayController);
 app.use("/pickup", pickupController);
+app.use("/entry", entryController);
 
 app.get("*", (req, res) => {
   res.json("Error, path not found");

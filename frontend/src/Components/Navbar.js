@@ -114,6 +114,11 @@ function Sidebar({
           <h1>Calendar</h1>
         </Link>
       }
+      {
+        <Link to="/calendar2">
+          <h1>Calendar2</h1>
+        </Link>
+      }
       {accessLevel !== "user" ? (
         <>
           <Link to="/bookings">

@@ -526,3 +526,232 @@ a {
     transform: rotate(360deg);
   }
 }
+
+.externalDataContainer {
+  text-align: right;
+}
+
+.externalData {
+  display: inline-block;
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+.externalDataHeader {
+  display: inline-block;
+  background-color: rgb(100, 110, 60);
+  padding: 3px 7px;
+  color: white;
+  font-weight: 600;
+  font-size: large;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  height: 25px;
+}
+
+.externalDataEntry {
+  color: rgb(40, 40, 40);
+  display: inline-block;
+  width: 20px;
+  font-weight: 600;
+  font-size: large;
+  padding: 3px 5px;
+  box-shadow: inset 0px 0px 0px 3px rgb(100, 110, 60);
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  height: 25px;
+  vertical-align: top;
+  text-align: center;
+}
+
+.externalDataLoading {
+  display: inline-block;
+  position: relative;
+  width: 25px;
+  height: 25px;
+  padding: 3px 5px;
+  box-shadow: inset 0px 0px 0px 3px rgb(100, 110, 60);
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  vertical-align: top;
+}
+
+.externalDataLoading .loading {
+  background-image: url("./Assets/data_loading.svg");
+  width: 75%;
+  height: 75%;
+  margin: auto;
+  margin-top: 3px;
+}
+
+.calendar {
+  position: relative;
+  margin: 0 auto;
+  padding: 0px 15px 15px 15px;
+  background-color: rgb(255, 254, 238);
+  margin-top: 20px;
+}
+
+.externalDetails {
+  position: absolute;
+  right: 0;
+  padding: 10px 15px;
+  border: 5px solid rgb(100, 110, 60);
+  border-bottom-left-radius: 20px;
+  background-color: rgb(255, 254, 238);
+  z-index: 2;
+}
+
+.externalDetails h2 {
+  margin: 0;
+  margin-bottom: 10px;
+}
+
+.externalEntry {
+  background-color: rgb(170, 180, 130);
+  padding: 10px 20px;
+  margin: 10px;
+}
+
+.externalEntry button {
+  margin: auto 5px;
+  font-size: large;
+  border: 2px solid rgb(50, 50, 50);
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.externalEntry button:hover {
+  background-color: rgb(50, 50, 50);
+  color: white;
+}
+
+.calendarGrid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  width: 100%;
+  margin-top: 10px;
+  padding-top: 0;
+}
+
+.calendarGrid .placeholder {
+  display: inline-grid;
+}
+
+.calendarGrid .previousMonth {
+  display: inline-block;
+  margin-left: 20px;
+  font-size: 1.3em;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  padding-left: 10px;
+  padding-top: 10px;
+}
+
+.previousMonthArrow {
+  position: absolute;
+  top: 10px;
+  left: 25px;
+  width: 7px;
+  height: 7px;
+  border-top: 4px solid rgb(40, 40, 40);
+  border-left: 4px solid rgb(40, 40, 40);
+  border-right: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+  transform: rotate(-45deg);
+  margin-top: 7px;
+  margin-left: 3px;
+}
+
+.calendarGrid .nextMonth {
+  display: inline-block;
+  margin-right: 20px;
+  font-size: 1.3em;
+  font-weight: 600;
+  text-align: right;
+  cursor: pointer;
+  padding-right: 10px;
+  padding-top: 10px;
+}
+
+.nextMonthArrow {
+  position: absolute;
+  top: 10px;
+  right: 25px;
+  width: 7px;
+  height: 7px;
+  border-top: 4px solid rgb(40, 40, 40);
+  border-left: 4px solid rgb(40, 40, 40);
+  border-right: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+  transform: rotate(135deg);
+  margin-top: 7px;
+  margin-right: 3px;
+}
+
+.calendarGrid .calendarMonth {
+  display: inline-grid;
+  font-size: 1.5em;
+  font-weight: bold;
+  grid-column: 2 / span 5;
+  margin: 10px auto;
+}
+
+.calendarGrid .day {
+  display: inline-grid;
+  font-size: 1.3em;
+  width: 100%;
+  height: 100%;
+  padding-top: 5px;
+  padding-bottom: 4px;
+}
+
+.calendarGrid .emptyCell {
+  padding-top: 2px;
+  padding-bottom: 2px;
+  height: 100px;
+}
+
+.calendarGrid .cell {
+  box-shadow: inset 0 0 0 1px rgb(150, 150, 150);
+  min-height: 110px;
+  text-align: right;
+  padding: 2px 10px;
+  cursor: pointer;
+}
+
+.calendarGrid .cell p {
+  margin: 0;
+}
+
+.bookingNode {
+  background-color: blue;
+  color: white;
+  text-align: center;
+  padding: 2px;
+  margin-bottom: 5px;
+}
+
+.holidayNode {
+  background-color: green;
+  color: white;
+  text-align: center;
+  padding: 2px;
+  margin-bottom: 5px;
+}
+
+.offdayNode {
+  background-color: lightblue;
+  color: white;
+  text-align: center;
+  padding: 2px;
+  margin-bottom: 5px;
+}
+
+.pickupNode {
+  background-color: red;
+  color: white;
+  text-align: center;
+  padding: 2px;
+}

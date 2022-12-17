@@ -7,7 +7,6 @@ const isStaff = require("../functions/isStaff");
 
 router.get("/sophie", isStaff, async (req, res) => {
   let result = await sophieData();
-
   for (let x = 0; x < result.length; x++) {
     const searchResult = await Booking.find({
       origin: result[x].origin,
@@ -24,7 +23,6 @@ router.get("/sophie", isStaff, async (req, res) => {
 
 router.get("/shopify", isStaff, async (req, res) => {
   let result = await shopifyData();
-
   for (let x = 0; x < result.length; x++) {
     const searchResult = await Booking.find({
       origin: result[x].origin,

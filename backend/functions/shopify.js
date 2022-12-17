@@ -10,7 +10,11 @@ const shopify = new Shopify({
 
 async function getData() {
   let data = await shopify.order.list();
-  let shopifyList = data.map((order) => {
+  let shopifyList = data.filter((order) =>
+    order.line_items[0].name.includes("Booking")
+  );
+  shopifyList = data.map((order) => {
+    let dateTime = "";
     if (order.line_items[0].properties[1]) {
       dateTime = new Date(order.line_items[0].properties[1].value);
     }

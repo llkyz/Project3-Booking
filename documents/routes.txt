@@ -3,7 +3,7 @@ Routes
 GET /fetch/sophie (Get array of open orders from sophie) 
 GET /fetch/shopify (Get array of open orders from shopify)
 
-GET /entry/range (send dateStart and dateEnd, returns an array of entries within that range)
+GET /entry/range/:year&:month (send year and month, returns an array of entries within that range)
 GET /entry/:id (Get specific entry)
 
 GET /booking

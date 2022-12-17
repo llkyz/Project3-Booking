@@ -5,6 +5,7 @@ import Home from "./Components/Home";
 import Login from "./Components/Login";
 import Register from "./Components/Register";
 import Calendar from "./Components/Calendar";
+import Calendar2 from "./Components/Calendar2";
 import Profile from "./Components/Profile";
 import config from "./config";
 import checkAccess from "./Authorization/checkAccess";
@@ -63,19 +64,15 @@ function App() {
             />
             <Route
               path="/register"
-              element={
-                <Register loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
-              }
+              element={<Register loggedIn={loggedIn} />}
             />
             <Route
               path="/calendar"
-              element={
-                <Calendar
-                  loggedIn={loggedIn}
-                  setLoggedIn={setLoggedIn}
-                  accessLevel={accessLevel}
-                />
-              }
+              element={<Calendar loggedIn={loggedIn} />}
+            />
+            <Route
+              path="/calendar2"
+              element={<Calendar2 loggedIn={loggedIn} />}
             />
             <Route
               path="/profile"
@@ -86,51 +83,31 @@ function App() {
             <Route
               path="/userlist"
               element={
-                <UserList
-                  loggedIn={loggedIn}
-                  setLoggedIn={setLoggedIn}
-                  accessLevel={accessLevel}
-                />
+                <UserList loggedIn={loggedIn} accessLevel={accessLevel} />
               }
             />
             <Route
               path="/bookings"
               element={
-                <Bookings
-                  loggedIn={loggedIn}
-                  setLoggedIn={setLoggedIn}
-                  accessLevel={accessLevel}
-                />
+                <Bookings loggedIn={loggedIn} accessLevel={accessLevel} />
               }
             />
             <Route
               path="/holidays"
               element={
-                <Holidays
-                  loggedIn={loggedIn}
-                  setLoggedIn={setLoggedIn}
-                  accessLevel={accessLevel}
-                />
+                <Holidays loggedIn={loggedIn} accessLevel={accessLevel} />
               }
             />
             <Route
               path="/offdays"
               element={
-                <Offdays
-                  loggedIn={loggedIn}
-                  setLoggedIn={setLoggedIn}
-                  accessLevel={accessLevel}
-                />
+                <Offdays loggedIn={loggedIn} accessLevel={accessLevel} />
               }
             />
             <Route
               path="/pickups"
               element={
-                <Pickups
-                  loggedIn={loggedIn}
-                  setLoggedIn={setLoggedIn}
-                  accessLevel={accessLevel}
-                />
+                <Pickups loggedIn={loggedIn} accessLevel={accessLevel} />
               }
             />
           </Routes>
