@@ -179,6 +179,8 @@ function ExternalDetails({
 }
 
 function ExternalDetailEntry({ data, index, externalData, setExternalData }) {
+  const [errorMessage, setErrorMessage] = useState();
+
   async function submitEntry(
     data,
     index,
@@ -206,7 +208,7 @@ function ExternalDetailEntry({ data, index, externalData, setExternalData }) {
     if (res.status === 200) {
       setdataInput(dataInput.filter((d, i) => i !== index));
     } else {
-      console.log(data);
+      setErrorMessage(`Error, unable to process: Response ${res.status}`);
     }
   }
 
@@ -214,6 +216,11 @@ function ExternalDetailEntry({ data, index, externalData, setExternalData }) {
 
   return (
     <div className="externalEntry">
+      {errorMessage ? (
+        <h4 style={{ margin: "0px 0px 10px 0px" }}>{errorMessage}</h4>
+      ) : (
+        ""
+      )}
       <div className="entryTextGrid" style={{ marginBottom: "10px" }}>
         <div className="entryTextGrid" style={{ marginRight: "10px" }}>
           <div className="label">Name</div>

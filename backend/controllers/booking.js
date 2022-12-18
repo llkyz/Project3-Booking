@@ -40,7 +40,9 @@ router.put("/:id", isStaff, async (req, res) => {
   try {
     let originalData = await Booking.findById(req.params.id);
     await entryFindDelete(originalData.dateTime, req.params.id, "bookings");
-    await entryFindCreate(req.body.dateTime, req.params.id, "bookings");
+    if (!req.body.ignore && !req.body.complete) {
+      await entryFindCreate(req.body.dateTime, req.params.id, "bookings");
+    }
 
     let result2 = await Booking.findByIdAndUpdate(req.params.id, req.body);
     console.log(result2);

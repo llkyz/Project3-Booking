@@ -16,24 +16,31 @@ async function entryFindDelete(dateTimeStr, _id, type) {
     .toLocaleString("en-US", { minimumIntegerDigits: 2, useGrouping: false });
   let dateTimeFormat = year + "-" + month + "-" + day;
 
-  const result = await Entry.findOne({ date: new Date(dateTimeFormat) });
-  if (result === null) {
-    //return error. should not happen in any circumstance
-    console.log("Cannot find entry?!");
-  } else {
-    const result2 = await Entry.findOneAndUpdate(
-      { date: new Date(dateTimeFormat) },
-      { $pull: { [type]: _id } },
-      { new: true }
-    );
-    if (
-      result2.bookings.length === 0 &&
-      result2.holidays.length === 0 &&
-      result2.offdays.length === 0 &&
-      result2.pickups.length === 0
-    ) {
-      await Entry.findOneAndDelete({ date: new Date(dateTimeFormat) });
+  try {
+    const result = await Entry.findOne({ date: new Date(dateTimeFormat) });
+    if (result === null) {
+      //return error. should not happen in any circumstance
+      console.log("Cannot find entry?!");
+    } else {
+      const result2 = await Entry.findOneAndUpdate(
+        { date: new Date(dateTimeFormat) },
+        { $pull: { [type]: _id } },
+        { new: true }
+      );
+      if (
+        result2.bookings.length === 0 &&
+        result2.holidays.length === 0 &&
+        result2.offdays.length === 0 &&
+        result2.pickups.length === 0
+      ) {
+        const result = await Entry.findOneAndDelete({
+          date: new Date(dateTimeFormat),
+        });
+        console.log(result);
+      }
     }
+  } catch (err) {
+    console.log(err);
   }
 }
 

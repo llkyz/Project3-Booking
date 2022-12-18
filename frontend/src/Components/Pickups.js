@@ -122,7 +122,7 @@ function PickupList({ pickupData, category, getPickupData }) {
   );
 }
 
-function PickupEntry({ data, getPickupData }) {
+export function PickupEntry({ data, getPickupData }) {
   const [showDetails, setShowDetails] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
@@ -228,7 +228,7 @@ function PickupEntry({ data, getPickupData }) {
   );
 }
 
-function NewPickup({ setNewPickup, getPickupData }) {
+export function NewPickup({ setNewPickup, getPickupData }) {
   const [errorMesssage, setErrorMessage] = useState();
 
   let myDate = new Date();
@@ -274,19 +274,7 @@ function NewPickup({ setNewPickup, getPickupData }) {
 
   return (
     <>
-      <div
-        onClick={() => setNewPickup(false)}
-        style={{
-          backgroundColor: "grey",
-          position: "fixed",
-          height: "100%",
-          width: "100%",
-          top: 0,
-          left: 0,
-          opacity: 0.5,
-          zIndex: 10,
-        }}
-      />
+      <div onClick={() => setNewPickup(false)} className="modalBackground" />
 
       <div className="entryModal">
         <h1>New Pickup</h1>
@@ -379,19 +367,7 @@ function EditPickup({ data, getPickupData, setShowEdit }) {
 
   return (
     <>
-      <div
-        onClick={() => setShowEdit(false)}
-        style={{
-          backgroundColor: "grey",
-          position: "fixed",
-          height: "100%",
-          width: "100%",
-          top: 0,
-          left: 0,
-          opacity: 0.5,
-          zIndex: 10,
-        }}
-      />
+      <div onClick={() => setShowEdit(false)} className="modalBackground" />
 
       <div className="entryModal">
         <h1>Edit Pickup</h1>

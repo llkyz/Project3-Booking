@@ -426,7 +426,8 @@ a {
   padding-bottom: 20px;
   position: fixed;
   height: fit-content;
-  width: 500px;
+  min-width: 500px;
+  width: fit-content;
   z-index: 20;
   top: 0;
   bottom: 0;
@@ -754,4 +755,15 @@ a {
   color: white;
   text-align: center;
   padding: 2px;
+}
+
+.modalBackground {
+  background-color: grey;
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  opacity: 0.5;
+  z-index: 10;
 }

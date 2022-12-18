@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import config from "../config";
+import CalendarGrid2Modal from "./CalendarGrid2Modal";
 
 export default function CalendarGrid2() {
   const [calendarMonth, setCalendarMonth] = useState();
   const [calendarYear, setCalendarYear] = useState();
   const [monthEntries, setmonthEntries] = useState([]);
+  const [modalDate, setModalDate] = useState(null);
 
   useEffect(() => {
     function setDates() {
@@ -16,9 +18,10 @@ export default function CalendarGrid2() {
   }, []);
 
   useEffect(() => {
-    if (calendarMonth && calendarYear) {
+    if (calendarMonth !== undefined && calendarYear !== undefined) {
       getMonthEntries();
     }
+    //eslint-disable-next-line
   }, [calendarMonth, calendarYear]);
 
   async function getMonthEntries() {
@@ -53,7 +56,17 @@ export default function CalendarGrid2() {
           calendarYear={calendarYear}
           calendarMonth={calendarMonth}
           monthEntries={monthEntries}
+          setModalDate={setModalDate}
         />
+        {modalDate ? (
+          <CalendarGrid2Modal
+            modalDate={modalDate}
+            setModalDate={setModalDate}
+            getMonthEntries={getMonthEntries}
+          />
+        ) : (
+          ""
+        )}
       </div>
     </>
   );
@@ -129,7 +142,7 @@ function DayHeader() {
   );
 }
 
-function Days({ calendarYear, calendarMonth, monthEntries }) {
+function Days({ calendarYear, calendarMonth, monthEntries, setModalDate }) {
   const [cellList, setCellList] = useState();
   let numDays = new Date(calendarYear, calendarMonth + 1, 0).getDate();
   let firstDay = new Date(calendarYear, calendarMonth, 1).getDay();
@@ -147,7 +160,13 @@ function Days({ calendarYear, calendarMonth, monthEntries }) {
             new Date(calendarYear, calendarMonth, x).setHours(0, 0, 0, 0)
           ) {
             cells.push(
-              <div className="cell" key={x}>
+              <div
+                className="cell"
+                key={x}
+                onClick={() => {
+                  setModalDate(new Date(calendarYear, calendarMonth, x));
+                }}
+              >
                 <p>{x}</p>
                 {entryList[y].bookings.length === 0 ? (
                   ""
@@ -194,7 +213,13 @@ function Days({ calendarYear, calendarMonth, monthEntries }) {
         }
         if (entryFound === false) {
           cells.push(
-            <div className="cell" key={x}>
+            <div
+              className="cell"
+              key={x}
+              onClick={() => {
+                setModalDate(new Date(calendarYear, calendarMonth, x));
+              }}
+            >
               <p>{x}</p>
             </div>
           );
@@ -202,7 +227,7 @@ function Days({ calendarYear, calendarMonth, monthEntries }) {
       }
     }
     setCellList(cells);
-  }, [monthEntries]);
+  }, [monthEntries, calendarMonth, calendarYear, numDays, setModalDate]);
 
   for (let x = 0; x < firstDay; x++) {
     emptyCells.push(<div className="emptyCell" key={x} />);

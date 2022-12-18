@@ -15,18 +15,21 @@ async function entryFindCreate(dateTimeStr, _id, type) {
     .getDate()
     .toLocaleString("en-US", { minimumIntegerDigits: 2, useGrouping: false });
   let dateTimeFormat = year + "-" + month + "-" + day;
-  console.log(dateTimeFormat);
+
   try {
     const result = await Entry.findOne({ date: new Date(dateTimeFormat) });
     if (result === null) {
       await Entry.create({ date: new Date(dateTimeFormat), [type]: [_id] });
     } else {
-      await Entry.findByIdAndUpdate(result._id, { $push: { [type]: _id } });
+      const result = await Entry.findOneAndUpdate(
+        { date: new Date(dateTimeFormat) },
+        { $push: { [type]: _id } },
+        { new: true }
+      );
+      console.log(result);
     }
-    return true;
   } catch (err) {
-    console.log("Error: ", err);
-    return false;
+    console.log(err);
   }
 }
 

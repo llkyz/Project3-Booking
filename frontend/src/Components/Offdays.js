@@ -122,7 +122,7 @@ function OffdayList({ offdayData, category, getOffdayData }) {
   );
 }
 
-function OffdayEntry({ data, getOffdayData }) {
+export function OffdayEntry({ data, getOffdayData }) {
   const [showDetails, setShowDetails] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
@@ -222,7 +222,7 @@ function OffdayEntry({ data, getOffdayData }) {
   );
 }
 
-function NewOffday({ setNewOffday, getOffdayData }) {
+export function NewOffday({ setNewOffday, getOffdayData }) {
   const [errorMesssage, setErrorMessage] = useState();
   const [staffList, setStaffList] = useState();
 
@@ -289,19 +289,7 @@ function NewOffday({ setNewOffday, getOffdayData }) {
 
   return (
     <>
-      <div
-        onClick={() => setNewOffday(false)}
-        style={{
-          backgroundColor: "grey",
-          position: "fixed",
-          height: "100%",
-          width: "100%",
-          top: 0,
-          left: 0,
-          opacity: 0.5,
-          zIndex: 10,
-        }}
-      />
+      <div onClick={() => setNewOffday(false)} className="modalBackground" />
 
       <div className="entryModal">
         <h1>New Offday</h1>
@@ -417,19 +405,7 @@ function EditOffday({ data, getOffdayData, setShowEdit }) {
 
   return (
     <>
-      <div
-        onClick={() => setShowEdit(false)}
-        style={{
-          backgroundColor: "grey",
-          position: "fixed",
-          height: "100%",
-          width: "100%",
-          top: 0,
-          left: 0,
-          opacity: 0.5,
-          zIndex: 10,
-        }}
-      />
+      <div onClick={() => setShowEdit(false)} className="modalBackground" />
 
       <div className="entryModal">
         <h1>Edit Offday</h1>

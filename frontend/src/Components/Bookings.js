@@ -140,7 +140,7 @@ function BookingList({ bookingData, category, getBookingData }) {
   );
 }
 
-function BookingEntry({ data, getBookingData }) {
+export function BookingEntry({ data, getBookingData }) {
   const [showDetails, setShowDetails] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
@@ -163,6 +163,7 @@ function BookingEntry({ data, getBookingData }) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
+        dateTime: data.dateTime,
         complete: condition,
       }),
     });
@@ -183,6 +184,7 @@ function BookingEntry({ data, getBookingData }) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
+        dateTime: data.dateTime,
         ignore: condition,
       }),
     });
@@ -323,7 +325,7 @@ function BookingEntry({ data, getBookingData }) {
   );
 }
 
-function NewBooking({ setNewBooking, getBookingData }) {
+export function NewBooking({ setNewBooking, getBookingData }) {
   const [errorMesssage, setErrorMessage] = useState();
 
   let myDate = new Date();
@@ -382,19 +384,7 @@ function NewBooking({ setNewBooking, getBookingData }) {
 
   return (
     <>
-      <div
-        onClick={() => setNewBooking(false)}
-        style={{
-          backgroundColor: "grey",
-          position: "fixed",
-          height: "100%",
-          width: "100%",
-          top: 0,
-          left: 0,
-          opacity: 0.5,
-          zIndex: 10,
-        }}
-      />
+      <div onClick={() => setNewBooking(false)} className="modalBackground" />
 
       <div className="entryModal">
         <h1>New Booking</h1>
@@ -511,19 +501,7 @@ function EditBooking({ data, getBookingData, setShowEdit }) {
 
   return (
     <>
-      <div
-        onClick={() => setShowEdit(false)}
-        style={{
-          backgroundColor: "grey",
-          position: "fixed",
-          height: "100%",
-          width: "100%",
-          top: 0,
-          left: 0,
-          opacity: 0.5,
-          zIndex: 10,
-        }}
-      />
+      <div onClick={() => setShowEdit(false)} className="modalBackground" />
       <div className="entryModal">
         <h1>Edit Booking</h1>
         {errorMesssage ? <h3 style={{ color: "red" }}>{errorMesssage}</h3> : ""}

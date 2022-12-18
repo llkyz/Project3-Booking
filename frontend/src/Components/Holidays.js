@@ -126,7 +126,7 @@ function HolidayList({ holidayData, category, getHolidayData }) {
   );
 }
 
-function HolidayEntry({ data, getHolidayData }) {
+export function HolidayEntry({ data, getHolidayData }) {
   const [showDetails, setShowDetails] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
@@ -220,7 +220,7 @@ function HolidayEntry({ data, getHolidayData }) {
   );
 }
 
-function NewHoliday({ setNewHoliday, getHolidayData }) {
+export function NewHoliday({ setNewHoliday, getHolidayData }) {
   const [errorMesssage, setErrorMessage] = useState();
 
   let myDate = new Date();
@@ -264,19 +264,7 @@ function NewHoliday({ setNewHoliday, getHolidayData }) {
 
   return (
     <>
-      <div
-        onClick={() => setNewHoliday(false)}
-        style={{
-          backgroundColor: "grey",
-          position: "fixed",
-          height: "100%",
-          width: "100%",
-          top: 0,
-          left: 0,
-          opacity: 0.5,
-          zIndex: 10,
-        }}
-      />
+      <div onClick={() => setNewHoliday(false)} className="modalBackground" />
 
       <div className="entryModal">
         <h1>New Holiday</h1>
@@ -359,19 +347,7 @@ function EditHoliday({ data, getHolidayData, setShowEdit }) {
 
   return (
     <>
-      <div
-        onClick={() => setShowEdit(false)}
-        style={{
-          backgroundColor: "grey",
-          position: "fixed",
-          height: "100%",
-          width: "100%",
-          top: 0,
-          left: 0,
-          opacity: 0.5,
-          zIndex: 10,
-        }}
-      />
+      <div onClick={() => setShowEdit(false)} className="modalBackground" />
 
       <div className="entryModal">
         <h1>Edit Holiday</h1>
