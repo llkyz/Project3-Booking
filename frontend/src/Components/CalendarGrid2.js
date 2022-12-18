@@ -162,6 +162,12 @@ function Days({ calendarYear, calendarMonth, monthEntries, setModalDate }) {
             cells.push(
               <div
                 className="cell"
+                id={
+                  new Date().setHours(0, 0, 0, 0) ===
+                  new Date(calendarYear, calendarMonth, x).setHours(0, 0, 0, 0)
+                    ? "today"
+                    : ""
+                }
                 key={x}
                 onClick={() => {
                   setModalDate(new Date(calendarYear, calendarMonth, x));
@@ -172,36 +178,28 @@ function Days({ calendarYear, calendarMonth, monthEntries, setModalDate }) {
                   ""
                 ) : (
                   <div className="bookingNode">
-                    {entryList[y].bookings.length}{" "}
-                    {entryList[y].bookings.length === 1
-                      ? "booking"
-                      : "bookings"}
+                    Bookings: {entryList[y].bookings.length}
                   </div>
                 )}
                 {entryList[y].holidays.length === 0 ? (
                   ""
                 ) : (
                   <div className="holidayNode">
-                    {entryList[y].holidays.length}{" "}
-                    {entryList[y].holidays.length === 1
-                      ? "holiday"
-                      : "holidays"}
+                    Holidays: {entryList[y].holidays.length}
                   </div>
                 )}
                 {entryList[y].offdays.length === 0 ? (
                   ""
                 ) : (
                   <div className="offdayNode">
-                    {entryList[y].offdays.length}{" "}
-                    {entryList[y].offdays.length === 1 ? "offday" : "offdays"}
+                    Offdays: {entryList[y].offdays.length}
                   </div>
                 )}
                 {entryList[y].pickups.length === 0 ? (
                   ""
                 ) : (
                   <div className="pickupNode">
-                    {entryList[y].pickups.length}{" "}
-                    {entryList[y].pickups.length === 1 ? "pickup" : "pickups"}
+                    Pickups: {entryList[y].pickups.length}
                   </div>
                 )}
               </div>
@@ -215,6 +213,12 @@ function Days({ calendarYear, calendarMonth, monthEntries, setModalDate }) {
           cells.push(
             <div
               className="cell"
+              id={
+                new Date().setHours(0, 0, 0, 0) ===
+                new Date(calendarYear, calendarMonth, x).setHours(0, 0, 0, 0)
+                  ? "today"
+                  : ""
+              }
               key={x}
               onClick={() => {
                 setModalDate(new Date(calendarYear, calendarMonth, x));

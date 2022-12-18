@@ -15,8 +15,7 @@ export default function CalendarGrid2Modal({
   const [holidayData, setHolidayData] = useState([]);
   const [offdayData, setOffdayData] = useState([]);
   const [pickupData, setPickupData] = useState([]);
-
-  console.log(entryData);
+  const [createNew, setCreateNew] = useState();
 
   useEffect(() => {
     if (modalDate) {
@@ -149,55 +148,137 @@ export default function CalendarGrid2Modal({
         className="modalBackground"
       />
       <div className="entryModal" style={{ minWidth: "60%" }}>
-        <h2>
+        <div className="calendarModalDate">
           {modalDate.toLocaleDateString("en-SG", {
             weekday: "short",
             year: "numeric",
             month: "short",
             day: "numeric",
           })}
-        </h2>
-        <div className="calendarModalLabel">Bookings</div>
-        <div className="calendarModalContent">
-          {bookingData
-            ? bookingData.length === 0
-              ? "No bookings"
-              : bookingData.map((data) => (
-                  <BookingEntry data={data} getBookingData={refreshEntries} />
-                ))
-            : "Loading..."}
         </div>
-        <div className="calendarModalLabel">Holidays</div>
-        <div className="calendarModalContent">
-          {holidayData
-            ? holidayData.length === 0
-              ? "No holidays"
-              : holidayData.map((data) => (
-                  <HolidayEntry data={data} getHolidayData={refreshEntries} />
-                ))
-            : "Loading..."}
+        <div className="calendarModalLabel">
+          <div
+            className="createButton"
+            onClick={() => {
+              setCreateNew("booking");
+            }}
+          >
+            CREATE NEW
+          </div>
+          Bookings
         </div>
-        <div className="calendarModalLabel">Offdays</div>
         <div className="calendarModalContent">
-          {offdayData
-            ? offdayData.length === 0
-              ? "No offdays"
-              : offdayData.map((data) => (
-                  <OffdayEntry data={data} getOffdayData={refreshEntries} />
-                ))
-            : "Loading..."}
+          {bookingData ? (
+            bookingData.length === 0 ? (
+              <h2>No bookings</h2>
+            ) : (
+              bookingData.map((data) => (
+                <BookingEntry data={data} getBookingData={refreshEntries} />
+              ))
+            )
+          ) : (
+            <h2>Loading...</h2>
+          )}
         </div>
-        <div className="calendarModalLabel">Pickups</div>
+        <div className="calendarModalLabel">
+          <div
+            className="createButton"
+            onClick={() => {
+              setCreateNew("holiday");
+            }}
+          >
+            CREATE NEW
+          </div>
+          Holidays
+        </div>
         <div className="calendarModalContent">
-          {pickupData
-            ? pickupData.length === 0
-              ? "No pickups"
-              : pickupData.map((data) => (
-                  <PickupEntry data={data} getPickupData={refreshEntries} />
-                ))
-            : "Loading..."}
+          {holidayData ? (
+            holidayData.length === 0 ? (
+              <h2>No holidays</h2>
+            ) : (
+              holidayData.map((data) => (
+                <HolidayEntry data={data} getHolidayData={refreshEntries} />
+              ))
+            )
+          ) : (
+            <h2>Loading...</h2>
+          )}
+        </div>
+        <div className="calendarModalLabel">
+          <div
+            className="createButton"
+            onClick={() => {
+              setCreateNew("offday");
+            }}
+          >
+            CREATE NEW
+          </div>
+          Offdays
+        </div>
+        <div className="calendarModalContent">
+          {offdayData ? (
+            offdayData.length === 0 ? (
+              <h2>No offdays</h2>
+            ) : (
+              offdayData.map((data) => (
+                <OffdayEntry data={data} getOffdayData={refreshEntries} />
+              ))
+            )
+          ) : (
+            <h2>Loading...</h2>
+          )}
+        </div>
+        <div className="calendarModalLabel">
+          <div
+            className="createButton"
+            onClick={() => {
+              setCreateNew("pickup");
+            }}
+          >
+            CREATE NEW
+          </div>
+          Pickups
+        </div>
+        <div className="calendarModalContent">
+          {pickupData ? (
+            pickupData.length === 0 ? (
+              <h2>No pickups</h2>
+            ) : (
+              pickupData.map((data) => (
+                <PickupEntry data={data} getPickupData={refreshEntries} />
+              ))
+            )
+          ) : (
+            <h2>Loading...</h2>
+          )}
         </div>
       </div>
+      {createNew === "booking" ? (
+        <NewBooking
+          setNewBooking={setCreateNew}
+          getBookingData={refreshEntries}
+        />
+      ) : (
+        ""
+      )}
+      {createNew === "holiday" ? (
+        <NewHoliday
+          setNewHoliday={setCreateNew}
+          getHolidayData={refreshEntries}
+        />
+      ) : (
+        ""
+      )}
+      {createNew === "offday" ? (
+        <NewOffday setNewOffday={setCreateNew} getOffdayData={refreshEntries} />
+      ) : (
+        ""
+      )}
+      {createNew === "pickup" ? (
+        <NewPickup setNewPickup={setCreateNew} getPickupData={refreshEntries} />
+      ) : (
+        ""
+      )}
     </>
   );
 }

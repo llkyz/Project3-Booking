@@ -289,9 +289,13 @@ export function NewOffday({ setNewOffday, getOffdayData }) {
 
   return (
     <>
-      <div onClick={() => setNewOffday(false)} className="modalBackground" />
+      <div
+        onClick={() => setNewOffday(false)}
+        className="modalBackground"
+        style={{ zIndex: 39 }}
+      />
 
-      <div className="entryModal">
+      <div className="entryModal" style={{ zIndex: 40 }}>
         <h1>New Offday</h1>
         {errorMesssage ? <h3 style={{ color: "red" }}>{errorMesssage}</h3> : ""}
         <form className="entryForm">

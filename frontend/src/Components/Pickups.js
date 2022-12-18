@@ -274,9 +274,13 @@ export function NewPickup({ setNewPickup, getPickupData }) {
 
   return (
     <>
-      <div onClick={() => setNewPickup(false)} className="modalBackground" />
+      <div
+        onClick={() => setNewPickup(false)}
+        className="modalBackground"
+        style={{ zIndex: 39 }}
+      />
 
-      <div className="entryModal">
+      <div className="entryModal" style={{ zIndex: 40 }}>
         <h1>New Pickup</h1>
         {errorMesssage ? <h3 style={{ color: "red" }}>{errorMesssage}</h3> : ""}
         <form className="entryForm">

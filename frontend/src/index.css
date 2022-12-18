@@ -718,43 +718,54 @@ a {
   box-shadow: inset 0 0 0 1px rgb(150, 150, 150);
   min-height: 110px;
   text-align: right;
-  padding: 2px 10px;
+  padding: 2px 10px 10px 10px;
   cursor: pointer;
+}
+
+.calendarGrid #today {
+  background-color: rgb(236, 233, 161);
+  font-weight: bold;
 }
 
 .calendarGrid .cell p {
   margin: 0;
+  margin-bottom: 2px;
 }
 
 .bookingNode {
-  background-color: blue;
-  color: white;
+  border: 3px solid blue;
+  border-radius: 10px;
   text-align: center;
+  font-weight: 600;
   padding: 2px;
   margin-bottom: 5px;
 }
 
 .holidayNode {
-  background-color: green;
-  color: white;
+  border: 3px solid green;
+  border-radius: 10px;
   text-align: center;
+  font-weight: 600;
   padding: 2px;
   margin-bottom: 5px;
 }
 
 .offdayNode {
-  background-color: lightblue;
-  color: white;
+  border: 3px solid goldenrod;
+  border-radius: 10px;
   text-align: center;
+  font-weight: 600;
   padding: 2px;
   margin-bottom: 5px;
 }
 
 .pickupNode {
-  background-color: red;
-  color: white;
+  border: 3px solid red;
+  border-radius: 10px;
   text-align: center;
+  font-weight: 600;
   padding: 2px;
+  margin-bottom: 5px;
 }
 
 .modalBackground {
@@ -766,4 +777,43 @@ a {
   left: 0;
   opacity: 0.5;
   z-index: 10;
+}
+
+.calendarModalDate {
+  font-size: 2em;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.calendarModalLabel {
+  position: relative;
+  color: white;
+  font-size: 2em;
+  font-weight: 600;
+  background-color: rgb(100, 110, 60);
+  padding: 5px;
+  margin: auto 50px;
+}
+
+.calendarModalLabel .createButton {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 20px;
+  font-size: 0.6em;
+  margin: auto;
+  padding: 3px 8px;
+  height: fit-content;
+  border: 2px solid white;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.calendarModalLabel .createButton:hover {
+  background-color: white;
+  color: rgb(100, 110, 60);
+}
+
+.calendarModalContent {
+  margin: auto 40px 40px 40px;
 }

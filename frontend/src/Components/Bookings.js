@@ -384,9 +384,13 @@ export function NewBooking({ setNewBooking, getBookingData }) {
 
   return (
     <>
-      <div onClick={() => setNewBooking(false)} className="modalBackground" />
+      <div
+        onClick={() => setNewBooking(false)}
+        className="modalBackground"
+        style={{ zIndex: 39 }}
+      />
 
-      <div className="entryModal">
+      <div className="entryModal" style={{ zIndex: 40 }}>
         <h1>New Booking</h1>
         {errorMesssage ? <h3 style={{ color: "red" }}>{errorMesssage}</h3> : ""}
         <form className="entryForm">
