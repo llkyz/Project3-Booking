@@ -14,7 +14,6 @@ const holidayController = require("./controllers/holiday");
 const offdayController = require("./controllers/offday");
 const pickupController = require("./controllers/pickup");
 const entryController = require("./controllers/entry");
-const { dirname } = require("path");
 require("dotenv").config();
 
 let mongoURI = process.env.DATABASE;

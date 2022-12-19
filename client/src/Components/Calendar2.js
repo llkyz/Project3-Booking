@@ -6,7 +6,7 @@ export default function Calendar2({ loggedIn, accessLevel }) {
   const [sophieData, setSophieData] = useState();
   const [shopifyData, setShopifyData] = useState();
   const [externalDetails, setExternalDetails] = useState("");
-  const [calendarRefresh, setCalendarRefresh] = useState(false)
+  const [calendarRefresh, setCalendarRefresh] = useState(false);
   const sophieRef = useRef();
   const shopifyRef = useRef();
 
@@ -62,67 +62,62 @@ export default function Calendar2({ loggedIn, accessLevel }) {
   }
 
   function closeAndRefresh() {
-    setExternalDetails("")
-    setCalendarRefresh(true)
+    setExternalDetails("");
+    setCalendarRefresh(true);
   }
 
   function ExternalDataButtons() {
     return (
       <div className="externalDataContainer">
+        <div className="externalData" ref={sophieRef} onClick={toggleSophie}>
+          <div className="externalDataHeader">Sophie</div>
+          {sophieData ? (
             <div
-              className="externalData"
-              ref={sophieRef}
-              onClick={toggleSophie}
+              className="externalDataEntry"
+              style={{
+                backgroundColor: sophieData.length !== 0 ? "red" : "",
+                color: sophieData.length !== 0 ? "white" : "",
+              }}
             >
-              <div className="externalDataHeader">Sophie</div>
-              {sophieData ? (
-                <div
-                  className="externalDataEntry"
-                  style={{
-                    backgroundColor: sophieData.length !== 0 ? "red" : "",
-                    color: sophieData.length !== 0 ? "white" : "",
-                  }}
-                >
-                  {sophieData.length}
-                </div>
-              ) : (
-                <div className="externalDataLoading">
-                  <div className="loading" />
-                </div>
-              )}
+              {sophieData.length}
             </div>
+          ) : (
+            <div className="externalDataLoading">
+              <div className="loading" />
+            </div>
+          )}
+        </div>
+        <div className="externalData" ref={shopifyRef} onClick={toggleShopify}>
+          <div className="externalDataHeader">Shopify</div>
+          {shopifyData ? (
             <div
-              className="externalData"
-              ref={shopifyRef}
-              onClick={toggleShopify}
+              className="externalDataEntry"
+              style={{
+                backgroundColor: shopifyData.length !== 0 ? "red" : "",
+                color: shopifyData.length !== 0 ? "white" : "",
+              }}
             >
-              <div className="externalDataHeader">Shopify</div>
-              {shopifyData ? (
-                <div
-                  className="externalDataEntry"
-                  style={{
-                    backgroundColor: shopifyData.length !== 0 ? "red" : "",
-                    color: shopifyData.length !== 0 ? "white" : "",
-                  }}
-                >
-                  {shopifyData.length}
-                </div>
-              ) : (
-                <div className="externalDataLoading">
-                  <div className="loading" />
-                </div>
-              )}
+              {shopifyData.length}
             </div>
-          </div>
-    )
+          ) : (
+            <div className="externalDataLoading">
+              <div className="loading" />
+            </div>
+          )}
+        </div>
+      </div>
+    );
   }
 
   return (
     <>
       {loggedIn ? (
         <>
-          <h1>Calendar</h1>
-          {accessLevel === "staff" || accessLevel === "admin" ? <ExternalDataButtons/> : ""}
+          {accessLevel === "staff" || accessLevel === "admin" ? (
+            <ExternalDataButtons />
+          ) : (
+            ""
+          )}
           <div className="calendar">
             {externalDetails === "sophie" ? (
               <ExternalDetails
@@ -145,7 +140,11 @@ export default function Calendar2({ loggedIn, accessLevel }) {
             ) : (
               ""
             )}
-            <CalendarGrid2 accessLevel={accessLevel} calendarRefresh={calendarRefresh} setCalendarRefresh={setCalendarRefresh}/>
+            <CalendarGrid2
+              accessLevel={accessLevel}
+              calendarRefresh={calendarRefresh}
+              setCalendarRefresh={setCalendarRefresh}
+            />
           </div>
         </>
       ) : (
@@ -294,7 +293,7 @@ function useOutsideClick(detailRef, closeAndRefresh, sophieRef, shopifyRef) {
           shopifyRef.current.contains(event.target)
         )
       ) {
-        closeAndRefresh()
+        closeAndRefresh();
       }
     }
     document.addEventListener("mouseup", handleOutsideClick);
