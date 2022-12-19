@@ -24,7 +24,7 @@ mongoose.set("debug", true);
 mongoose.connect(mongoURI);
 db.on("open", () => console.log("MongoDB connection established"));
 
-app.use(express.static(path.join(__dirname, "./client/build")));
+app.use(express.static("./client/build"));
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -48,12 +48,7 @@ app.use("/api/pickup", pickupController);
 app.use("/api/entry", entryController);
 
 app.get("*", (req, res) => {
-  res.sendFile(
-    path.join(__dirname, "./client/build/index.html"),
-    function (err) {
-      res.status(500).send(err);
-    }
-  );
+  res.sendFile("./client/build/index.html");
 });
 
 mongoose.connection.once("open", () => {
