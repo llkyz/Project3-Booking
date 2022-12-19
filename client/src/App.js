@@ -4,8 +4,8 @@ import Navbar from "./Components/Navbar";
 import Home from "./Components/Home";
 import Login from "./Components/Login";
 import Register from "./Components/Register";
-import Calendar from "./Components/Calendar";
-import Calendar2 from "./Components/Calendar2";
+import Calendar from "./Components/Calendar2";
+import Calendar2 from "./Components/Calendar";
 import Profile from "./Components/Profile";
 import config from "./config";
 import checkAccess from "./Authorization/checkAccess";
@@ -67,12 +67,14 @@ function App() {
               element={<Register loggedIn={loggedIn} />}
             />
             <Route
-              path="/calendar"
-              element={<Calendar loggedIn={loggedIn} />}
+              path="/calendar2"
+              element={<Calendar2 loggedIn={loggedIn} />}
             />
             <Route
-              path="/calendar2"
-              element={<Calendar2 loggedIn={loggedIn} accessLevel={accessLevel} />}
+              path="/calendar"
+              element={
+                <Calendar loggedIn={loggedIn} accessLevel={accessLevel} />
+              }
             />
             <Route
               path="/profile"

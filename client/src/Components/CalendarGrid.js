@@ -1,266 +1,284 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import config from "../config";
+import CalendarGridModal from "./CalendarGridModal";
 
-////consts////
-const MONTHS = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-];
+export default function CalendarGrid2({
+  accessLevel,
+  calendarRefresh,
+  setCalendarRefresh,
+}) {
+  const [calendarMonth, setCalendarMonth] = useState();
+  const [calendarYear, setCalendarYear] = useState();
+  const [monthEntries, setmonthEntries] = useState([]);
+  const [modalDate, setModalDate] = useState(null);
 
-const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  useEffect(() => {
+    function setDates() {
+      let currentDate = new Date();
+      setCalendarMonth(currentDate.getMonth());
+      setCalendarYear(currentDate.getFullYear());
+    }
+    setDates();
+  }, []);
 
-const startingDate = new Date();
+  useEffect(() => {
+    if (calendarRefresh) {
+      getMonthEntries();
+      setCalendarRefresh(false);
+    }
+    //eslint-disable-next-line
+  }, [calendarRefresh]);
 
-////functions & utilities////
-const range = (end) => {
-  const { result } = Array.from({ length: end }).reduce(
-    ({ result, current }) => ({
-      result: [...result, current],
-      current: current + 1,
-    }),
-    { result: [], current: 1 }
-  );
-  return result;
-};
+  useEffect(() => {
+    if (calendarMonth !== undefined && calendarYear !== undefined) {
+      getMonthEntries();
+    }
+    //eslint-disable-next-line
+  }, [calendarMonth, calendarYear]);
 
-const getDaysOfMonth = (month, year) => {
-  return new Date(year, month + 1, 0).getDate();
-};
+  async function getMonthEntries() {
+    const res = await fetch(
+      config.BACKEND_URL + `entry/range/${calendarYear}&${calendarMonth}`,
+      {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (res.status === 200) {
+      setmonthEntries(await res.json());
+    } else {
+      console.log("Error: ", await res.json());
+    }
+  }
 
-const getSortedDays = (month, year) => {
-  const dayIndex = new Date(year, month, 1).getDay();
-  return [...DAYS.slice(dayIndex), ...DAYS.slice(0, dayIndex)];
-};
-
-const getDateObj = (day, month, year) => {
-  return new Date(year, month, day);
-};
-
-const areDatesTheSame = (date1, date2) => {
   return (
-    date1.getFullYear() === date2.getFullYear() &&
-    date1.getMonth() === date2.getMonth() &&
-    date1.getDate() === date2.getDate()
+    <>
+      <div className="calendarGrid">
+        <Header
+          calendarMonth={calendarMonth}
+          calendarYear={calendarYear}
+          setCalendarMonth={setCalendarMonth}
+          setCalendarYear={setCalendarYear}
+        />
+        <DayHeader />
+        <Days
+          calendarYear={calendarYear}
+          calendarMonth={calendarMonth}
+          monthEntries={monthEntries}
+          setModalDate={setModalDate}
+          accessLevel={accessLevel}
+        />
+        {modalDate && (accessLevel === "staff" || accessLevel === "admin") ? (
+          <CalendarGridModal
+            modalDate={modalDate}
+            setModalDate={setModalDate}
+            getMonthEntries={getMonthEntries}
+          />
+        ) : (
+          ""
+        )}
+      </div>
+    </>
   );
-};
+}
 
-////calendar////
-function CalendarGrid() {
-  const [currentMonth, setCurrentMonth] = useState(startingDate.getMonth());
-  const [currentYear, setCurrentYear] = useState(startingDate.getFullYear());
-  const [showModal, setShowModal] = useState(false);
-  const [showAddModal, setShowAddModal] = useState(false);
-  // const [modalData, setModalData] = useState({});
-  const [eventsArr, setEventsArr] = useState([
-    {
-      id: "1",
-      customer: "John",
-      date: new Date(2022, 11, 12, 13),
-    },
+function Header({
+  calendarMonth,
+  calendarYear,
+  setCalendarMonth,
+  setCalendarYear,
+}) {
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
 
-    {
-      id: "2",
-      customer: "Peter",
-      date: new Date(2022, 11, 20, 15),
-    },
+  function decreaseMonth() {
+    if (calendarMonth === 0) {
+      setCalendarMonth(11);
+      setCalendarYear(calendarYear - 1);
+    } else {
+      setCalendarMonth(calendarMonth - 1);
+    }
+  }
 
-    {
-      id: "3",
-      customer: "Sarah",
-      date: new Date(2022, 11, 23, 15),
-    },
+  function increaseMonth() {
+    if (calendarMonth === 11) {
+      setCalendarMonth(0);
+      setCalendarYear(calendarYear + 1);
+    } else {
+      setCalendarMonth(calendarMonth + 1);
+    }
+  }
 
-    {
-      id: "4",
-      customer: "Mary",
-      date: new Date(2022, 11, 12, 13),
-    },
+  return (
+    <>
+      <div className="previousMonth" onClick={decreaseMonth}>
+        <div className="previousMonthArrow" />
+        {calendarMonth === 0 ? months[11] : months[calendarMonth - 1]}
+      </div>
+      <div className="calendarMonth">
+        {`${months[calendarMonth]} ${calendarYear}`}
+      </div>
+      <div className="nextMonth" onClick={increaseMonth}>
+        {calendarMonth === 11 ? months[0] : months[calendarMonth + 1]}
+        <div className="nextMonthArrow" />
+      </div>
+    </>
+  );
+}
+
+function DayHeader() {
+  return (
+    <>
+      <div className="day">Sun</div>
+      <div className="day">Mon</div>
+      <div className="day">Tue</div>
+      <div className="day">Wed</div>
+      <div className="day">Thu</div>
+      <div className="day">Fri</div>
+      <div className="day">Sat</div>
+    </>
+  );
+}
+
+function Days({
+  calendarYear,
+  calendarMonth,
+  monthEntries,
+  setModalDate,
+  accessLevel,
+}) {
+  const [cellList, setCellList] = useState();
+  let numDays = new Date(calendarYear, calendarMonth + 1, 0).getDate();
+  let firstDay = new Date(calendarYear, calendarMonth, 1).getDay();
+  let emptyCells = [];
+
+  useEffect(() => {
+    let cells = [];
+    if (monthEntries) {
+      let entryList = monthEntries.map((data) => data);
+      for (let x = 1; x <= numDays; x++) {
+        let entryFound = false;
+        for (let y = 0; y < entryList.length; y++) {
+          if (
+            new Date(entryList[y].date).setHours(0, 0, 0, 0) ===
+            new Date(calendarYear, calendarMonth, x).setHours(0, 0, 0, 0)
+          ) {
+            cells.push(
+              <div
+                className="cell"
+                id={
+                  new Date().setHours(0, 0, 0, 0) ===
+                  new Date(calendarYear, calendarMonth, x).setHours(0, 0, 0, 0)
+                    ? "today"
+                    : ""
+                }
+                key={x}
+                onClick={() => {
+                  setModalDate(new Date(calendarYear, calendarMonth, x));
+                }}
+                style={{
+                  cursor:
+                    accessLevel === "staff" || accessLevel === "admin"
+                      ? "pointer"
+                      : "default",
+                }}
+              >
+                <p>{x}</p>
+                {entryList[y].bookings.length === 0 ? (
+                  ""
+                ) : (
+                  <div className="bookingNode">
+                    Bookings: {entryList[y].bookings.length}
+                  </div>
+                )}
+                {entryList[y].holidays.length === 0 ? (
+                  ""
+                ) : (
+                  <div className="holidayNode">
+                    Holidays: {entryList[y].holidays.length}
+                  </div>
+                )}
+                {entryList[y].offdays.length === 0 ? (
+                  ""
+                ) : (
+                  <div className="offdayNode">
+                    Offdays: {entryList[y].offdays.length}
+                  </div>
+                )}
+                {entryList[y].pickups.length === 0 ? (
+                  ""
+                ) : (
+                  <div className="pickupNode">
+                    Pickups: {entryList[y].pickups.length}
+                  </div>
+                )}
+              </div>
+            );
+            entryList.splice(y, 1);
+            entryFound = true;
+            break;
+          }
+        }
+        if (entryFound === false) {
+          cells.push(
+            <div
+              className="cell"
+              id={
+                new Date().setHours(0, 0, 0, 0) ===
+                new Date(calendarYear, calendarMonth, x).setHours(0, 0, 0, 0)
+                  ? "today"
+                  : ""
+              }
+              key={x}
+              onClick={() => {
+                setModalDate(new Date(calendarYear, calendarMonth, x));
+              }}
+              style={{
+                cursor:
+                  accessLevel === "staff" || accessLevel === "admin"
+                    ? "pointer"
+                    : "default",
+              }}
+            >
+              <p>{x}</p>
+            </div>
+          );
+        }
+      }
+    }
+    setCellList(cells);
+  }, [
+    monthEntries,
+    calendarMonth,
+    calendarYear,
+    numDays,
+    setModalDate,
+    accessLevel,
   ]);
 
-  // useEffect(() => {
-  //   //fetch data from backend &
-  //   setEventsArr();
-  // }, [])
-
-  // data parser function?
-
-  const DAYSINMONTH = getDaysOfMonth(currentMonth, currentYear);
-
-  const nextMonth = () => {
-    if (currentMonth < 11) {
-      setCurrentMonth((prev) => prev + 1);
-    } else {
-      setCurrentMonth(0);
-      setCurrentYear((prev) => prev + 1);
-    }
-  };
-
-  const prevMonth = () => {
-    if (currentMonth > 0) {
-      setCurrentMonth((prev) => prev - 1);
-    } else {
-      setCurrentMonth(11);
-      setCurrentYear((prev) => prev - 1);
-    }
-  };
-
-  const openModal = () => {
-    setShowModal(true);
-  };
-
-  const closeModal = () => {
-    setShowModal(false);
-  };
-
-  const openAddModal = () => {
-    setShowAddModal(true);
-  };
-
-  const closeAddModal = () => {
-    setShowAddModal(false);
-  };
+  for (let x = 0; x < firstDay; x++) {
+    emptyCells.push(<div className="emptyCell" key={x} />);
+  }
 
   return (
-    <div className="wrapper">
-      <div className="calendarHead">
-        <button onClick={prevMonth}>prev--</button>
-        <p>
-          {MONTHS[currentMonth]} {currentYear}
-        </p>
-        <button onClick={nextMonth}>--next</button>
-      </div>
-      <div className="grid">
-        {getSortedDays(currentMonth, currentYear).map((day, i) => (
-          <span key={i} className="daysHeader">
-            {day}
-          </span>
-        ))}
-      </div>
-      <div className="calendarBody">
-        {range(DAYSINMONTH).map((day, i) => (
-          <span
-            onClick={openModal}
-            key={i}
-            className={
-              areDatesTheSame(
-                new Date(),
-                getDateObj(day, currentMonth, currentYear)
-              )
-                ? "today"
-                : "days"
-            }
-          >
-            <p>{day}</p>
-
-            {eventsArr.map(
-              (event) =>
-                areDatesTheSame(
-                  getDateObj(day, currentMonth, currentYear),
-                  event.date
-                ) && (
-                  <span key={event.id} className="events">
-                    {event.customer}
-                  </span>
-                )
-            )}
-          </span>
-        ))}
-      </div>
-      {showModal && (
-        <Modal closeModal={closeModal} openAddModal={openAddModal} />
-      )}
-      {showAddModal && <AddModal closeAddModal={closeAddModal} />}
-    </div>
+    <>
+      {emptyCells}
+      {cellList}
+    </>
   );
 }
-
-function Modal({ closeModal, openAddModal }) {
-  return (
-    <div className="modal">
-      <div className="modalContents">
-        <h2>Events of the day</h2>
-        <p>
-          Match date with eventArr and map each event details // There are no
-          events for the day
-        </p>
-      </div>
-      <p>
-        Some sample data from sophie/shopify{" "}
-        <button disabled="true">Edit</button>
-      </p>
-      <p>
-        Some sample data from mongodb <button>Edit</button> //opens editModal
-      </p>
-
-      <button onClick={openAddModal} className="addEvent">
-        ADD NEW EVENT
-      </button>
-      <button onClick={closeModal} className="closeModal">
-        Close
-      </button>
-    </div>
-  );
-}
-
-function AddModal({ closeAddModal }) {
-  return (
-    <div className="addModal">
-      <div className="AddModalContents">
-        <h2>Sample Event Form</h2>
-        <p>check for changes and validity, else disable save</p>
-        <form>
-          <fieldset>
-            <legend>Customer: </legend>
-            <label>
-              Name: <input type="text"></input>
-            </label>
-            <br />
-            <br />
-            <label>
-              Name: <input type="text"></input>
-            </label>
-            <br />
-            <br />
-            <label>
-              Name: <input type="text"></input>
-            </label>
-          </fieldset>
-          <br />
-          <fieldset>
-            <legend>Booking details: </legend>
-            <label>
-              Date: <input type="text"></input>
-            </label>
-            <br />
-            <br />
-            <label>
-              Time: <input type="text"></input>
-            </label>
-            <br />
-            <br />
-            <label>
-              Origin: <input type="text"></input>
-            </label>
-          </fieldset>
-        </form>
-      </div>
-      <button onClick={closeAddModal} className="addEvent">
-        SAVE & UPDATE
-      </button>
-      <button onClick={closeAddModal} className="closeModal">
-        Cancel
-      </button>
-    </div>
-  );
-}
-
-export default CalendarGrid;
