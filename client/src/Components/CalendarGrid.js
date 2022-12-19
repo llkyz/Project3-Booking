@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import config from "../config";
 import CalendarGridModal from "./CalendarGridModal";
 
-export default function CalendarGrid2({
+export default function CalendarGrid({
   accessLevel,
   calendarRefresh,
   setCalendarRefresh,

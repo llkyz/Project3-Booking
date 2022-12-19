@@ -5,7 +5,7 @@ import { HolidayEntry, NewHoliday } from "./Holidays";
 import { OffdayEntry, NewOffday } from "./Offdays";
 import { PickupEntry, NewPickup } from "./Pickups";
 
-export default function CalendarGrid2Modal({
+export default function CalendarGridModal({
   modalDate,
   setModalDate,
   getMonthEntries,
@@ -272,12 +272,20 @@ export default function CalendarGrid2Modal({
         ""
       )}
       {createNew === "offday" ? (
-        <NewOffday setNewOffday={setCreateNew} getOffdayData={refreshEntries} defaultDate={modalDate}/>
+        <NewOffday
+          setNewOffday={setCreateNew}
+          getOffdayData={refreshEntries}
+          defaultDate={modalDate}
+        />
       ) : (
         ""
       )}
       {createNew === "pickup" ? (
-        <NewPickup setNewPickup={setCreateNew} getPickupData={refreshEntries} defaultDate={modalDate}/>
+        <NewPickup
+          setNewPickup={setCreateNew}
+          getPickupData={refreshEntries}
+          defaultDate={modalDate}
+        />
       ) : (
         ""
       )}

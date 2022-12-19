@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import config from "../config";
 import CalendarGrid2 from "./CalendarGrid2";
 
-export default function Calendar({ loggedIn }) {
+export default function Calendar2({ loggedIn }) {
   const [sophieData, setSophieData] = useState();
   const [shopifyData, setShopifyData] = useState();
 

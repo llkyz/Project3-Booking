@@ -54,7 +54,7 @@ const areDatesTheSame = (date1, date2) => {
 };
 
 ////calendar////
-function CalendarGrid() {
+function CalendarGrid2() {
   const [currentMonth, setCurrentMonth] = useState(startingDate.getMonth());
   const [currentYear, setCurrentYear] = useState(startingDate.getFullYear());
   const [showModal, setShowModal] = useState(false);
@@ -263,4 +263,4 @@ function AddModal({ closeAddModal }) {
   );
 }
 
-export default CalendarGrid;
+export default CalendarGrid2;
