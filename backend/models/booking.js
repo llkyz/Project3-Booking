@@ -4,7 +4,7 @@ const bookingSchema = mongoose.Schema({
   origin: { type: String, required: true },
   id: { type: Number },
   price: { type: Number },
-  participants: { type: Number },
+  participants: { type: String },
   dateTime: { type: Date, required: true },
   customer: { type: String },
   contact: { type: String },
