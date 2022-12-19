@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import config from "../config";
+import Searchbar from "./Searchbar";
 
 export default function Bookings({ loggedIn, accessLevel }) {
   const [bookingData, setBookingData] = useState();
   const [newBooking, setNewBooking] = useState(false);
   const [category, setCategory] = useState("open");
+  const [searchQuery, setSearchQuery] = useState("")
 
   useEffect(() => {
     if (accessLevel === "staff" || accessLevel === "admin") {
@@ -79,11 +81,13 @@ export default function Bookings({ loggedIn, accessLevel }) {
                 </button>
               </div>
             </div>
+            <Searchbar dataList={bookingData} setDataList={setBookingData} setSearchQuery={setSearchQuery}/>
             {bookingData ? (
               <BookingList
                 bookingData={bookingData}
                 category={category}
                 getBookingData={getBookingData}
+                searchQuery={searchQuery}
               />
             ) : (
               <>
@@ -110,8 +114,12 @@ export default function Bookings({ loggedIn, accessLevel }) {
   );
 }
 
-function BookingList({ bookingData, category, getBookingData }) {
+function BookingList({ bookingData, category, getBookingData, searchQuery }) {
   let myList = bookingData.map((data) => data);
+  
+  if (searchQuery) {
+    myList = myList.filter((data) => data.customer.toLowerCase().includes(searchQuery.toLowerCase()))
+  }
 
   if (category === "all") {
     myList = myList.filter((data) => data.ignore === false);

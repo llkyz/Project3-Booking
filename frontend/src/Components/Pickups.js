@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import config from "../config";
+import Searchbar from "./Searchbar";
 
 export default function Pickups({ loggedIn, accessLevel }) {
   const [pickupData, setPickupData] = useState();
   const [newPickup, setNewPickup] = useState(false);
   const [category, setCategory] = useState("upcoming");
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     if (accessLevel === "staff" || accessLevel === "admin") {
@@ -69,11 +71,13 @@ export default function Pickups({ loggedIn, accessLevel }) {
                 </button>
               </div>
             </div>
+            <Searchbar dataList={pickupData} setDataList={setPickupData} setSearchQuery={setSearchQuery}/>
             {pickupData ? (
               <PickupList
                 pickupData={pickupData}
                 category={category}
                 getPickupData={getPickupData}
+                searchQuery={searchQuery}
               />
             ) : (
               <>
@@ -100,8 +104,12 @@ export default function Pickups({ loggedIn, accessLevel }) {
   );
 }
 
-function PickupList({ pickupData, category, getPickupData }) {
+function PickupList({ pickupData, category, getPickupData, searchQuery }) {
   let myList = pickupData.map((data) => data);
+
+  if (searchQuery) {
+    myList = myList.filter((data) => data.customer.toLowerCase().includes(searchQuery.toLowerCase()))
+  }
 
   if (category === "upcoming") {
     myList = myList.filter(

@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import config from "../config";
+import Searchbar from "./Searchbar";
 
 export default function Offdays({ loggedIn, accessLevel }) {
   const [offdayData, setOffdayData] = useState();
   const [newOffday, setNewOffday] = useState(false);
   const [category, setCategory] = useState("upcoming");
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     if (accessLevel === "staff" || accessLevel === "admin") {
@@ -69,11 +71,13 @@ export default function Offdays({ loggedIn, accessLevel }) {
                 </button>
               </div>
             </div>
+            <Searchbar dataList={offdayData} setDataList={setOffdayData} setSearchQuery={setSearchQuery}/>
             {offdayData ? (
               <OffdayList
                 offdayData={offdayData}
                 category={category}
                 getOffdayData={getOffdayData}
+                searchQuery={searchQuery}
               />
             ) : (
               <>
@@ -100,8 +104,12 @@ export default function Offdays({ loggedIn, accessLevel }) {
   );
 }
 
-function OffdayList({ offdayData, category, getOffdayData }) {
+function OffdayList({ offdayData, category, getOffdayData, searchQuery }) {
   let myList = offdayData.map((data) => data);
+
+  if (searchQuery) {
+    myList = myList.filter((data) => data.staffName.toLowerCase().includes(searchQuery.toLowerCase()))
+  }
 
   if (category === "upcoming") {
     myList = myList.filter(

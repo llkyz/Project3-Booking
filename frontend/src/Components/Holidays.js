@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import config from "../config";
+import Searchbar from "./Searchbar";
 
 export default function Holidays({ loggedIn, accessLevel }) {
   const [holidayData, setHolidayData] = useState();
   const [newHoliday, setNewHoliday] = useState(false);
   const [category, setCategory] = useState("upcoming");
+  const [searchQuery, setSearchQuery] = useState("")
 
   useEffect(() => {
     if (accessLevel === "staff" || accessLevel === "admin") {
@@ -69,11 +71,13 @@ export default function Holidays({ loggedIn, accessLevel }) {
                 </button>
               </div>
             </div>
+            <Searchbar dataList={holidayData} setDataList={setHolidayData} setSearchQuery={setSearchQuery}/>
             {holidayData ? (
               <HolidayList
                 holidayData={holidayData}
                 category={category}
                 getHolidayData={getHolidayData}
+                searchQuery={searchQuery}
               />
             ) : (
               <>
@@ -100,8 +104,12 @@ export default function Holidays({ loggedIn, accessLevel }) {
   );
 }
 
-function HolidayList({ holidayData, category, getHolidayData }) {
+function HolidayList({ holidayData, category, getHolidayData, searchQuery }) {
   let myList = holidayData.map((data) => data);
+
+  if (searchQuery) {
+    myList = myList.filter((data) => data.title.toLowerCase().includes(searchQuery.toLowerCase()))
+  }
 
   if (category === "upcoming") {
     myList = myList.filter(

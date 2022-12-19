@@ -851,3 +851,39 @@ a {
 .calendarModalContent {
   margin: auto 40px 40px 40px;
 }
+
+.searchbar {
+  display: flex;
+  justify-content: space-between;
+}
+
+.search {
+  margin-left: 3%;
+  height: 30px;
+  line-height: 30px;
+  text-align: left;
+}
+
+.searchBox {
+  font-size: 1.2em;
+  border: none;
+  border-bottom: 2px solid rgb(100, 110, 60);
+  background-color: transparent;
+  outline: none;
+  margin-left: 10px;
+  width: 70%;
+  vertical-align: top;
+}
+
+.magnifyingGlass {
+  height: 100%
+}
+
+.sort {
+  margin-right: 3%;
+  font-size: 1em;
+}
+
+select {
+  padding: 2px 4px;
+}
