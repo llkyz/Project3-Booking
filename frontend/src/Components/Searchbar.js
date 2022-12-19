@@ -28,12 +28,13 @@ export default function Searchbar({dataList, setDataList, setSearchQuery}) {
                 setDataList(tempList)
             }
         }
+        //eslint-disable-next-line
     },[sortQuery])
 
     return(
         <div className="searchbar">
             <div className="search">
-                <img className="magnifyingGlass" src={magnifyingGlass}/>
+                <img className="magnifyingGlass" src={magnifyingGlass} alt="search"/>
                 <input className="searchBox" type="text" onChange={(event)=>{
                     setSearchQuery(event.currentTarget.value)
                 }}></input>

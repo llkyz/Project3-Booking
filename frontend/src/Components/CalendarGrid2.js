@@ -22,6 +22,7 @@ export default function CalendarGrid2({accessLevel, calendarRefresh, setCalendar
       getMonthEntries()
       setCalendarRefresh(false)
     }
+    //eslint-disable-next-line
   },[calendarRefresh])
 
   useEffect(() => {
@@ -241,7 +242,7 @@ function Days({ calendarYear, calendarMonth, monthEntries, setModalDate, accessL
       }
     }
     setCellList(cells);
-  }, [monthEntries, calendarMonth, calendarYear, numDays, setModalDate]);
+  }, [monthEntries, calendarMonth, calendarYear, numDays, setModalDate, accessLevel]);
 
   for (let x = 0; x < firstDay; x++) {
     emptyCells.push(<div className="emptyCell" key={x} />);
