@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const Pickup = require("../models/pickup");
-const isAuthenticated = require("../functions/isAuthenticated");
 const isStaff = require("../functions/isStaff");
 const entryFindCreate = require("../functions/entryFindCreate");
 const entryFindDelete = require("../functions/entryFindDelete");
@@ -15,7 +14,7 @@ router.get("/", isStaff, async (req, res) => {
   }
 });
 
-router.get("/:id", isAuthenticated, async (req, res) => {
+router.get("/:id", isStaff, async (req, res) => {
   try {
     let result = await Pickup.findById(req.params.id);
     res.status(200).json(result);

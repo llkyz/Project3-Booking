@@ -72,7 +72,7 @@ function App() {
             />
             <Route
               path="/calendar2"
-              element={<Calendar2 loggedIn={loggedIn} />}
+              element={<Calendar2 loggedIn={loggedIn} accessLevel={accessLevel} />}
             />
             <Route
               path="/profile"

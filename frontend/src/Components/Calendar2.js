@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import config from "../config";
 import CalendarGrid2 from "./CalendarGrid2";
 
-export default function Calendar2({ loggedIn }) {
+export default function Calendar2({ loggedIn, accessLevel }) {
   const [sophieData, setSophieData] = useState();
   const [shopifyData, setShopifyData] = useState();
   const [externalDetails, setExternalDetails] = useState("");
@@ -14,9 +14,11 @@ export default function Calendar2({ loggedIn }) {
       await getSophieData();
       await getShopifyData();
     }
-    getData();
+    if (accessLevel === "staff" || accessLevel === "admin") {
+      getData();
+    }
     //eslint-ignore-next-line
-  }, []);
+  }, [accessLevel]);
 
   async function getSophieData() {
     const response = await fetch(config.BACKEND_URL + "fetch/sophie", {
@@ -58,12 +60,9 @@ export default function Calendar2({ loggedIn }) {
     }
   }
 
-  return (
-    <>
-      {loggedIn ? (
-        <>
-          <h1>Calendar</h1>
-          <div className="externalDataContainer">
+  function ExternalDataButtons() {
+    return (
+      <div className="externalDataContainer">
             <div
               className="externalData"
               ref={sophieRef}
@@ -109,6 +108,15 @@ export default function Calendar2({ loggedIn }) {
               )}
             </div>
           </div>
+    )
+  }
+
+  return (
+    <>
+      {loggedIn ? (
+        <>
+          <h1>Calendar</h1>
+          {accessLevel === "staff" || accessLevel === "admin" ? <ExternalDataButtons/> : ""}
           <div className="calendar">
             {externalDetails === "sophie" ? (
               <ExternalDetails
@@ -131,7 +139,7 @@ export default function Calendar2({ loggedIn }) {
             ) : (
               ""
             )}
-            <CalendarGrid2 />
+            <CalendarGrid2 accessLevel={accessLevel}/>
           </div>
         </>
       ) : (

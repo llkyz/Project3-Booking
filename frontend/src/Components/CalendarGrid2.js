@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import config from "../config";
 import CalendarGrid2Modal from "./CalendarGrid2Modal";
 
-export default function CalendarGrid2() {
+export default function CalendarGrid2({accessLevel}) {
   const [calendarMonth, setCalendarMonth] = useState();
   const [calendarYear, setCalendarYear] = useState();
   const [monthEntries, setmonthEntries] = useState([]);
@@ -57,8 +57,9 @@ export default function CalendarGrid2() {
           calendarMonth={calendarMonth}
           monthEntries={monthEntries}
           setModalDate={setModalDate}
+          accessLevel={accessLevel}
         />
-        {modalDate ? (
+        {modalDate && (accessLevel === "staff" || accessLevel === "admin") ? (
           <CalendarGrid2Modal
             modalDate={modalDate}
             setModalDate={setModalDate}
@@ -142,7 +143,7 @@ function DayHeader() {
   );
 }
 
-function Days({ calendarYear, calendarMonth, monthEntries, setModalDate }) {
+function Days({ calendarYear, calendarMonth, monthEntries, setModalDate, accessLevel }) {
   const [cellList, setCellList] = useState();
   let numDays = new Date(calendarYear, calendarMonth + 1, 0).getDate();
   let firstDay = new Date(calendarYear, calendarMonth, 1).getDay();
@@ -172,6 +173,7 @@ function Days({ calendarYear, calendarMonth, monthEntries, setModalDate }) {
                 onClick={() => {
                   setModalDate(new Date(calendarYear, calendarMonth, x));
                 }}
+                style={{cursor: accessLevel === "staff" || accessLevel === "admin" ? "pointer" : "default"}}
               >
                 <p>{x}</p>
                 {entryList[y].bookings.length === 0 ? (
@@ -223,6 +225,7 @@ function Days({ calendarYear, calendarMonth, monthEntries, setModalDate }) {
               onClick={() => {
                 setModalDate(new Date(calendarYear, calendarMonth, x));
               }}
+              style={{cursor: accessLevel === "staff" || accessLevel === "admin" ? "pointer" : "default"}}
             >
               <p>{x}</p>
             </div>
