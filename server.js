@@ -25,7 +25,7 @@ mongoose.set("debug", true);
 mongoose.connect(mongoURI);
 db.on("open", () => console.log("MongoDB connection established"));
 
-app.use(express.static(__dirname + "/client/build"));
+app.use(express.static(path.join(__dirname, "./client/build")));
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
