@@ -3,6 +3,7 @@ const app = express();
 const mongoose = require("mongoose");
 const db = mongoose.connection;
 const cors = require("cors");
+const path = require("path");
 const cookieParser = require("cookie-parser");
 const adminController = require("./controllers/admin");
 const authController = require("./controllers/auth");
@@ -23,6 +24,7 @@ mongoose.set("debug", true);
 mongoose.connect(mongoURI);
 db.on("open", () => console.log("MongoDB connection established"));
 
+app.use(express.static(path.join(__dirname, "./client/build")));
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -35,18 +37,23 @@ app.use(
     optionsSuccessStatus: 204,
   })
 );
-app.use("/admin", adminController);
-app.use("/auth", authController);
-app.use("/user", userController);
-app.use("/fetch", fetchController);
-app.use("/booking", bookingController);
-app.use("/holiday", holidayController);
-app.use("/offday", offdayController);
-app.use("/pickup", pickupController);
-app.use("/entry", entryController);
+app.use("/api/admin", adminController);
+app.use("/api/auth", authController);
+app.use("/api/user", userController);
+app.use("/api/fetch", fetchController);
+app.use("/api/booking", bookingController);
+app.use("/api/holiday", holidayController);
+app.use("/api/offday", offdayController);
+app.use("/api/pickup", pickupController);
+app.use("/api/entry", entryController);
 
 app.get("*", (req, res) => {
-  res.json("Error, path not found");
+  res.sendFile(
+    path.join(__dirname, "./client/build/index.html"),
+    function (err) {
+      res.status(500).send(err);
+    }
+  );
 });
 
 mongoose.connection.once("open", () => {
