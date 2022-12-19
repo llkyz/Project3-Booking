@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import config from "../config";
 import CalendarGrid2Modal from "./CalendarGrid2Modal";
 
-export default function CalendarGrid2({accessLevel}) {
+export default function CalendarGrid2({accessLevel, calendarRefresh, setCalendarRefresh}) {
   const [calendarMonth, setCalendarMonth] = useState();
   const [calendarYear, setCalendarYear] = useState();
   const [monthEntries, setmonthEntries] = useState([]);
@@ -16,6 +16,13 @@ export default function CalendarGrid2({accessLevel}) {
     }
     setDates();
   }, []);
+
+  useEffect(()=>{
+    if (calendarRefresh) {
+      getMonthEntries()
+      setCalendarRefresh(false)
+    }
+  },[calendarRefresh])
 
   useEffect(() => {
     if (calendarMonth !== undefined && calendarYear !== undefined) {

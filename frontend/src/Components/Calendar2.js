@@ -6,6 +6,7 @@ export default function Calendar2({ loggedIn, accessLevel }) {
   const [sophieData, setSophieData] = useState();
   const [shopifyData, setShopifyData] = useState();
   const [externalDetails, setExternalDetails] = useState("");
+  const [calendarRefresh, setCalendarRefresh] = useState(false)
   const sophieRef = useRef();
   const shopifyRef = useRef();
 
@@ -58,6 +59,11 @@ export default function Calendar2({ loggedIn, accessLevel }) {
     } else {
       setExternalDetails("shopify");
     }
+  }
+
+  function closeAndRefresh() {
+    setExternalDetails("")
+    setCalendarRefresh(true)
   }
 
   function ExternalDataButtons() {
@@ -125,7 +131,7 @@ export default function Calendar2({ loggedIn, accessLevel }) {
                 sophieRef={sophieRef}
                 shopifyRef={shopifyRef}
                 source={"sophie"}
-                setExternalDetails={setExternalDetails}
+                closeAndRefresh={closeAndRefresh}
               />
             ) : externalDetails === "shopify" ? (
               <ExternalDetails
@@ -134,12 +140,12 @@ export default function Calendar2({ loggedIn, accessLevel }) {
                 sophieRef={sophieRef}
                 shopifyRef={shopifyRef}
                 source={"shopify"}
-                setExternalDetails={setExternalDetails}
+                closeAndRefresh={closeAndRefresh}
               />
             ) : (
               ""
             )}
-            <CalendarGrid2 accessLevel={accessLevel}/>
+            <CalendarGrid2 accessLevel={accessLevel} calendarRefresh={calendarRefresh} setCalendarRefresh={setCalendarRefresh}/>
           </div>
         </>
       ) : (
@@ -155,10 +161,10 @@ function ExternalDetails({
   sophieRef,
   shopifyRef,
   source,
-  setExternalDetails,
+  closeAndRefresh,
 }) {
   const detailRef = useRef();
-  useOutsideClick(detailRef, setExternalDetails, sophieRef, shopifyRef);
+  useOutsideClick(detailRef, closeAndRefresh, sophieRef, shopifyRef);
 
   return (
     <div className="externalDetails" ref={detailRef}>
@@ -277,7 +283,7 @@ function ExternalDetailEntry({ data, index, externalData, setExternalData }) {
   );
 }
 
-function useOutsideClick(detailRef, setExternalDetails, sophieRef, shopifyRef) {
+function useOutsideClick(detailRef, closeAndRefresh, sophieRef, shopifyRef) {
   useEffect(() => {
     function handleOutsideClick(event) {
       if (
@@ -288,12 +294,12 @@ function useOutsideClick(detailRef, setExternalDetails, sophieRef, shopifyRef) {
           shopifyRef.current.contains(event.target)
         )
       ) {
-        setExternalDetails("");
+        closeAndRefresh()
       }
     }
     document.addEventListener("mouseup", handleOutsideClick);
     return () => {
       document.removeEventListener("mouseup", handleOutsideClick);
     };
-  }, [detailRef, setExternalDetails, sophieRef, shopifyRef]);
+  }, [detailRef, closeAndRefresh, sophieRef, shopifyRef]);
 }
