@@ -257,6 +257,7 @@ export default function CalendarGrid2Modal({
         <NewBooking
           setNewBooking={setCreateNew}
           getBookingData={refreshEntries}
+          defaultDate={modalDate}
         />
       ) : (
         ""
@@ -265,17 +266,18 @@ export default function CalendarGrid2Modal({
         <NewHoliday
           setNewHoliday={setCreateNew}
           getHolidayData={refreshEntries}
+          defaultDate={modalDate}
         />
       ) : (
         ""
       )}
       {createNew === "offday" ? (
-        <NewOffday setNewOffday={setCreateNew} getOffdayData={refreshEntries} />
+        <NewOffday setNewOffday={setCreateNew} getOffdayData={refreshEntries} defaultDate={modalDate}/>
       ) : (
         ""
       )}
       {createNew === "pickup" ? (
-        <NewPickup setNewPickup={setCreateNew} getPickupData={refreshEntries} />
+        <NewPickup setNewPickup={setCreateNew} getPickupData={refreshEntries} defaultDate={modalDate}/>
       ) : (
         ""
       )}

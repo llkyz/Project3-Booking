@@ -220,10 +220,15 @@ export function HolidayEntry({ data, getHolidayData }) {
   );
 }
 
-export function NewHoliday({ setNewHoliday, getHolidayData }) {
+export function NewHoliday({ setNewHoliday, getHolidayData, defaultDate }) {
   const [errorMesssage, setErrorMessage] = useState();
 
-  let myDate = new Date();
+  let myDate = null
+  if (defaultDate) {
+    myDate = defaultDate
+  } else {
+    myDate = new Date();
+  }
   let year = myDate.getFullYear();
   let month = (myDate.getMonth() + 1).toLocaleString("en-US", {
     minimumIntegerDigits: 2,

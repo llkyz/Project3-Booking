@@ -222,7 +222,7 @@ export function OffdayEntry({ data, getOffdayData }) {
   );
 }
 
-export function NewOffday({ setNewOffday, getOffdayData }) {
+export function NewOffday({ setNewOffday, getOffdayData, defaultDate }) {
   const [errorMesssage, setErrorMessage] = useState();
   const [staffList, setStaffList] = useState();
 
@@ -244,7 +244,12 @@ export function NewOffday({ setNewOffday, getOffdayData }) {
     getStaffList();
   }, []);
 
-  let myDate = new Date();
+  let myDate = null
+  if (defaultDate) {
+    myDate = defaultDate
+  } else {
+    myDate = new Date();
+  }
   let year = myDate.getFullYear();
   let month = (myDate.getMonth() + 1).toLocaleString("en-US", {
     minimumIntegerDigits: 2,

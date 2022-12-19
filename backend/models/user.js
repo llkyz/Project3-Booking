@@ -9,7 +9,7 @@ const userSchema = mongoose.Schema({
     minLength: 3,
   },
   password: { type: String, required: true, trim: true },
-  access: { type: String, default: "user" },
+  access: { type: String, enum:['user', 'staff', 'admin'], default: "user", required: true },
 });
 
 const User = mongoose.model("User", userSchema);

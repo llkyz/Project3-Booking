@@ -325,10 +325,15 @@ export function BookingEntry({ data, getBookingData }) {
   );
 }
 
-export function NewBooking({ setNewBooking, getBookingData }) {
+export function NewBooking({ setNewBooking, getBookingData, defaultDate }) {
   const [errorMesssage, setErrorMessage] = useState();
 
-  let myDate = new Date();
+  let myDate = null
+  if (defaultDate) {
+    myDate = defaultDate
+  } else {
+    myDate = new Date();
+  }
   let year = myDate.getFullYear();
   let month = (myDate.getMonth() + 1).toLocaleString("en-US", {
     minimumIntegerDigits: 2,
