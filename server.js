@@ -14,6 +14,7 @@ const holidayController = require("./controllers/holiday");
 const offdayController = require("./controllers/offday");
 const pickupController = require("./controllers/pickup");
 const entryController = require("./controllers/entry");
+const { dirname } = require("path");
 require("dotenv").config();
 
 let mongoURI = process.env.DATABASE;
@@ -24,7 +25,7 @@ mongoose.set("debug", true);
 mongoose.connect(mongoURI);
 db.on("open", () => console.log("MongoDB connection established"));
 
-app.use(express.static("./client/build"));
+app.use(express.static(__dirname + "/client/build"));
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -48,7 +49,7 @@ app.use("/api/pickup", pickupController);
 app.use("/api/entry", entryController);
 
 app.get("*", (req, res) => {
-  res.sendFile("./client/build/index.html");
+  res.sendFile(__dirname + "/client/build/index.html");
 });
 
 mongoose.connection.once("open", () => {
