@@ -27,6 +27,48 @@ As a business owner of a terrarium workshop, I want an app to help track custome
 
 ## Layout
 
+### Home Page
+
+By default, the user needs to be logged in to use any aspect of the app. Hence, the home page simply prompts the user to either log in or register. Once the user is logged in, returning to the home page will redirect the user to the calendar page.
+
+image here
+---
+  
+### Login Page
+
+Run-of-the-mill login page with a link to the register page for new users.
+  
+image here
+---
+  
+### Register Page
+
+Requirements of at least 3 characters for a username, and at least 8 characters, 1 lowercase letter, 1 uppercase letter, and 1 number for a password. The character requirements are checked using Regex tests.
+
+image here
+---
+
+### Calendar Page
+
+The beef of the app. Regular users can view the number of records for every day, but they're not allowed to see detailed information, nor create or edit new records. For staff and admin users, alongside full access to records, they are also able to access data from external shopfronts and push them into the calendar.
+
+image here
+---
+
+### Sub-category Page (Bookings, Holidays, Offdays, Pickups)
+
+Displays sub-category records in list view. Staff and admin can create new records here, and also sort through records based on name, title, or date.
+
+image here
+---
+
+### User List Page
+
+The admin page for managing user information. Users with admin access can access a list of all users, with their usernames and access level. Passwords are protected and will not be shown. Admins can modify user access levels, or delete a user entirely. 
+
+image here
+---
+
 ## Challenges
 
 Getting the dateTimes of records to function properly proved to be a challenge. Although nothing seemed out of the ordinary during development, problems arise once the code is deployed onto the production servers. Since the servers are located in a different timezone, the server's local time would be in conflict with the user's local time, leading to the user inputting a certain timing but getting back an entirely different timing. This was eventually resolved by offsetting all the input timings, and working solely with UTC time. 
