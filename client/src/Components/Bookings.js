@@ -225,7 +225,7 @@ export function BookingEntry({ data, getBookingData }) {
 
   let oldDate = new Date(data.dateTime)
   let timezoneOffset = new Date().getTimezoneOffset()
-  let offsetDate = new Date(oldDate - timezoneOffset * 60 * 1000)
+  let offsetDate = new Date(oldDate + timezoneOffset * 60 * 1000)
 
   return (
     <div className="entry">
