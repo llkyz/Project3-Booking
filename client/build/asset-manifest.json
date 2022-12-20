@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/static/css/main.fc721599.css",
-    "main.js": "/static/js/main.c0bd886b.js",
+    "main.js": "/static/js/main.b977b7ed.js",
     "static/js/787.cda612ba.chunk.js": "/static/js/787.cda612ba.chunk.js",
     "static/media/background.jpg": "/static/media/background.3fa9b9c46602f19220fe.jpg",
     "static/media/sppfy_logo.png": "/static/media/sppfy_logo.78626f2da2a8f56b091c.png",
@@ -11,11 +11,11 @@
     "static/media/search.svg": "/static/media/search.c2ffc47ceaaeed46815734422652ae52.svg",
     "static/media/data_loading.svg": "/static/media/data_loading.14e6b6df4c2524536d01.svg",
     "main.fc721599.css.map": "/static/css/main.fc721599.css.map",
-    "main.c0bd886b.js.map": "/static/js/main.c0bd886b.js.map",
+    "main.b977b7ed.js.map": "/static/js/main.b977b7ed.js.map",
     "787.cda612ba.chunk.js.map": "/static/js/787.cda612ba.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.fc721599.css",
-    "static/js/main.c0bd886b.js"
+    "static/js/main.b977b7ed.js"
   ]
 }

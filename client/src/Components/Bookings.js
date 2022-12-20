@@ -238,7 +238,7 @@ export function BookingEntry({ data, getBookingData }) {
         <div className="entryTextGrid">
           <div className="label">Date</div>
           <div className="entryTextItem">
-            {data.dateTime.toLocaleDateString(undefined, {
+            {data.dateTime.toLocaleDateString("en-US", {
               weekday: "short",
               year: "numeric",
               month: "short",
@@ -247,7 +247,7 @@ export function BookingEntry({ data, getBookingData }) {
           </div>
           <div className="label">Time</div>
           <div className="entryTextItem">
-            {data.dateTime.toLocaleTimeString(undefined, {
+            {data.dateTime.toLocaleTimeString("en-US", {
               hour: "2-digit",
               minute: "2-digit",
             })}
@@ -353,6 +353,12 @@ export function NewBooking({ setNewBooking, getBookingData, defaultDate }) {
   let defaultDateTime = year + "-" + month + "-" + day + "T00:00";
 
   async function createBooking(event) {
+    let oldDate = new Date(event.target.form[2].value)
+    let timezoneOffset = oldDate.getTimezoneOffset()
+    console.log(timezoneOffset)
+    let newDate = new Date(oldDate - timezoneOffset * 60 * 1000)
+    console.log(newDate)
+
     event.preventDefault();
     if (!event.target.form[0].value) {
       setErrorMessage("Required field: Customer");
@@ -364,7 +370,7 @@ export function NewBooking({ setNewBooking, getBookingData, defaultDate }) {
       if (event.target.form[1].value) {
         formBody.contact = event.target.form[1].value;
       }
-      formBody.dateTime = event.target.form[2].value;
+      formBody.dateTime = newDate;
       if (event.target.form[3].value) {
         formBody.price = event.target.form[3].value;
       }
