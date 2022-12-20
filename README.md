@@ -31,42 +31,49 @@ As a business owner of a terrarium workshop, I want an app to help track custome
 
 By default, the user needs to be logged in to use any aspect of the app. Hence, the home page simply prompts the user to either log in or register. Once the user is logged in, returning to the home page will redirect the user to the calendar page.
 
-image here
+![home](https://user-images.githubusercontent.com/115427253/208719356-9b8943eb-16c6-456c-a5ae-f3ce8a9bac4d.jpg)
 ---
   
 ### Login Page
 
 Run-of-the-mill login page with a link to the register page for new users.
   
-image here
+![login](https://user-images.githubusercontent.com/115427253/208719498-343b3420-bcfb-4679-880c-565f65613639.jpg)
 ---
   
 ### Register Page
 
 Requirements of at least 3 characters for a username, and at least 8 characters, 1 lowercase letter, 1 uppercase letter, and 1 number for a password. The character requirements are checked using Regex tests.
 
-image here
+![register](https://user-images.githubusercontent.com/115427253/208719534-30e95bd2-32e8-474c-9d5f-66b5c3993e01.jpg)
 ---
 
 ### Calendar Page
 
-The beef of the app. Regular users can view the number of records for every day, but they're not allowed to see detailed information, nor create or edit new records. For staff and admin users, alongside full access to records, they are also able to access data from external shopfronts and push them into the calendar.
+The main bulk of the app. Regular users can view the number of records for every day, but they're not allowed to see detailed information, nor create or edit new records. For staff and admin users, alongside full access to records, they are also able to access data from external shopfronts and push them into the calendar.
 
-image here
+![calendar](https://user-images.githubusercontent.com/115427253/208719596-1d6d139c-3ed4-42a9-a0bb-2431ad6c46be.jpg)
 ---
 
 ### Sub-category Page (Bookings, Holidays, Offdays, Pickups)
 
 Displays sub-category records in list view. Staff and admin can create new records here, and also sort through records based on name, title, or date.
 
-image here
+![sub-category](https://user-images.githubusercontent.com/115427253/208719633-81f45aa4-b086-4f98-8a2d-fb0dfaed9d03.jpg)
+---
+
+### Profile Page
+
+A page that any user can access to see their own username and access level. Users can also change their password here. New passwords are also subject to the requirements of at least 8 characters, 1 lowercase letter, 1 uppercase letter, and 1 number.
+
+![profile](https://user-images.githubusercontent.com/115427253/208719749-4cd1d6b1-0023-4c17-8dad-120ba033d5db.jpg)
 ---
 
 ### User List Page
 
 The admin page for managing user information. Users with admin access can access a list of all users, with their usernames and access level. Passwords are protected and will not be shown. Admins can modify user access levels, or delete a user entirely. 
 
-image here
+![user-list](https://user-images.githubusercontent.com/115427253/208719661-d44e0222-925e-4b4d-9df8-34116940c98a.jpg)
 ---
 
 ## Challenges
