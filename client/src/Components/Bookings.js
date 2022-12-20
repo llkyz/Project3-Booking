@@ -223,6 +223,10 @@ export function BookingEntry({ data, getBookingData }) {
     }
   }
 
+  let oldDate = new Date(data.dateTime)
+  let timezoneOffset = new Date().getTimezoneOffset()
+  let offsetDate = new Date(oldDate - timezoneOffset * 60 * 1000)
+
   return (
     <div className="entry">
       <div className="arrowContainer" onClick={toggleDetails}>
@@ -238,7 +242,7 @@ export function BookingEntry({ data, getBookingData }) {
         <div className="entryTextGrid">
           <div className="label">Date</div>
           <div className="entryTextItem">
-            {data.dateTime.toLocaleDateString("en-US", {
+            {offsetDate.toLocaleDateString("en-US", {
               weekday: "short",
               year: "numeric",
               month: "short",
@@ -247,7 +251,7 @@ export function BookingEntry({ data, getBookingData }) {
           </div>
           <div className="label">Time</div>
           <div className="entryTextItem">
-            {data.dateTime.toLocaleTimeString("en-US", {
+            {offsetDate.toLocaleTimeString("en-US", {
               hour: "2-digit",
               minute: "2-digit",
             })}
@@ -356,8 +360,8 @@ export function NewBooking({ setNewBooking, getBookingData, defaultDate }) {
     let oldDate = new Date(event.target.form[2].value)
     let timezoneOffset = oldDate.getTimezoneOffset()
     console.log(timezoneOffset)
-    let newDate = new Date(oldDate - timezoneOffset * 60 * 1000)
-    console.log(newDate)
+    let offsetDate = new Date(oldDate - timezoneOffset * 60 * 1000)
+    console.log(offsetDate)
 
     event.preventDefault();
     if (!event.target.form[0].value) {
@@ -370,7 +374,7 @@ export function NewBooking({ setNewBooking, getBookingData, defaultDate }) {
       if (event.target.form[1].value) {
         formBody.contact = event.target.form[1].value;
       }
-      formBody.dateTime = newDate;
+      formBody.dateTime = offsetDate;
       if (event.target.form[3].value) {
         formBody.price = event.target.form[3].value;
       }
