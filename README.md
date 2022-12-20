@@ -22,3 +22,17 @@ Users can register and login to view limited information on the calendar. Only u
 ## User Stories
 
 As a business owner of a terrarium workshop, I want an app to help track customer bookings. I also want to combine the bookings from my multiple storefronts into a single calendar.
+
+## Wireframe
+
+## Layout
+
+## Challenges
+
+Getting the dateTimes of records to function properly proved to be a challenge. Although nothing seemed out of the ordinary during development, problems arise once the code is deployed onto the production servers. Since the servers are located in a different timezone, the server's local time would be in conflict with the user's local time, leading to the user inputting a certain timing but getting back an entirely different timing. This was eventually resolved by offsetting all the input timings, and working solely with UTC time. 
+
+<hr>
+
+## APIs Used
+
+- [Shopify API Node.js](https://www.npmjs.com/package/shopify-api-node)
