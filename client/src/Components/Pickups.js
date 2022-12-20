@@ -161,6 +161,7 @@ export function PickupEntry({ data, getPickupData }) {
     }
   }
 
+  data.dateTime = new Date(data.dateTime)
   let timezoneOffset = new Date().getTimezoneOffset()
   let offsetDate = new Date(data.dateTime.getTime() + timezoneOffset * 60000)
 
@@ -189,7 +190,7 @@ export function PickupEntry({ data, getPickupData }) {
           </div>
           <div className="label">Time</div>
           <div className="entryTextItem">
-            {data.dateTime.toLocaleTimeString("en-SG", {
+            {offsetDate.toLocaleTimeString("en-SG", {
               hour: "2-digit",
               minute: "2-digit",
             })}
