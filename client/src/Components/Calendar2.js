@@ -29,11 +29,10 @@ export default function Calendar2({ loggedIn }) {
       credentials: "include",
       body: JSON.stringify(formBody),
     });
-    console.log(`Response ${res.status}: ${await res.json()}`);
-    if (res.status === 200) {
+    if (res.ok) {
       setdataInput(dataInput.filter((d, i) => i !== index));
     } else {
-      console.log(data);
+      console.log(await res.json());
     }
   }
 

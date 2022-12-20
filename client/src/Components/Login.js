@@ -24,7 +24,7 @@ export default function Login({ loggedIn, setLoggedIn }) {
       },
       body: JSON.stringify(formBody),
     });
-    if (res.status === 200) {
+    if (res.ok) {
       setLoggedIn(true);
       navigate("/profile");
     } else {

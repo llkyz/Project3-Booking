@@ -29,7 +29,7 @@ export default function Profile({ loggedIn, setLoggedIn }) {
         credentials: "include",
       });
       let result = await res.json();
-      if (res.status === 200) {
+      if (res.ok) {
         setProfileData({ username: result.username, access: result.access });
       } else {
         setLoggedIn(false);
@@ -63,7 +63,7 @@ export default function Profile({ loggedIn, setLoggedIn }) {
       method: "GET",
       credentials: "include",
     });
-    if (res.status === 200) {
+    if (res.ok) {
       navigate("/");
       setLoggedIn(false);
     }
@@ -90,7 +90,7 @@ export default function Profile({ loggedIn, setLoggedIn }) {
         body: JSON.stringify(formBody),
       });
       let result = await res.json();
-      if (res.status === 200) {
+      if (res.ok) {
         setPassword("");
         setOldPassword("");
       }

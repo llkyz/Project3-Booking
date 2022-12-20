@@ -21,7 +21,7 @@ export default function Offdays({ loggedIn, accessLevel }) {
       credentials: "include",
     });
     let result = await res.json();
-    if (res.status === 200) {
+    if (res.ok) {
       setOffdayData(result);
     } else if (res.status === 401) {
       console.log(result);
@@ -71,7 +71,11 @@ export default function Offdays({ loggedIn, accessLevel }) {
                 </button>
               </div>
             </div>
-            <Searchbar dataList={offdayData} setDataList={setOffdayData} setSearchQuery={setSearchQuery}/>
+            <Searchbar
+              dataList={offdayData}
+              setDataList={setOffdayData}
+              setSearchQuery={setSearchQuery}
+            />
             {offdayData ? (
               <OffdayList
                 offdayData={offdayData}
@@ -108,7 +112,9 @@ function OffdayList({ offdayData, category, getOffdayData, searchQuery }) {
   let myList = offdayData.map((data) => data);
 
   if (searchQuery) {
-    myList = myList.filter((data) => data.staffName.toLowerCase().includes(searchQuery.toLowerCase()))
+    myList = myList.filter((data) =>
+      data.staffName.toLowerCase().includes(searchQuery.toLowerCase())
+    );
   }
 
   if (category === "upcoming") {
@@ -152,7 +158,7 @@ export function OffdayEntry({ data, getOffdayData }) {
       },
       body: JSON.stringify({ dateTime: data.dateTime }),
     });
-    if (res.status === 200) {
+    if (res.ok) {
       getOffdayData();
       setShowDelete(false);
       setShowDetails(false);
@@ -240,7 +246,7 @@ export function NewOffday({ setNewOffday, getOffdayData, defaultDate }) {
         credentials: "include",
       });
       let result = await res.json();
-      if (res.status === 200) {
+      if (res.ok) {
         result = result.filter(
           (data) => data.access === "admin" || data.access === "staff"
         );
@@ -252,9 +258,9 @@ export function NewOffday({ setNewOffday, getOffdayData, defaultDate }) {
     getStaffList();
   }, []);
 
-  let myDate = null
+  let myDate = null;
   if (defaultDate) {
-    myDate = defaultDate
+    myDate = defaultDate;
   } else {
     myDate = new Date();
   }
@@ -290,7 +296,7 @@ export function NewOffday({ setNewOffday, getOffdayData, defaultDate }) {
         },
         body: JSON.stringify(formBody),
       });
-      if (res.status === 200) {
+      if (res.ok) {
         getOffdayData();
         setErrorMessage(false);
         setNewOffday(false);
@@ -367,7 +373,7 @@ function EditOffday({ data, getOffdayData, setShowEdit }) {
         credentials: "include",
       });
       let result = await res.json();
-      if (res.status === 200) {
+      if (res.ok) {
         result = result.filter(
           (data) => data.access === "admin" || data.access === "staff"
         );
@@ -400,7 +406,7 @@ function EditOffday({ data, getOffdayData, setShowEdit }) {
         },
         body: JSON.stringify(formBody),
       });
-      if (res.status === 200) {
+      if (res.ok) {
         getOffdayData();
         setShowEdit(false);
       } else {

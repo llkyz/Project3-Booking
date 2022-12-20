@@ -47,7 +47,7 @@ export default function CalendarGrid({
         },
       }
     );
-    if (res.status === 200) {
+    if (res.ok) {
       setmonthEntries(await res.json());
     } else {
       console.log("Error: ", await res.json());

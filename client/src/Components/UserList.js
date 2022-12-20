@@ -16,7 +16,7 @@ function UserEntry({ data, fetchAllUsers }) {
       },
       body: JSON.stringify(formBody),
     });
-    if (res.status !== 200) {
+    if (!res.ok) {
       console.log(await res.json());
     } else {
       fetchAllUsers();
@@ -183,7 +183,7 @@ export default function UserList({ loggedIn, accessLevel }) {
       credentials: "include",
     });
     let result = await res.json();
-    if (res.status === 200) {
+    if (res.ok) {
       setUserData(result);
     } else {
       console.log(result);

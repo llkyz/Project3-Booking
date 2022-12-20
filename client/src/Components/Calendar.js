@@ -201,6 +201,9 @@ function ExternalDetailEntry({ data, index, externalData, setExternalData }) {
     setdataInput,
     ignoreCheck
   ) {
+    let oldDate = new Date(data.dateTime);
+    let timezoneOffset = oldDate.getTimezoneOffset();
+    data.dateTime = new Date(oldDate - timezoneOffset * 60000);
     let formBody = {};
     for (let property in data) {
       formBody[property] = data[property];
@@ -217,8 +220,7 @@ function ExternalDetailEntry({ data, index, externalData, setExternalData }) {
       credentials: "include",
       body: JSON.stringify(formBody),
     });
-    console.log(`Response ${res.status}: ${await res.json()}`);
-    if (res.status === 200) {
+    if (res.ok) {
       setdataInput(dataInput.filter((d, i) => i !== index));
     } else {
       setErrorMessage(`Error, unable to process: Response ${res.status}`);

@@ -6,7 +6,7 @@ export default function Bookings({ loggedIn, accessLevel }) {
   const [bookingData, setBookingData] = useState();
   const [newBooking, setNewBooking] = useState(false);
   const [category, setCategory] = useState("open");
-  const [searchQuery, setSearchQuery] = useState("")
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     if (accessLevel === "staff" || accessLevel === "admin") {
@@ -81,7 +81,11 @@ export default function Bookings({ loggedIn, accessLevel }) {
                 </button>
               </div>
             </div>
-            <Searchbar dataList={bookingData} setDataList={setBookingData} setSearchQuery={setSearchQuery}/>
+            <Searchbar
+              dataList={bookingData}
+              setDataList={setBookingData}
+              setSearchQuery={setSearchQuery}
+            />
             {bookingData ? (
               <BookingList
                 bookingData={bookingData}
@@ -116,9 +120,11 @@ export default function Bookings({ loggedIn, accessLevel }) {
 
 function BookingList({ bookingData, category, getBookingData, searchQuery }) {
   let myList = bookingData.map((data) => data);
-  
+
   if (searchQuery) {
-    myList = myList.filter((data) => data.customer.toLowerCase().includes(searchQuery.toLowerCase()))
+    myList = myList.filter((data) =>
+      data.customer.toLowerCase().includes(searchQuery.toLowerCase())
+    );
   }
 
   if (category === "all") {
@@ -175,7 +181,7 @@ export function BookingEntry({ data, getBookingData }) {
         complete: condition,
       }),
     });
-    if (res.status === 200) {
+    if (res.ok) {
       getBookingData();
       setShowDelete(false);
       setShowDetails(false);
@@ -196,7 +202,7 @@ export function BookingEntry({ data, getBookingData }) {
         ignore: condition,
       }),
     });
-    if (res.status === 200) {
+    if (res.ok) {
       getBookingData();
       setShowDelete(false);
       setShowDetails(false);
@@ -214,7 +220,7 @@ export function BookingEntry({ data, getBookingData }) {
       },
       body: JSON.stringify({ dateTime: data.dateTime }),
     });
-    if (res.status === 200) {
+    if (res.ok) {
       getBookingData();
       setShowDelete(false);
       setShowDetails(false);
@@ -223,8 +229,8 @@ export function BookingEntry({ data, getBookingData }) {
     }
   }
 
-  let timezoneOffset = new Date().getTimezoneOffset()
-  let offsetDate = new Date(data.dateTime.getTime() + timezoneOffset * 60000)
+  let timezoneOffset = new Date().getTimezoneOffset();
+  let offsetDate = new Date(data.dateTime.getTime() + timezoneOffset * 60000);
 
   return (
     <div className="entry">
@@ -339,9 +345,9 @@ export function BookingEntry({ data, getBookingData }) {
 export function NewBooking({ setNewBooking, getBookingData, defaultDate }) {
   const [errorMesssage, setErrorMessage] = useState();
 
-  let myDate = null
+  let myDate = null;
   if (defaultDate) {
-    myDate = defaultDate
+    myDate = defaultDate;
   } else {
     myDate = new Date();
   }
@@ -356,9 +362,9 @@ export function NewBooking({ setNewBooking, getBookingData, defaultDate }) {
   let defaultDateTime = year + "-" + month + "-" + day + "T00:00";
 
   async function createBooking(event) {
-    let oldDate = new Date(event.target.form[2].value)
-    let timezoneOffset = oldDate.getTimezoneOffset()
-    let offsetDate = new Date(oldDate - timezoneOffset * 60000)
+    let oldDate = new Date(event.target.form[2].value);
+    let timezoneOffset = oldDate.getTimezoneOffset();
+    let offsetDate = new Date(oldDate - timezoneOffset * 60000);
 
     event.preventDefault();
     if (!event.target.form[0].value) {
@@ -392,7 +398,7 @@ export function NewBooking({ setNewBooking, getBookingData, defaultDate }) {
         },
         body: JSON.stringify(formBody),
       });
-      if (res.status === 200) {
+      if (res.ok) {
         getBookingData();
         setErrorMessage(false);
         setNewBooking(false);
@@ -496,7 +502,7 @@ function EditBooking({ data, getBookingData, setShowEdit }) {
         },
         body: JSON.stringify(formBody),
       });
-      if (res.status === 200) {
+      if (res.ok) {
         getBookingData();
         setShowEdit(false);
       } else {

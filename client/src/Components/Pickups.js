@@ -21,7 +21,7 @@ export default function Pickups({ loggedIn, accessLevel }) {
       credentials: "include",
     });
     let result = await res.json();
-    if (res.status === 200) {
+    if (res.ok) {
       setPickupData(result);
     } else if (res.status === 401) {
       console.log(result);
@@ -71,7 +71,11 @@ export default function Pickups({ loggedIn, accessLevel }) {
                 </button>
               </div>
             </div>
-            <Searchbar dataList={pickupData} setDataList={setPickupData} setSearchQuery={setSearchQuery}/>
+            <Searchbar
+              dataList={pickupData}
+              setDataList={setPickupData}
+              setSearchQuery={setSearchQuery}
+            />
             {pickupData ? (
               <PickupList
                 pickupData={pickupData}
@@ -108,7 +112,9 @@ function PickupList({ pickupData, category, getPickupData, searchQuery }) {
   let myList = pickupData.map((data) => data);
 
   if (searchQuery) {
-    myList = myList.filter((data) => data.customer.toLowerCase().includes(searchQuery.toLowerCase()))
+    myList = myList.filter((data) =>
+      data.customer.toLowerCase().includes(searchQuery.toLowerCase())
+    );
   }
 
   if (category === "upcoming") {
@@ -152,7 +158,7 @@ export function PickupEntry({ data, getPickupData }) {
       },
       body: JSON.stringify({ dateTime: data.dateTime }),
     });
-    if (res.status === 200) {
+    if (res.ok) {
       getPickupData();
       setShowDelete(false);
       setShowDetails(false);
@@ -161,9 +167,9 @@ export function PickupEntry({ data, getPickupData }) {
     }
   }
 
-  data.dateTime = new Date(data.dateTime)
-  let timezoneOffset = new Date().getTimezoneOffset()
-  let offsetDate = new Date(data.dateTime.getTime() + timezoneOffset * 60000)
+  data.dateTime = new Date(data.dateTime);
+  let timezoneOffset = new Date().getTimezoneOffset();
+  let offsetDate = new Date(data.dateTime.getTime() + timezoneOffset * 60000);
 
   return (
     <div className="entry">
@@ -241,9 +247,9 @@ export function PickupEntry({ data, getPickupData }) {
 export function NewPickup({ setNewPickup, getPickupData, defaultDate }) {
   const [errorMesssage, setErrorMessage] = useState();
 
-  let myDate = null
+  let myDate = null;
   if (defaultDate) {
-    myDate = defaultDate
+    myDate = defaultDate;
   } else {
     myDate = new Date();
   }
@@ -258,9 +264,9 @@ export function NewPickup({ setNewPickup, getPickupData, defaultDate }) {
   let defaultDateTime = year + "-" + month + "-" + day + "T00:00";
 
   async function createPickup(event) {
-    let oldDate = new Date(event.target.form[1].value)
-    let timezoneOffset = oldDate.getTimezoneOffset()
-    let offsetDate = new Date(oldDate - timezoneOffset * 60000)
+    let oldDate = new Date(event.target.form[1].value);
+    let timezoneOffset = oldDate.getTimezoneOffset();
+    let offsetDate = new Date(oldDate - timezoneOffset * 60000);
 
     event.preventDefault();
     if (!event.target.form[0].value) {
@@ -281,7 +287,7 @@ export function NewPickup({ setNewPickup, getPickupData, defaultDate }) {
         },
         body: JSON.stringify(formBody),
       });
-      if (res.status === 200) {
+      if (res.ok) {
         getPickupData();
         setErrorMessage(false);
         setNewPickup(false);
@@ -361,7 +367,7 @@ function EditPickup({ data, getPickupData, setShowEdit }) {
         },
         body: JSON.stringify(formBody),
       });
-      if (res.status === 200) {
+      if (res.ok) {
         getPickupData();
         setShowEdit(false);
       } else {

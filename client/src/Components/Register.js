@@ -113,7 +113,7 @@ export default function Register({ loggedIn }) {
     });
     let result = await res.json();
     console.log(`Response ${res.status}: ${result}`);
-    if (res.status === 200) {
+    if (res.ok) {
       setRegisterUserResult(result);
       setRegisterSuccess(true);
       event.target.form[0].value = "";

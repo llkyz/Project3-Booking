@@ -6,7 +6,7 @@ export default function Holidays({ loggedIn, accessLevel }) {
   const [holidayData, setHolidayData] = useState();
   const [newHoliday, setNewHoliday] = useState(false);
   const [category, setCategory] = useState("upcoming");
-  const [searchQuery, setSearchQuery] = useState("")
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     if (accessLevel === "staff" || accessLevel === "admin") {
@@ -21,7 +21,7 @@ export default function Holidays({ loggedIn, accessLevel }) {
       credentials: "include",
     });
     let result = await res.json();
-    if (res.status === 200) {
+    if (res.ok) {
       setHolidayData(result);
     } else if (res.status === 401) {
       console.log(result);
@@ -71,7 +71,11 @@ export default function Holidays({ loggedIn, accessLevel }) {
                 </button>
               </div>
             </div>
-            <Searchbar dataList={holidayData} setDataList={setHolidayData} setSearchQuery={setSearchQuery}/>
+            <Searchbar
+              dataList={holidayData}
+              setDataList={setHolidayData}
+              setSearchQuery={setSearchQuery}
+            />
             {holidayData ? (
               <HolidayList
                 holidayData={holidayData}
@@ -108,7 +112,9 @@ function HolidayList({ holidayData, category, getHolidayData, searchQuery }) {
   let myList = holidayData.map((data) => data);
 
   if (searchQuery) {
-    myList = myList.filter((data) => data.title.toLowerCase().includes(searchQuery.toLowerCase()))
+    myList = myList.filter((data) =>
+      data.title.toLowerCase().includes(searchQuery.toLowerCase())
+    );
   }
 
   if (category === "upcoming") {
@@ -156,7 +162,7 @@ export function HolidayEntry({ data, getHolidayData }) {
       },
       body: JSON.stringify({ dateTime: data.dateTime }),
     });
-    if (res.status === 200) {
+    if (res.ok) {
       getHolidayData();
       setShowDelete(false);
       setShowDetails(false);
@@ -231,9 +237,9 @@ export function HolidayEntry({ data, getHolidayData }) {
 export function NewHoliday({ setNewHoliday, getHolidayData, defaultDate }) {
   const [errorMesssage, setErrorMessage] = useState();
 
-  let myDate = null
+  let myDate = null;
   if (defaultDate) {
-    myDate = defaultDate
+    myDate = defaultDate;
   } else {
     myDate = new Date();
   }
@@ -265,7 +271,7 @@ export function NewHoliday({ setNewHoliday, getHolidayData, defaultDate }) {
         },
         body: JSON.stringify(formBody),
       });
-      if (res.status === 200) {
+      if (res.ok) {
         getHolidayData();
         setErrorMessage(false);
         setNewHoliday(false);
@@ -342,7 +348,7 @@ function EditHoliday({ data, getHolidayData, setShowEdit }) {
         },
         body: JSON.stringify(formBody),
       });
-      if (res.status === 200) {
+      if (res.ok) {
         getHolidayData();
         setShowEdit(false);
       } else {

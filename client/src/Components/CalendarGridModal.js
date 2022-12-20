@@ -47,7 +47,7 @@ export default function CalendarGridModal({
         "Content-Type": "application/json",
       },
     });
-    if (res.status === 200) {
+    if (res.ok) {
       setEntryData(await res.json());
     } else {
       console.log("Error: ", await res.json());
