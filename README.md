@@ -23,9 +23,12 @@ Users can register and login to view limited information on the calendar. Only u
 
 As a business owner of a terrarium workshop, I want an app to help track customer bookings. I also want to combine the bookings from my multiple storefronts into a single calendar.
 
-## Wireframe
-
 ## Layout
+
+### Wireframe
+
+![Project3-Booking](https://user-images.githubusercontent.com/115427253/208727916-4480c172-b5dc-48b4-ae8b-a6fc82e823a0.png)
+---
 
 ### Home Page
 
@@ -50,7 +53,7 @@ Requirements of at least 3 characters for a username, and at least 8 characters,
 
 ### Calendar Page
 
-The main bulk of the app. Regular users can view the number of records for every day, but they're not allowed to see detailed information, nor create or edit new records. For staff and admin users, alongside full access to records, they are also able to access data from external shopfronts and push them into the calendar.
+The main bulk of the app. Regular users can view the number of records for every day, but they're not allowed to see detailed information, nor create or edit new records. Users with staff/admin permission can access data from external shopfronts and push them into the calendar, alongside full access to all calendar records.
 
 ![calendar](https://user-images.githubusercontent.com/115427253/208719596-1d6d139c-3ed4-42a9-a0bb-2431ad6c46be.jpg)
 ---
