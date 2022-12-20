@@ -165,8 +165,7 @@ export function HolidayEntry({ data, getHolidayData }) {
     }
   }
 
-  let timezoneOffset = new Date().getTimezoneOffset()
-  let offsetDate = new Date(data.dateTime.getTime() + timezoneOffset * 60000)
+  data.dateTime = new Date(data.dateTime);
 
   return (
     <div className="entry">
@@ -179,7 +178,7 @@ export function HolidayEntry({ data, getHolidayData }) {
           <div className="entryTextItem">{data.title}</div>
           <div className="label">Date</div>
           <div className="entryTextItem">
-            {offsetDate.toLocaleDateString("en-SG", {
+            {data.dateTime.toLocaleDateString("en-SG", {
               weekday: "short",
               year: "numeric",
               month: "short",
@@ -249,10 +248,6 @@ export function NewHoliday({ setNewHoliday, getHolidayData, defaultDate }) {
   let defaultDateTime = year + "-" + month + "-" + day;
 
   async function createHoliday(event) {
-    let oldDate = new Date(event.target.form[1].value)
-    let timezoneOffset = oldDate.getTimezoneOffset()
-    let offsetDate = new Date(oldDate - timezoneOffset * 60000)
-
     event.preventDefault();
     if (!event.target.form[0].value) {
       setErrorMessage("Required field: Title");
@@ -261,7 +256,7 @@ export function NewHoliday({ setNewHoliday, getHolidayData, defaultDate }) {
     } else {
       let formBody = {};
       formBody.title = event.target.form[0].value;
-      formBody.dateTime = offsetDate;
+      formBody.dateTime = event.target.form[1].value;
       const res = await fetch(config.BACKEND_URL + "holiday", {
         method: "POST",
         credentials: "include",

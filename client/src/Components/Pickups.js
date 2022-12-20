@@ -161,7 +161,8 @@ export function PickupEntry({ data, getPickupData }) {
     }
   }
 
-  data.dateTime = new Date(data.dateTime);
+  let timezoneOffset = new Date().getTimezoneOffset()
+  let offsetDate = new Date(data.dateTime.getTime() + timezoneOffset * 60000)
 
   return (
     <div className="entry">
@@ -179,7 +180,7 @@ export function PickupEntry({ data, getPickupData }) {
         <div className="entryTextGrid">
           <div className="label">Date</div>
           <div className="entryTextItem">
-            {data.dateTime.toLocaleDateString("en-SG", {
+            {offsetDate.toLocaleDateString("en-SG", {
               weekday: "short",
               year: "numeric",
               month: "short",
@@ -256,6 +257,10 @@ export function NewPickup({ setNewPickup, getPickupData, defaultDate }) {
   let defaultDateTime = year + "-" + month + "-" + day + "T00:00";
 
   async function createPickup(event) {
+    let oldDate = new Date(event.target.form[1].value)
+    let timezoneOffset = oldDate.getTimezoneOffset()
+    let offsetDate = new Date(oldDate - timezoneOffset * 60000)
+
     event.preventDefault();
     if (!event.target.form[0].value) {
       setErrorMessage("Required field: Customer");
@@ -264,7 +269,7 @@ export function NewPickup({ setNewPickup, getPickupData, defaultDate }) {
     } else {
       let formBody = {
         customer: event.target.form[0].value,
-        dateTime: event.target.form[1].value,
+        dateTime: offsetDate,
         item: event.target.form[2].value,
       };
       const res = await fetch(config.BACKEND_URL + "pickup", {
