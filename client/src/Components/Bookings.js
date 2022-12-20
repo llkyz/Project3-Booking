@@ -21,7 +21,7 @@ export default function Bookings({ loggedIn, accessLevel }) {
       credentials: "include",
     });
     let result = await res.json();
-    if (res.status === 200) {
+    if (res.ok) {
       setBookingData(result);
     } else {
       console.log(result);
