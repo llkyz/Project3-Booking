@@ -223,9 +223,8 @@ export function BookingEntry({ data, getBookingData }) {
     }
   }
 
-  let oldDate = new Date(data.dateTime)
   let timezoneOffset = new Date().getTimezoneOffset()
-  let offsetDate = new Date(oldDate + timezoneOffset * 60 * 1000)
+  let offsetDate = new Date(data.dateTime.getTime() + timezoneOffset * 60000)
 
   return (
     <div className="entry">
@@ -359,9 +358,7 @@ export function NewBooking({ setNewBooking, getBookingData, defaultDate }) {
   async function createBooking(event) {
     let oldDate = new Date(event.target.form[2].value)
     let timezoneOffset = oldDate.getTimezoneOffset()
-    console.log(timezoneOffset)
-    let offsetDate = new Date(oldDate - timezoneOffset * 60 * 1000)
-    console.log(offsetDate)
+    let offsetDate = new Date(oldDate - timezoneOffset * 60000)
 
     event.preventDefault();
     if (!event.target.form[0].value) {
