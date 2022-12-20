@@ -238,7 +238,7 @@ export function BookingEntry({ data, getBookingData }) {
         <div className="entryTextGrid">
           <div className="label">Date</div>
           <div className="entryTextItem">
-            {data.dateTime.toLocaleDateString("en-SG", {
+            {data.dateTime.toLocaleDateString(undefined, {
               weekday: "short",
               year: "numeric",
               month: "short",
@@ -247,7 +247,7 @@ export function BookingEntry({ data, getBookingData }) {
           </div>
           <div className="label">Time</div>
           <div className="entryTextItem">
-            {data.dateTime.toLocaleTimeString("en-SG", {
+            {data.dateTime.toLocaleTimeString(undefined, {
               hour: "2-digit",
               minute: "2-digit",
             })}
