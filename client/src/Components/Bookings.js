@@ -364,7 +364,7 @@ export function NewBooking({ setNewBooking, getBookingData, defaultDate }) {
       if (event.target.form[1].value) {
         formBody.contact = event.target.form[1].value;
       }
-      formBody.dateTime = new Date(event.target.form[2].value);
+      formBody.dateTime = event.target.form[2].value;
       if (event.target.form[3].value) {
         formBody.price = event.target.form[3].value;
       }
