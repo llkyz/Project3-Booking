@@ -23,6 +23,10 @@ Users can register and login to view limited information on the calendar. Only u
 
 As a business owner of a terrarium workshop, I want an app to help track customer bookings. I also want to combine the bookings from my multiple storefronts into a single calendar.
 
+## Database Schema
+
+![schema](https://user-images.githubusercontent.com/115427253/209153071-d43ff072-a792-4432-a3d2-548581dacb6e.jpg)
+
 ## Layout
 
 ### Wireframe
